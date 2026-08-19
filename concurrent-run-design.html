@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Concise design for concurrent Sessions and Generators in ONNX Runtime WebGPU.">
+  <title>ORT WebGPU Concurrent Run Design</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #16313b;
+      --muted: #5f7279;
+      --paper: #f6f3ec;
+      --panel: #fffdfa;
+      --line: #d8d3c8;
+      --navy: #123d4c;
+      --teal: #087f75;
+      --teal-soft: #e2f3ef;
+      --blue-soft: #e8f1f6;
+      --amber: #a75c12;
+      --amber-soft: #fff0d7;
+      --red-soft: #fae9e6;
+      --green-soft: #e7f3e9;
+      --code: #102d38;
+      --genai: #7fe3c8;
+      --ort: #ffc875;
+      --radius: 12px;
+      --sans: "Segoe UI", Inter, system-ui, sans-serif;
+      --mono: "Cascadia Code", Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 16px/1.58 var(--sans); }
+    a { color: #08717c; text-underline-offset: 2px; }
+    code, pre { font-family: var(--mono); }
+    code { padding: .08rem .28rem; background: #edf0eb; border: 1px solid #dde2da; border-radius: 4px; font-size: .9em; }
+    pre { margin: 14px 0; padding: 17px; overflow: auto; color: #e2eef1; background: var(--code); border-radius: var(--radius); line-height: 1.48; }
+    pre code { padding: 0; color: inherit; background: none; border: 0; }
+    .api-genai { color: var(--genai); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .api-ort { color: var(--ort); font-weight: 700; text-decoration: underline dashed; text-underline-offset: 3px; }
+    header, main, footer { width: min(1120px, calc(100% - 40px)); margin: auto; }
+    header { padding: 58px 0 30px; border-bottom: 1px solid var(--line); }
+    .eyebrow { color: var(--teal); font-size: .75rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { max-width: 880px; margin: 8px 0 12px; color: var(--navy); font-size: clamp(2.25rem, 6vw, 4.7rem); line-height: 1.02; letter-spacing: -.045em; }
+    header p { max-width: 850px; color: #3e5861; font-size: 1.08rem; }
+    .meta, nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .pill, nav a { padding: 5px 9px; border: 1px solid #cbd6d3; border-radius: 999px; background: rgba(255,255,255,.7); color: #36545e; font-size: .76rem; text-decoration: none; }
+    nav a:hover { border-color: var(--teal); }
+    section { padding: 48px 0 18px; }
+    section + section { border-top: 1px solid var(--line); }
+    h2 { margin: 0 0 12px; color: var(--navy); font-size: clamp(1.65rem, 3.5vw, 2.5rem); line-height: 1.12; }
+    h3 { margin: 28px 0 9px; color: #215162; font-size: 1.13rem; }
+    p { margin: 9px 0; }
+    ul, ol { padding-left: 1.25rem; }
+    li + li { margin-top: 6px; }
+    .lead { max-width: 900px; color: #405b64; }
+    .callout { margin: 16px 0; padding: 14px 16px; background: var(--blue-soft); border-left: 4px solid #397997; border-radius: 8px; }
+    .callout.good { background: var(--green-soft); border-color: #377957; }
+    .callout.warn { background: var(--amber-soft); border-color: var(--amber); }
+    .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 9px 0 -3px; color: var(--muted); font-size: .78rem; }
+    .legend span::before { content: ""; display: inline-block; width: 18px; height: 6px; margin-right: 6px; border-radius: 2px; vertical-align: middle; }
+    .legend .genai::before { background: #198c76; }
+    .legend .ort::before { background: #c77414; }
+    .table-wrap { width: 100%; margin: 15px 0; overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    th { padding: 10px 11px; color: #fff; background: var(--navy); text-align: left; font-size: .74rem; }
+    td { padding: 10px 11px; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+    tbody tr:nth-child(even) td { background: rgba(238,240,235,.55); }
+    .diagram { margin: 16px 0; padding: 18px; background: rgba(255,255,255,.58); border: 1px solid var(--line); border-radius: var(--radius); }
+    .diagram-title { margin-bottom: 13px; color: var(--muted); font-size: .72rem; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
+    .topology { display: grid; grid-template-columns: 1fr 1.2fr 1.2fr 1fr; gap: 22px; align-items: stretch; }
+    .node { position: relative; padding: 13px; background: var(--panel); border: 1px solid #c9d3d0; border-radius: 9px; }
+    .node:not(:last-child)::after { content: "→"; position: absolute; right: -17px; top: 42%; color: #718b93; font-weight: 800; }
+    .node strong { display: block; color: #164c5d; }
+    .node small { display: block; margin-top: 4px; color: var(--muted); line-height: 1.4; }
+    .stack { display: grid; gap: 7px; }
+    .subnode { padding: 7px 8px; background: var(--teal-soft); border-radius: 6px; font-size: .76rem; }
+    .flow-row { display: grid; grid-template-columns: repeat(var(--flow-columns, 4), minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+    .flow-step { position: relative; min-width: 0; padding: 12px; background: var(--panel); border: 1px solid #c9d3d0; border-radius: 9px; }
+    .flow-step:not(:last-child)::after { content: "→"; position: absolute; right: -18px; top: 42%; color: #718b93; font-weight: 800; }
+    .flow-step strong { display: block; color: #164c5d; }
+    .flow-step small { display: block; margin-top: 4px; color: var(--muted); line-height: 1.4; }
+    .flow-arrow-down { padding: 5px 0; color: #718b93; font-weight: 800; text-align: center; }
+    .capture-decision { padding: 12px; background: var(--blue-soft); border: 1px solid #bdd0da; border-radius: 9px; text-align: center; }
+    .capture-decision strong { color: #164c5d; }
+    .capture-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 10px; text-align: left; }
+    .capture-branch { padding: 9px 10px; background: var(--panel); border-radius: 7px; font-size: .78rem; }
+    .capture-branch code { white-space: nowrap; }
+    .flow-notes { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .flow-note { padding: 4px 8px; color: #37535c; background: #edf0eb; border-radius: 999px; font-size: .7rem; }
+    .parallel-lanes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .parallel-lane { padding: 12px; background: rgba(255,255,255,.42); border: 1px solid var(--line); border-radius: 9px; }
+    .lane-title { margin-bottom: 9px; color: #164c5d; font-weight: 750; }
+    .lane-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1.2fr; gap: 7px; align-items: center; }
+    .lane-arrow { color: #718b93; font-weight: 800; }
+    .lane-node { min-width: 0; padding: 9px; border-radius: 7px; font-size: .76rem; line-height: 1.38; }
+    .lane-node strong { display: block; }
+    .owner-session { background: var(--blue-soft); }
+    .owner-generator { background: var(--teal-soft); }
+    .owner-run { background: var(--amber-soft); }
+    .owner-device { background: #edf0eb; }
+    .allocation-options { display: grid; gap: 4px; margin-top: 5px; }
+    .allocation-options span { padding: 4px 5px; background: rgba(255,255,255,.68); border-radius: 4px; }
+    .diagram-key { display: flex; flex-wrap: wrap; gap: 9px; margin: -5px 0 11px; color: var(--muted); font-size: .72rem; }
+    .diagram-key span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
+    .diagram-key .key-session::before { background: var(--blue-soft); border: 1px solid #bdd0da; }
+    .diagram-key .key-generator::before { background: var(--teal-soft); border: 1px solid #b8dcd4; }
+    .diagram-key .key-run::before { background: var(--amber-soft); border: 1px solid #e5c18e; }
+    .diagram-key .key-device::before { background: #edf0eb; border: 1px solid #d2d8cf; }
+    .contract { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+    .contract div { padding: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; }
+    .contract strong { display: block; color: #18576a; }
+    .status { display: inline-block; padding: 2px 6px; border-radius: 999px; font-size: .68rem; font-weight: 750; white-space: nowrap; }
+    .target { color: #16675c; background: var(--teal-soft); }
+    .serial { color: #88470f; background: var(--amber-soft); }
+    .reject { color: #8d3d3d; background: var(--red-soft); }
+    .steps { counter-reset: step; display: grid; gap: 8px; margin: 14px 0; }
+    .steps div { position: relative; padding: 11px 13px 11px 46px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+    .steps div::before { counter-increment: step; content: counter(step); position: absolute; left: 12px; top: 10px; width: 23px; height: 23px; display: grid; place-items: center; color: #fff; background: var(--teal); border-radius: 50%; font-size: .72rem; font-weight: 750; }
+    footer { margin-top: 46px; padding: 22px 0 42px; color: var(--muted); border-top: 1px solid var(--line); font-size: .8rem; }
+    @media (max-width: 800px) {
+      .contract { grid-template-columns: 1fr; }
+      .topology { grid-template-columns: 1fr; }
+      .node:not(:last-child)::after { content: "↓"; right: auto; left: 48%; top: auto; bottom: -21px; }
+      .flow-row { grid-template-columns: 1fr; gap: 22px; }
+      .flow-step:not(:last-child)::after { content: "↓"; right: auto; left: 49%; top: auto; bottom: -21px; }
+      .parallel-lanes { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      header, main, footer { width: min(100% - 26px, 1120px); }
+      header { padding-top: 38px; }
+      section { padding-top: 38px; }
+      .table-wrap.responsive { overflow: visible; border: 0; background: none; }
+      table.mobile, table.mobile tbody, table.mobile tr, table.mobile td { display: block; width: 100%; }
+      table.mobile thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+      table.mobile tbody { display: grid; gap: 10px; }
+      table.mobile tr { overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; }
+      table.mobile td, table.mobile tbody tr:nth-child(even) td { display: grid; grid-template-columns: minmax(95px, 34%) 1fr; gap: 8px; background: none; }
+      table.mobile td:first-child { border-top: 0; }
+      table.mobile td::before { content: attr(data-label); color: #315d6c; font-size: .7rem; font-weight: 750; }
+      .capture-branches { grid-template-columns: 1fr; }
+      .lane-flow { grid-template-columns: 1fr; gap: 5px; }
+      .lane-arrow { text-align: center; transform: rotate(90deg); }
+    }
+    @media print {
+      body { background: #fff; }
+      nav { display: none; }
+      .diagram, .table-wrap, pre { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">Concise target design · 2026-08-19</div>
+    <h1>ORT WebGPU concurrent run</h1>
+    <p>A minimal design for multiple live generation contexts, concurrent Generators on different threads, sequential thread handoff of one Generator, eager execution, graph capture, KV cache, buffers and Session construction during active Runs.</p>
+    <div class="meta">
+      <span class="pill">ORT <code>dfb403d9</code></span>
+      <span class="pill">GenAI <code>d2606bba</code></span>
+      <span class="pill">Status: proposed target</span>
+      <a class="pill" href="concurrent-run-design-draft.html">Detailed draft archive</a>
+    </div>
+    <nav aria-label="Document sections">
+      <a href="#current-model">1 · Current programming model</a>
+      <a href="#concurrent-model">2 · Concurrent programming model</a>
+      <a href="#changes">3 · Problems and solutions</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="current-model">
+      <h2>1. Current programming model</h2>
+      <p class="lead"><strong>Generation context</strong> is the design-level container for one Model/internal Session and multiple live Generators. It is distinct from the <strong>WebGPU device context</strong>, which may be shared by multiple generation contexts. The current OGA C API has no <code>OgaContext</code> handle; the Model, its internal Session and its associated Generators collectively form this boundary.</p>
+
+      <div class="diagram">
+        <div class="diagram-title">Ownership and execution path · generation context is not the WebGPU device context</div>
+        <div class="topology" role="img" aria-label="The application owns a generation context containing a GenAI Model, internal ORT Session and multiple Generators. Each Generator owns independent sequence, search, graph lease, KV lease and dependency state. Generator steps submit through a WebGPU device context that may be shared by multiple generation contexts.">
+          <div class="node"><strong>Application</strong><small>Owns public handles and shutdown order.</small></div>
+          <div class="node"><strong>Generation context</strong><small>GenAI Model + internal ORT Session and WebGPU EP.</small><div class="stack"><span class="subnode">Immutable model resources</span><span class="subnode">Idle graph/KV/arena pools</span></div></div>
+          <div class="node"><strong>Generator(s)</strong><small>Each owns independent active state.</small><div class="stack"><span class="subnode">Tokens + search state</span><span class="subnode">Graph identity + active slot</span><span class="subnode">KV lease + completion chain</span></div></div>
+          <div class="node"><strong>WebGPU device context</strong><small>Queue, program cache, ordered submission, completion epochs and raw-buffer pool.</small></div>
+        </div>
+      </div>
+
+      <h3>Current execution flow</h3>
+      <div class="diagram">
+        <div class="diagram-title">Current implementation · graph capture changes the route through Session Run</div>
+        <div role="img" aria-label="The application calls a GenAI Model backed by an internal ORT Session. A Generator owns a State and optionally one graph ID. GenerateNextToken calls State Run, which selects eager execution when capture is disabled or the graph ID is minus one, captures and immediately replays an unseen positive ID, or directly replays a known positive ID. Work then reaches the Session WebGPU execution provider, the shared WebGpuContext and the ordered WebGPU queue.">
+          <div class="flow-row" style="--flow-columns: 4">
+            <div class="flow-step"><strong>Application</strong><small>Owns Model and Generator handles.</small></div>
+            <div class="flow-step"><strong>GenAI Model</strong><small>Owns one internal ORT Session + WebGPU EP.</small></div>
+            <div class="flow-step"><strong>Generator State</strong><small>One <code>State</code> and one positive graph ID when capture is enabled.</small></div>
+            <div class="flow-step"><strong><code>GenerateNextToken</code></strong><small><code>State::Run</code> enters <code>OrtApi::Run</code>.</small></div>
+          </div>
+          <div class="flow-arrow-down">↓</div>
+          <div class="capture-decision">
+            <strong><code>gpu_graph_id</code> decision</strong>
+            <div class="capture-branches">
+              <div class="capture-branch"><strong><code>-1</code> / capture off</strong>Normal eager execution through the serialized Session Run path.</div>
+              <div class="capture-branch"><strong>Unseen positive ID</strong>Normal execution records the graph, then immediately replays it.</div>
+              <div class="capture-branch"><strong>Known positive ID</strong>Direct captured-graph replay before the normal Session Run mutex.</div>
+            </div>
+          </div>
+          <div class="flow-arrow-down">↓</div>
+          <div class="flow-row" style="--flow-columns: 3">
+            <div class="flow-step"><strong>Session WebGPU EP</strong><small>Graph commands and per-graph buffer managers are stored by graph ID.</small></div>
+            <div class="flow-step"><strong>Shared <code>WebGpuContext</code></strong><small>Mutable encoder, capture/replay, dispatch and profiling state.</small></div>
+            <div class="flow-step"><strong>WebGPU queue</strong><small>Commands are submitted in queue order.</small></div>
+          </div>
+          <div class="flow-notes" aria-label="Current implementation limitations">
+            <span class="flow-note">Normal execution: Session-serialized</span>
+            <span class="flow-note">Captured replay: bypasses that mutex</span>
+            <span class="flow-note">Default <code>contextId=0</code>: mutable context shared across Sessions</span>
+            <span class="flow-note">Multiple objects exist; concurrent Run is not safe</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Real public API shape</h3>
+      <div class="legend"><span class="genai">GenAI / OGA API</span><span class="ort">Internal ORT API boundary</span></div>
+      <pre><code>// No public OgaContext exists. This Model/Session plus its Generators form one context.
+OgaModel* model = nullptr;
+OgaGeneratorParams* params = nullptr;
+OgaGenerator* generator = nullptr;
+
+<span class="api-genai">OgaCreateModel</span>(config_directory, &amp;model);              // creates the internal Session
+<span class="api-genai">OgaCreateGeneratorParams</span>(model, &amp;params);
+<span class="api-genai">OgaCreateGenerator</span>(model, params, &amp;generator);
+<span class="api-genai">OgaGenerator_AppendTokens</span>(generator, ids, count);
+
+while (!<span class="api-genai">OgaGenerator_IsDone</span>(generator))
+  <span class="api-genai">OgaGenerator_GenerateNextToken</span>(generator);          // enters the internal Session Run
+
+<span class="api-genai">OgaDestroyGenerator</span>(generator);
+<span class="api-genai">OgaDestroyGeneratorParams</span>(params);
+<span class="api-genai">OgaDestroyModel</span>(model);                              // releases the internal Session
+<span class="api-genai">OgaShutdown</span>();</code></pre>
+      <pre><code><span class="api-genai">OgaCreateModel</span>                     → <span class="api-ort">OrtApi::CreateSession</span>
+<span class="api-genai">OgaGenerator_GenerateNextToken</span>     → <span class="api-ort">OrtApi::Run</span>
+<span class="api-genai">OgaDestroyModel</span>                    → <span class="api-ort">OrtApi::ReleaseSession</span></code></pre>
+
+      <h3>Target ownership and lifetime summary</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Runtime object/resource</th><th>Owner</th><th>Live range</th><th>Release rule</th></tr></thead>
+        <tbody>
+          <tr><td>GenAI global runtime</td><td>Process/application</td><td>First OGA use → <code>OgaShutdown</code></td><td>Shutdown last.</td></tr>
+          <tr><td>Generation context</td><td>Application, as a logical owner</td><td>Model/Session creation → all Generators and Model destroyed</td><td>Contains multiple Generators; destroy Generator-owned state before the internal Session.</td></tr>
+          <tr><td>Model API object and source</td><td>Application</td><td><code>OgaCreateModel</code> → <code>OgaDestroyModel</code></td><td>Outlives its Generators or Engine.</td></tr>
+          <tr><td>ORT Session</td><td>Model, internally</td><td>Model construction → Model destruction</td><td>Stop admission; retire final Runs before releasing resources.</td></tr>
+          <tr><td>Model resources</td><td>Session</td><td>Session initialization → final Session epoch</td><td>Private per Session; no cross-Session weight/initializer sharing.</td></tr>
+          <tr><td>WebGPU EP</td><td>Session</td><td>Session initialization → Session teardown</td><td>Releases graph/pool state and its context reference.</td></tr>
+          <tr><td>Device/context/queue</td><td>Device runtime</td><td>First context acquisition → last context release</td><td>Drain submissions and callbacks before destruction.</td></tr>
+          <tr><td>Generator parameters</td><td>Application until binding; immutable snapshot thereafter</td><td>Create → final Generator using the snapshot</td><td>Freeze at Generator creation or deep-copy into that Generator; later mutation is rejected.</td></tr>
+          <tr><td>Generator</td><td>Application; member of one generation context</td><td>Create → done/cancel/close</td><td>Not thread-affine. Owns tokens/search, graph identity/active slot, KV lease, predecessor completion state and a fail-fast admission guard.</td></tr>
+          <tr><td>Engine/request</td><td>Application/Engine</td><td>Optional alternative to direct Generator driving</td><td>Remove/destroy requests, then Engine, before Model.</td></tr>
+          <tr><td>Generation step / Run state</td><td>Admitted Generator call and its RunContext</td><td>Admission → commit/failure publication</td><td>Different Generators may own steps concurrently; physical leases remain unavailable through their completion epochs.</td></tr>
+          <tr><td>Allocation record</td><td>Allocation domain that created it</td><td>Allocation → completion-safe release</td><td>Stores immutable pool/domain provenance; <code>Free</code> never consults mutable “current Run” routing.</td></tr>
+          <tr><td>Graph template and idle-slot pool</td><td>Session</td><td>Session Ready → Session drain</td><td>Stores immutable signatures and reusable idle capacity; it does not own a Generator's active graph state.</td></tr>
+          <tr><td>Active captured graph / GraphArena</td><td>Generator</td><td>Generator's first capture/acquire → Generator close</td><td>Run steps borrow it; return it to the Session pool only after the final replay epoch.</td></tr>
+          <tr><td>KV state and active slot/blocks</td><td>Generator</td><td>Generator admission → final KV reader/writer</td><td>Session provides only the synchronized allocator/idle pool; the active lease is exclusive to one Generator.</td></tr>
+          <tr><td>Eager arena</td><td>Run lease from Session/device pools</td><td>One eager step → completion epoch</td><td>Descriptor returns Session-locally; raw buffers may return device-wide.</td></tr>
+          <tr><td>Initializer/prepack arena</td><td>Session</td><td>Session initialization → Session drain</td><td>Model resources remain private to that Session; only raw backing capacity may recycle device-wide.</td></tr>
+          <tr><td>Staging, query and profiling state</td><td>Generation step / RunContext</td><td>One step</td><td>Never stored as mutable current-Run state on the Session or device context.</td></tr>
+          <tr><td>Device-runtime lease, queue and raw buffer pool</td><td>Device runtime</td><td>First context acquisition → final Run/callback completion</td><td>Track free, leased and retiring records; destruction drains submissions/callbacks and never reuses storage before completion.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout"><strong>Core lifetime rule:</strong> API destruction ends new access immediately; physical GPU storage becomes reusable only after its last submission epoch completes.</div>
+
+      <h3>Current graph-capture problems</h3>
+      <p>No deterministic result-correctness defect was identified solely from serialized graph replay when the ID, signature and bindings remain unchanged. The implementation nevertheless has the following correctness and recovery defects. Part 3 gives the corresponding changes.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Problem</th><th>Applies under strict serialization?</th><th>Current consequence</th></tr></thead>
+        <tbody>
+          <tr><td>Generator graph IDs are random and are not reserved uniquely within the Session.</td><td><span class="status reject">Yes</span></td><td>Two live Generators can receive the same ID. The second can replay the first Generator's captured graph, even when their Runs occur sequentially.</td></tr>
+          <tr><td>Replay has no scope guard that restores <code>WebGpuContext</code> state after every failure.</td><td><span class="status reject">Yes, on an error path</span></td><td>An exception during dispatch or flush can leave the context in <code>Replaying</code> state and make later Runs fail or use incorrect routing state.</td></tr>
+          <tr><td>A captured graph is selected by integer ID without validating a graph/binding signature.</td><td><span class="status reject">Yes</span></td><td>An ID collision or accidental reuse can replay commands captured for different shapes, buffer identities or bindings. The replay fast path also bypasses normal input/output validation.</td></tr>
+          <tr><td>Generator destruction performs best-effort graph release and suppresses release failures.</td><td><span class="status serial">Yes, cleanup path</span></td><td>Captured commands and graph buffers can remain retained until Session teardown; failure reporting may be limited to logging.</td></tr>
+          <tr><td>Captured replay occurs before the mutex that serializes normal Session execution.</td><td><span class="status serial">No, if the application externally serializes every call</span></td><td>The Session does not actually enforce the advertised serial behavior for replay. Overlapping replay/release or two replay callers can race, so external serialization is currently required.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="concurrent-model">
+      <h2>2. Concurrent programming model</h2>
+      <p class="lead">The target supports multiple live Sessions, multiple live Generators inside each Session, concurrent execution of different Generators on different threads, and sequential handoff of one Generator between threads. It does not support overlapping state mutation of the same Generator and does not promise simultaneous GPU kernel execution: one device runtime still orders queue writes and submissions.</p>
+
+      <div class="contract">
+        <div><strong>Multiple Sessions</strong>Different Sessions may initialize and Run concurrently, including on the same WebGPU context.</div>
+        <div><strong>Different Generators on different threads</strong>Generators in the same or different Sessions may have active steps concurrently because each owns independent mutable state and leases.</div>
+        <div><strong>Thread-mobile Generator</strong>Successive calls may run on different threads, but one admission guard permits only one active state-mutating call.</div>
+      </div>
+
+      <div class="callout"><strong>Definition — generation step:</strong> one invocation of <code>OgaGenerator_GenerateNextToken(generator)</code> for one Generator. It starts when the call passes that Generator's admission guard, may perform one or more internal ORT Session Runs, consumes the current token/KV/search state, and ends when the next token plus the updated Generator state are committed or the call fails without committing. “At most one step in flight” means two threads must not execute this state-mutating interval concurrently on the same Generator. GPU storage used by the step can remain in the <code>retiring</code> state until its completion epoch; this physical retirement period is tracked separately and does not permit early buffer or KV reuse.</div>
+      <div class="callout good"><strong>Required parallelism:</strong> T1 may run Generator A1 while T2 runs Generator A2, even when A1 and A2 share one Session. Their Generator state, KV leases and graph/eager allocation domains are independent; Session registries and device-runtime services provide the required synchronization.</div>
+      <div class="callout good"><strong>Thread handoff is supported; overlap is not.</strong> A Generator has no permanent worker-thread affinity. It may be created on T1, used on T2, and used for its next step on T3 after a release/acquire synchronization edge. This supports worker pools, asynchronous continuations and work stealing. It does not allow T2 and T3 to mutate that Generator simultaneously: step N+1 depends on step N's token, search state, KV cache and graph bindings.</div>
+
+      <div class="diagram">
+        <div class="diagram-title">Target concurrent execution flow · parallel host lanes converge on one ordered queue</div>
+        <div class="diagram-key" aria-label="Ownership color key">
+          <span class="key-session">Session-owned</span>
+          <span class="key-generator">Generator-owned</span>
+          <span class="key-run">Run-owned</span>
+          <span class="key-device">Device-runtime-owned</span>
+        </div>
+        <div role="img" aria-label="Caller threads may prepare work in parallel for Session A Generators A1 and A2 and Session B Generators B1 and B2. Each Generator admits at most one active generation step at a time. Every admitted step gets its own RunContext and selects either a persistent Generator-owned GraphLease or a per-Run EagerLease borrowed from the Session pool. Both Session lanes converge on a context submission coordinator, an ordered WebGPU queue and a completion epoch. Eager resources retire and recycle after completion while Generator graph and KV leases remain active.">
+          <div class="flow-step owner-device"><strong>Caller threads</strong><small>Sessions and different Generators may overlap. One Generator may migrate between threads only across an ordered handoff.</small></div>
+          <div class="flow-arrow-down">↓ parallel Session lanes</div>
+          <div class="parallel-lanes">
+            <div class="parallel-lane">
+              <div class="lane-title">Session A · Generators A1 and A2</div>
+              <div class="lane-flow">
+                <div class="lane-node owner-session"><strong>Session A</strong>Synchronized registries, graph/KV allocators and idle eager pools.</div>
+                <span class="lane-arrow">→</span>
+                <div class="lane-node owner-generator"><strong>A1 / A2</strong>Each owns active graph + KV leases; one active generation step.</div>
+                <span class="lane-arrow">→</span>
+                <div class="lane-node owner-run"><strong>RunContext</strong>Transient recording, staging, query and dependency state.</div>
+                <span class="lane-arrow">→</span>
+                <div class="lane-node owner-run"><strong>AllocationDomain</strong><div class="allocation-options"><span><b>GraphLease:</b> borrowed from Generator</span><span><b>EagerLease:</b> borrowed from Session pool for this Run</span></div></div>
+              </div>
+            </div>
+            <div class="parallel-lane">
+              <div class="lane-title">Session B · Generators B1 and B2</div>
+              <div class="lane-flow">
+                <div class="lane-node owner-session"><strong>Session B</strong>Private model resources and synchronized Session-local pools.</div>
+                <span class="lane-arrow">→</span>
+                <div class="lane-node owner-generator"><strong>B1 / B2</strong>Each owns active graph + KV leases; one active generation step.</div>
+                <span class="lane-arrow">→</span>
+                <div class="lane-node owner-run"><strong>RunContext</strong>Independent from every other active RunContext.</div>
+                <span class="lane-arrow">→</span>
+                <div class="lane-node owner-run"><strong>AllocationDomain</strong><div class="allocation-options"><span><b>GraphLease:</b> stable Generator addresses</span><span><b>EagerLease:</b> completion-bounded scratch</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-arrow-down">↓ merge</div>
+          <div class="flow-row" style="--flow-columns: 4">
+            <div class="flow-step owner-device"><strong>Submission coordinator</strong><small>Orders uploads, recordings and submits across Sessions.</small></div>
+            <div class="flow-step owner-device"><strong>WebGPU queue</strong><small>GPU submission remains globally ordered.</small></div>
+            <div class="flow-step owner-device"><strong>Completion epoch</strong><small>Marks the last GPU use of every leased resource.</small></div>
+            <div class="flow-step"><strong>Retire or retain</strong><small>Recycle eager buffers after completion; retain Generator graph and KV leases.</small></div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Concrete multi-thread API shape</h3>
+      <pre><code>// Decoder-only scope: each OgaModel below owns one internal ORT Session.
+<span class="api-genai">OgaCreateModel</span>(path_a, &amp;model_a);
+<span class="api-genai">OgaCreateModel</span>(path_b, &amp;model_b);
+
+<span class="api-genai">OgaCreateGeneratorParams</span>(model_a, &amp;params_a1);
+<span class="api-genai">OgaCreateGeneratorParams</span>(model_a, &amp;params_a2);
+// Finish configuring each params object before binding it to a Generator.
+<span class="api-genai">OgaCreateGenerator</span>(model_a, params_a1, &amp;generator_a1);
+<span class="api-genai">OgaCreateGenerator</span>(model_a, params_a2, &amp;generator_a2);
+
+<span class="api-genai">OgaCreateGeneratorParams</span>(model_b, &amp;params_b);
+<span class="api-genai">OgaCreateGenerator</span>(model_b, params_b, &amp;generator_b1);
+
+// T1, T2 and T3 may overlap. Each Generator is exclusive only for the duration
+// of its admitted call; it is not permanently bound to that worker thread.
+T1: <span class="api-genai">OgaGenerator_GenerateNextToken</span>(generator_a1);
+T2: <span class="api-genai">OgaGenerator_GenerateNextToken</span>(generator_a2);
+T3: <span class="api-genai">OgaGenerator_GenerateNextToken</span>(generator_b1);
+
+// T4 may construct another Model/Session while those steps remain in flight.
+T4: <span class="api-genai">OgaCreateModel</span>(path_c, &amp;model_c);
+
+// After T1 returns and the application publishes the handoff, another worker
+// may execute the next step of the same Generator. It must not overlap T1.
+T5 (after T1): <span class="api-genai">OgaGenerator_GenerateNextToken</span>(generator_a1);</code></pre>
+
+      <h3>Concurrency contract</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Operation</th><th>Target behavior</th><th>Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Successive calls on one Generator from different threads</td><td><span class="status target">Supported handoff</span></td><td>No thread affinity. The previous call must finish, and publication to the next thread must establish a release/acquire synchronization edge.</td></tr>
+          <tr><td>Overlapping calls on the same Generator</td><td><span class="status reject">Fail fast: busy</span></td><td>One admission guard covers every state-mutating API. A scheduler may queue the later call outside the Generator, but the Generator itself does not block unpredictably or execute both calls.</td></tr>
+          <tr><td>Read or mutate a Generator during its active step</td><td><span class="status reject">Snapshot or busy</span></td><td>Mutators return busy. Safe scalar reads use a locked immutable snapshot; APIs exposing mutable or borrowed spans are unavailable until the step finishes.</td></tr>
+          <tr><td>Mutate GeneratorParams after Generator creation</td><td><span class="status reject">Rejected</span></td><td>Creation binds an immutable snapshot; use a different params object for different settings.</td></tr>
+          <tr><td>Different Generators on different threads, same Session</td><td><span class="status target">Concurrent</span></td><td>Independent Generator and Run state, KV ownership and graph/eager leases; only Session registries and device services are synchronized.</td></tr>
+          <tr><td>Different Generators on different threads, different Sessions</td><td><span class="status target">Concurrent</span></td><td>Private Session/model state; the shared device runtime coordinates submission, completion and raw-memory capacity.</td></tr>
+          <tr><td>Create Session B while Session A Runs</td><td><span class="status target">Supported</span></td><td>Private initialization context and ordered device submission.</td></tr>
+          <tr><td>Create Session on T1, Run it on T2</td><td><span class="status target">Supported</span></td><td>Publish the Ready Session through a release/acquire synchronization edge.</td></tr>
+          <tr><td>Eager and graph replay overlap</td><td><span class="status target">Supported</span></td><td>Separate Run allocation domains; common epoch-based retirement.</td></tr>
+          <tr><td>Same writable tensor/buffer used concurrently</td><td><span class="status reject">Rejected unless ordered</span></td><td>Caller must provide distinct ranges or an explicit dependency.</td></tr>
+          <tr><td>Destroy Generator/Model/Session during active work</td><td><span class="status serial">Close then drain</span></td><td>Close stops admission; destruction waits for active calls and GPU/callback epochs before freeing physical resources.</td></tr>
+          <tr><td>Cancel a Run from another thread</td><td><span class="status target">Dedicated channel</span></td><td>Use an atomic cancellation token with defined observation points; do not mutate a live <code>OrtRunOptions</code>.</td></tr>
+          <tr><td><code>OgaShutdown</code> with live objects or callbacks</td><td><span class="status reject">Unsupported</span></td><td>Shutdown is terminal and quiescent: all Models, Generators, Engines, Runs and callbacks are gone.</td></tr>
+          <tr><td>Queue submission</td><td><span class="status serial">Globally ordered</span></td><td>One context-level coordinator assigns submission/completion epochs.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Graph capture and buffer behavior</h3>
+      <ul>
+        <li><strong>Capture on:</strong> the Session owns graph templates and one or more address-stable graph slots. A Generator leases a compatible slot for capture/replay; the slot returns to the Session only after its last replay epoch.</li>
+        <li><strong>Capture off:</strong> each Run leases an eager arena for transient tensors, descriptors, staging and queries. The arena descriptor returns Session-locally; raw buffers recycle device-wide after completion.</li>
+        <li><strong>KV cache:</strong> KV is persistent Generator state, never general scratch. Contiguous KV leases one Session slot per Generator; paged KV leases blocks transactionally and uses per-in-flight metadata slots.</li>
+        <li><strong>Backpressure:</strong> admission may wait or fail when graph slots, KV capacity, metadata slots or the device memory budget are exhausted.</li>
+      </ul>
+    </section>
+
+    <section id="changes">
+      <h2>3. Problems and solutions</h2>
+      <p class="lead">Current graph capture is already <strong>per Generator in logical identity and lifetime</strong>. Concurrent execution is not: the WebGPU EP reports that concurrent Run is unsupported, and mutable replay, profiling and allocation state is shared below the Session boundary.</p>
+
+      <h3>Current graph-capture implementation review · complete issue list</h3>
+      <div class="callout good"><strong>Verified ownership:</strong> each GenAI <code>Generator</code> creates its own <code>State</code>. When capture is enabled, <code>State::State</code> creates its graph ID, <code>State::Run</code> writes that ID to <code>gpu_graph_id</code>, and <code>State::~State</code> calls <code>SessionReleaseCapturedGraph</code>. Thus the graph's logical identity follows the Generator. ORT physically stores captured commands and the per-graph <code>BufferManager</code> in Session EP maps keyed by that ID.</div>
+      <div class="callout warn"><strong>Per-Generator graph buffers are necessary, not sufficient.</strong> They prevent intentional buffer sharing between Generators, but concurrent threads still touch the Session graph registry, replay/release paths, allocator routing, program cache and shared <code>WebGpuContext</code> recording/profiling state. Different Generators become safe only after those shared layers are synchronized or made per Run.</div>
+
+      <div class="diagram">
+        <div class="diagram-title">Current placement · Generator identity, Session registry</div>
+        <div class="topology" role="img" aria-label="Each Generator owns a State with a graph ID. State Run passes the ID through RunOptions. The Session WebGPU execution provider uses the ID to find captured commands and a per-graph buffer manager. The shared WebGPU context records and replays commands.">
+          <div class="node"><strong>Generator State</strong><small>One positive graph ID per capture-enabled Generator; destructor releases that ID.</small></div>
+          <div class="node"><strong>RunOptions</strong><small><code>gpu_graph_id = generator.graph_id</code>, or <code>-1</code> for eager prefill.</small></div>
+          <div class="node"><strong>Session WebGPU EP</strong><div class="stack"><span class="subnode"><code>captured_graphs_[id]</code></span><span class="subnode"><code>per_graph_buffer_mgrs_[id]</code></span></div><small>Physical registry and idle buffer pool.</small></div>
+          <div class="node"><strong>WebGpuContext</strong><small>Current capture/replay encoder, dispatch and profiling state.</small></div>
+        </div>
+      </div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Finding</th><th>Classification</th><th>Required correction</th></tr></thead>
+        <tbody>
+          <tr><td>Graph identity and cleanup are already attached to GenAI <code>State</code>, which is owned by one Generator.</td><td><span class="status target">Correct today</span></td><td>Preserve this ownership. A per-Run context borrows the Generator's graph ID/lease for one step; it must not replace the persistent Generator state.</td></tr>
+          <tr><td><code>State::State</code> independently samples a random integer in <code>[1, INT_MAX]</code>. There is no per-Session uniqueness check.</td><td><span class="status reject">Correctness bug</span></td><td>Allocate IDs monotonically from the Model/Session generation context, reserve them in a synchronized registry, handle wraparound, and release the reservation after graph retirement. Never rely on probability for uniqueness.</td></tr>
+          <tr><td><code>InferenceSession::RunImpl</code> checks and replays a captured graph before it acquires the mutex used when <code>ConcurrentRunSupported()==false</code>. <code>ReleaseCapturedGraph</code> does acquire that mutex, so it does not synchronize with replay. Two replays—or replay and release—can race on EP maps and shared <code>WebGpuContext</code> state.</td><td><span class="status reject">Current race</span></td><td>Immediate containment: serialize WebGPU replay, capture and release with one lock. Target design: synchronized graph registry plus Generator-owned active leases and per-Run recording state; release waits for the lease's last submission epoch.</td></tr>
+          <tr><td><code>WebGpuContext::Replay</code> sets state to <code>Replaying</code> but has no scope guard. A dispatch/flush exception leaves it stuck; <code>OnRunEnd</code> can also return before resetting routing/error-scope state if immediate replay fails.</td><td><span class="status reject">Recovery bug</span></td><td>Make capture/replay transactional with scope guards. Publish <code>captured_graph_ids_</code> only on successful completion; on failure reset context/routing state and erase or quarantine the partial graph and arena.</td></tr>
+          <tr><td><code>State::Run</code> calls <code>AddRunConfigEntry("gpu_graph_id", ...)</code> every step. <code>ConfigOptions::AddConfigEntry</code> overwrites safely but logs a warning whenever the key already exists.</td><td><span class="status serial">Diagnostics/perf bug</span></td><td>Track the last installed value and update only on the eager/capture transition, or add a set/replace API that does not warn for an intentional update.</td></tr>
+          <tr><td>A captured graph is looked up by integer ID only. ORT does not bind that ID to an input/output shape, address, graph signature or Generator identity, and the replay fast path runs before normal input/output validation. Reusing an ID with incompatible bindings can replay commands against the old buffers.</td><td><span class="status reject">API correctness hazard</span></td><td>Store and validate a <code>GraphSignature</code> with each ID: Session/model identity, graph variant, shapes, data types, buffer identities/ranges and capture-affecting options. Reject mismatch or select eager/re-capture; never replay solely because the integer ID exists.</td></tr>
+          <tr><td>Once captured, <code>RunImpl</code> calls <code>ReplayGraph</code> directly and skips normal <code>OnRunStart</code>/<code>OnRunEnd</code> execution. WebGPU explicitly leaves run-level replay profiling as a TODO, and the normal Execute path's termination check cannot interrupt replay.</td><td><span class="status serial">Behavior limitation</span></td><td>Move all per-Run setup/cleanup into a replay-aware Run context. Define profiling and cancellation semantics explicitly; at minimum check cancellation before submission and collect replay events into the requesting Run profiler.</td></tr>
+          <tr><td>Every live graph ID retains a dedicated captured-command vector and graph-mode <code>BufferManager</code> until release. The Session buffer pool then retains retired buffers by a count of Generator slots, not by bytes; one large high-water allocation can remain cached, and incompatible donated sizes can sit unused.</td><td><span class="status serial">Memory limitation</span></td><td>Add byte budgets at device and Session levels, per-slot accounting, compatibility classes, eviction and backpressure. Expose retained/active/retiring bytes and graph-slot counts for diagnostics.</td></tr>
+          <tr><td><code>State::~State</code> performs best-effort graph release and swallows every exception. A release failure can retain the graph until Session teardown, with diagnostics emitted only when the relevant logging is enabled.</td><td><span class="status serial">Cleanup weakness</span></td><td>Provide an explicit close/release path that returns status, keep the destructor as a no-throw fallback, and have Session teardown report and reclaim any orphaned graph IDs.</td></tr>
+          <tr><td>The Session pool and per-graph maps are unsynchronized. Sessions using default <code>contextId=0</code> also share one mutable <code>WebGpuContext</code>, while their Session mutexes are independent. Existing tests do not cover concurrent replay/release, multiple simultaneously live Generators, or cross-Session overlap.</td><td><span class="status serial">Current limitation / test gap</span></td><td>Keep concurrent Run disabled and do not overlap Sessions on one context until the isolation work below lands. Add deterministic-ID-collision, signature-mismatch, two-Generator, replay/release, failed-capture/replay, cancellation/profiling, memory-pressure and cross-Session shared-context stress tests.</td></tr>
+        </tbody>
+      </table></div>
+
+      <p><strong>Code evidence:</strong> GenAI <code>src/generators.cpp</code> and <code>src/models/model.cpp/.h</code>; ORT <code>core/session/inference_session.cc</code>, <code>core/framework/config_options.cc</code>, and <code>core/providers/webgpu/{webgpu_execution_provider,webgpu_context,session_buffer_pool}.*</code>. Current tests exercise sequential multi-ID capture/release and sequential Generator recreation, not the races above.</p>
+
+      <p>The single <code>graph_capture_session_</code> pointer is not a demonstrated decoder-path bug today: a capture-capable decoder <code>State</code> targets one decoder Session, while pipeline components use separate <code>State</code> objects. Replace it with an explicit per-Session graph lease if a future State can capture against more than one Session.</p>
+
+      <h3>Eager mode: reuse the graph-capture pattern, not its lifetime</h3>
+      <div class="callout"><strong>Recommendation:</strong> generalize graph capture's <em>allocation-domain routing</em>, but do not permanently attach a graph-style <code>BufferManager</code> to every eager Generator. Use one interface with two lease types: a Generator-lifetime pinned <code>GraphLease</code>, and a completion-bounded <code>EagerLease</code> owned by one Run. This preserves isolation while allowing eager memory to be shared after each step.</div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Alternative</th><th>What it solves</th><th>Cost / gap</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Extend today's per-graph map to one persistent <code>BufferManager</code> per eager Generator.</td><td>Simple allocation isolation and good locality; a useful correctness-first prototype.</td><td>Retains each Generator's high-water scratch until Generator destruction, multiplies memory by active Generator count, fragments capacity, and still does not isolate encoder/pass, deferred-dispatch, profiling or submission state.</td><td><span class="status serial">Fallback only</span></td></tr>
+          <tr><td>Keep one shared eager manager and add a mutex.</td><td>Small change and container safety.</td><td>Serializes allocation/recording and cannot satisfy overlapping Runs; head-of-line blocking remains across Sessions.</td><td><span class="status reject">Not target</span></td></tr>
+          <tr><td>Lease an eager arena from a synchronized Session pool for each Run; retire its buffers by submission epoch.</td><td>Run isolation, bounded reuse, backpressure and fast transfer of idle memory between Generators.</td><td>Requires lease state, completion tracking and pool budgets.</td><td><span class="status target">Recommended</span></td></tr>
+          <tr><td>Add soft Generator affinity to the leased eager arena.</td><td>Recovers cache locality when the same Generator runs its next step.</td><td>Affinity must be revocable under pressure; it cannot become permanent ownership.</td><td><span class="status target">Optional optimization</span></td></tr>
+        </tbody>
+      </table></div>
+
+      <p>Represent the choice in <code>WebGpuRunContext</code> as an <code>AllocationDomain</code>: <code>Graph(generator_graph_lease)</code> or <code>Eager(run_arena_lease)</code>. Persistent outputs and KV remain Generator-owned in both modes. Only transient intermediates, uniforms, staging and query buffers use the eager Run lease. On completion they move <code>leased → retiring → free</code>; the Session pool may then hand the arena to any compatible Generator. Raw buffers may ultimately return to the device-wide pool.</p>
+
+      <div class="callout"><strong>Eager-pool concurrency protocol:</strong> pool metadata is protected by a short-held mutex or size/usage shard. Acquisition atomically removes one compatible record from <code>free</code> and assigns an exclusive lease ID. Release validates immutable pool provenance plus a generation counter, then moves the record to <code>retiring(completion_epoch)</code>; only completion processing may return it to <code>free</code>. Reserve budget under the lock, but create physical buffers, record commands, submit and wait outside it. This prevents duplicate leases, wrong-pool returns, ABA/stale releases and GPU waits under pool locks.</div>
+
+      <h3>Changes required for the target model</h3>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Boundary and confirmed current problem</th><th>Required solution</th><th>Invariant</th></tr></thead>
+        <tbody>
+          <tr><td><strong>GenAI Generator API.</strong> <code>Generator</code> mutates <code>state_</code>, search/sequences, logits, KV, options, adapters and telemetry without an admission guard.</td><td>Add a per-Generator mutex/state machine independent of thread identity. Guard <code>GenerateNextToken</code>, append, rewind, inputs/logits/options/adapters and close; overlapping mutators fail fast with a busy status. Define snapshot semantics for safe scalar reads, and make close drain the admitted step.</td><td>Different Generators may mutate concurrently on different threads; one Generator may move between threads, but exactly one of its mutating intervals is active.</td></tr>
+          <tr><td><strong>Generator parameters.</strong> Multiple Generators may retain the same logically const <code>GeneratorParams</code>, while another API handle can still mutate its search/speculative/guidance fields.</td><td>Freeze the object after first binding or deep-copy a validated immutable snapshot into every Generator. Reject mutation while binding or afterward.</td><td>All decisions within a Generator use one stable parameter version.</td></tr>
+          <tr><td><strong>Per-Generator RunOptions and cancellation.</strong> <code>State</code> owns <code>run_options_</code>, dynamic options, adapter names and <code>session_terminated_</code>, but they are unsynchronized.</td><td>Mutate them only inside Generator admission. For cross-thread cancellation, add a dedicated atomic token checked before recording/submission and at supported execution boundaries.</td><td>Cancellation cannot race container or <code>OrtRunOptions</code> mutation; a failed/cancelled step has defined commit semantics.</td></tr>
+          <tr><td><strong>ORT Session and graph replay.</strong> Normal WebGPU Runs are Session-serialized, but replay bypasses that mutex; graph maps and release are not mutually safe.</td><td>Contain immediately with a common replay/capture/release lock. Target: synchronized graph registry, immutable signatures, active Generator leases and completion-aware release, as detailed above.</td><td>Lookup, replay and retirement cannot overlap an incompatible mutation of the same graph entry.</td></tr>
+          <tr><td><strong>Run recording state.</strong> Shared <code>WebGpuContext</code> contains the current command/compute-pass encoder, deferred dispatches, pending pipeline builds/kernels/queries, query resources, profiling offsets/events, capture state, error scopes and flush counters.</td><td>Create one <code>WebGpuRunContext</code> per Run and <code>WebGpuInitContext</code> per initialization transaction. Keep only device, immutable caches, submission coordination, completion tracking and health in the device runtime.</td><td>One Run or Session initialization cannot encode into, flush, reset, profile or complete another Run's state.</td></tr>
+          <tr><td><strong>Allocator routing.</strong> <code>GpuBufferAllocator::Alloc/Free</code> dynamically consult EP-wide <code>graph_buffer_mgr_active_</code> and <code>current_graph_annotation_id_</code>. Allocation and later free may therefore select different managers; allocator statistics are also unsynchronized.</td><td>Return an allocation record containing immutable allocation-domain/pool provenance and size/class. Route <code>Free</code> from that record, never from current-Run EP state. Make accounting per-pool/atomic or lock it externally.</td><td>Every buffer returns exactly once to the manager that created it, independent of which Run/thread performs release.</td></tr>
+          <tr><td><strong>Data transfer and staging.</strong> <code>GetDataTransfer()</code> captures one fixed <code>BufferManager&amp;</code>; upload/download/copy record into and can flush the shared context. Upload also copies alignment padding whose staging bytes are currently uninitialized.</td><td>Pass an explicit Run/init transfer context and destination allocation domain. Lease staging/readback storage per operation, submit through the coordinator, retain CPU source data until encoded copy safety is established, and zero or avoid padded tail writes.</td><td>A transfer is ordered with its consumer/producer, cannot flush another Run, uses the destination's true owner, and never writes indeterminate bytes.</td></tr>
+          <tr><td><strong>Session initialization/model resources.</strong> Preferred/prepack allocation uses context-wide <code>InitializerBufferManager()</code>. Multiple Sessions on default <code>contextId=0</code> can initialize through the same mutable manager while another Session Runs.</td><td>Give each Session private initializer/prepack semantic arenas and a private InitContext. Permit only raw backing-buffer reuse at device scope after retirement; publish the Session as Ready only after initialization submissions and metadata are complete.</td><td>Weights, initializers, packed weights and their allocation metadata are private per Session; construction never drains active Run state.</td></tr>
+          <tr><td><strong>Buffer caches and pools.</strong> Pending, bucket, graph and simple cache containers are unsynchronized and do not encode allocation owner or GPU completion. A single global cache lock would serialize the hot path.</td><td>Use synchronized Session registries plus a device raw-buffer pool, immutable pool/owner IDs, exclusive lease IDs, generation counters, byte budgets and completion epochs. Shard by compatibility class; reserve capacity under the shard lock and perform physical creation outside it.</td><td>Acquisition removes exactly one record atomically; buffers move <code>free → leased → retiring → free</code>; only completion processing recycles them, and no pool lock covers recording, submission or GPU waits.</td></tr>
+          <tr><td><strong>Graph slots.</strong> Stable addresses require capacity to remain Generator-owned, while one slot per signature would serialize Generators and unlimited slots would exhaust memory.</td><td>Pool a bounded number of address-stable slots per exact <code>GraphSignature</code>. A Generator owns its active <code>GraphLease</code>; a Run only borrows it. Apply wait/eager-fallback/fail backpressure policy.</td><td>A slot is exclusive to one live Generator and is reusable only after its final replay epoch.</td></tr>
+          <tr><td><strong>KV cache.</strong> Current KV tensors are per <code>State</code>, but their allocation/replacement, rewind and present-to-past transitions are not guarded against an overlapping step or early physical reuse.</td><td>Keep contiguous KV or page leases in Generator state; transact allocation/update/rollback under admission and tag every block with its last-use epoch. For paged KV, lease immutable block-table/metadata snapshots per step.</td><td>No live Generator shares writable KV; no slot/page/metadata record is reused while a GPU reader or writer remains.</td></tr>
+          <tr><td><strong>Program/pipeline cache.</strong> <code>ProgramManager::programs_</code> is an unsynchronized map; concurrent misses may build/publish the same program while deferred-build code expects another thread to populate it.</td><td>Use a concurrent immutable artifact cache with per-key single-flight promise/future. Publish only complete pipelines; on failure deterministically erase or poison the pending entry. Captured commands retain strong pipeline references.</td><td>One build per complete key; all waiters receive the same immutable result or failure.</td></tr>
+          <tr><td><strong>GenAI process-global WebGPU interface.</strong> One <code>InterfaceImpl</code> and trivial-Session allocator serve all Models. Its reusable attention-mask staging vectors resize without synchronization, and <code>EnsureDeviceOrtInit</code> checks/creates the allocator without its own single-flight guard.</td><td>Make device-interface initialization single-flight and configuration-aware. Remove shared mutable staging or lease it per Run. Treat the allocator/device runtime as a strong leased service, not a raw process-global pointer.</td><td>Concurrent Model construction and Generator uploads cannot race singleton creation, resize shared host memory or outlive the allocator Session.</td></tr>
+          <tr><td><strong>GenAI helper graph Sessions.</strong> Cast and similar helper graphs are cached process-wide. The cache mutex protects creation only; callers then Run the same cached WebGPU Session concurrently. Its cache key omits device type and session configuration values.</td><td>Include device/context and all execution-affecting configuration in the key, use single-flight creation, and execute through the same concurrent RunContext contract (or temporarily serialize each cached Session).</td><td>A helper Session is configuration-compatible, strongly alive, and no less concurrency-safe than the decoder Session.</td></tr>
+          <tr><td><strong>Profiling.</strong> <code>WebGpuProfiler</code> writes the shared context's profiling start/offset/event state; captured replay skips normal Run hooks.</td><td>Own queries, timestamp origin and events in each RunContext; merge completed events into Session-level output under synchronization. Define replay profiling and concurrent Session-profiling policy explicitly.</td><td>Every event is attributed once to its requesting Run/Session, with no shared offset reset.</td></tr>
+          <tr><td><strong>Device context configuration and health.</strong> Context initialization is <code>call_once</code>; later Sessions sharing an ID do not validate all device-wide options. Uncaptured-error/device-lost callbacks currently mostly log and do not fail all dependent work through a common state.</td><td>Canonicalize and store a device-runtime compatibility signature; reject conflicting later configurations. Add a synchronized health state machine that stops admission, completes pending work with one stable error and quarantines resources after loss.</td><td>One context ID has one compatible device contract, and device loss cannot leave Runs waiting indefinitely or reuse uncertain resources.</td></tr>
+          <tr><td><strong>Lifetime and shutdown.</strong> <code>WebGpuContextFactory</code> returns raw references and destroys at the last EP ref; GenAI <code>OgaShutdown</code> can reset globals after callers obtained raw interface/global references.</td><td>Give Run/init contexts, submissions and callbacks strong device-runtime leases. Close → stop admission → drain queue/callbacks → destroy. Specify <code>OgaShutdown</code> as terminal and legal only after all runtime objects and work are gone.</td><td>No context, allocator, Session, interface or callback is destroyed while any in-flight operation can dereference it.</td></tr>
+          <tr><td><strong>Admission and memory pressure.</strong> Unbounded Session construction and Generator steps can reserve weights, graph slots, KV and eager arenas beyond the device budget.</td><td>Reserve model/graph/KV/eager bytes before admission, use per-Session quotas plus a fair device scheduler, expose wait/timeout/fail outcomes, and prevent Session initialization from starving decode.</td><td>Accepted work has reserved capacity; backpressure is deterministic, observable and starvation-bounded.</td></tr>
+          <tr><td><strong>Validation gap.</strong> Existing coverage is mainly sequential and does not exercise the ownership/lifetime boundaries above.</td><td>Add race/stress/fault tests: two Generators per Session, multiple Sessions, Session creation during Run, eager+replay, helper graph calls, graph collision/signature mismatch, replay/release, cancellation/profiling, allocation provenance, memory pressure, device loss and close/shutdown. Run with deterministic scheduling hooks and thread sanitization where supported.</td><td>Concurrent results equal serialized baselines, and every failure path leaves registries, leases and budgets balanced.</td></tr>
+        </tbody>
+      </table></div>
+
+      <p><strong>Additional code evidence:</strong> ORT <code>core/providers/webgpu/{allocator,data_transfer,buffer_manager,program_manager,webgpu_profiler,webgpu_context,webgpu_execution_provider}.*</code>; GenAI <code>src/{generators,webgpu/interface}.*</code>, <code>src/models/{model,graph_executor,kv_cache,windowed_kv_cache}.*</code>. The findings distinguish container creation locks from safe use after lookup: both the device-interface cache and helper-session cache currently publish objects whose later mutable operations remain outside those locks.</p>
+
+      <h3>Implementation order</h3>
+      <div class="steps">
+        <div><strong>Enforce API admission first.</strong> Add thread-independent Generator close/admission, fail-fast busy results, immutable parameter snapshots and explicit reader/cancellation semantics. Different Generators remain independently admissible while unsupported same-Generator overlap is contained.</div>
+        <div><strong>Isolate Run, transfer and initialization state.</strong> Introduce <code>WebGpuRunContext</code>/<code>WebGpuInitContext</code>, transfer contexts and graph/eager <code>AllocationDomain</code>; remove current-Run fields from the EP/device context.</div>
+        <div><strong>Make allocation provenance and completion explicit.</strong> Change allocation records and <code>Free</code> routing, then implement submission epochs, raw-buffer retirement, Session initializer arenas, persistent graph leases and pooled eager arenas.</div>
+        <div><strong>Make caches and device services concurrent.</strong> Add single-flight program/helper-Session/allocator initialization, immutable graph templates, compatible context signatures, bounded graph slots and per-Run profiling.</div>
+        <div><strong>Make KV and failure handling transactional.</strong> Add contiguous/paged KV ownership and metadata slots, memory admission, cancellation, close/drain and device-loss propagation.</div>
+        <div><strong>Enable and validate the contract.</strong> Change <code>ConcurrentRunSupported()</code> only after eager, capture, replay, transfers, helper graphs, Session-init overlap, cancellation, destruction, pressure and device-loss stress tests pass.</div>
+      </div>
+
+      <h3>Intentional limitations</h3>
+      <ul>
+        <li>Different Generators in the same or different Sessions are supported concurrently on different threads; shared Session and device structures must not serialize their entire Runs.</li>
+        <li>A Generator may be handed to a different thread after synchronization, but it has at most one active generation step; methods that mutate the same Generator do not overlap.</li>
+        <li>Generator parameters are immutable after they are bound. Different concurrent requests use separate parameter objects or separate immutable snapshots.</li>
+        <li>Graph replay requires an exact compatible signature and an available graph slot; otherwise the Run waits, falls back to eager when legal, or returns backpressure.</li>
+        <li>Model resources are private to each Session. Sessions loading the same model source do not share weights, initializers, packed weights or graph artifacts.</li>
+        <li>Safe concurrent API calls do not guarantee concurrent GPU kernels. WebGPU queue submission remains ordered.</li>
+        <li>The target is memory-bounded. Maximum active Sessions and Generators depend on model weights, KV capacity, graph slots and the device budget.</li>
+        <li><code>OgaShutdown</code> is not concurrent with live Models, Generators, Engines, Runs or callbacks; it is a final quiescent operation.</li>
+      </ul>
+
+      <div class="callout good"><strong>Completion criterion:</strong> steps for different Generators demonstrably overlap on different host threads—including two Generators in one Session—and produce the same results as serialized execution, with no data races, early buffer/KV reuse, cross-Run graph state, resource leaks, whole-Run Session serialization or starvation.</div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Source basis:</strong> current ONNX Runtime and ONNX Runtime GenAI implementations at the pinned revisions above. The archived <a href="concurrent-run-design-draft.html">detailed draft</a> retains the full evidence map, API discussion, buffer-pool details, paged-KV design and validation matrix.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('table').forEach(table => {
+      const headers = [...table.querySelectorAll('thead th')].map(cell => cell.textContent.trim());
+      table.querySelectorAll('tbody tr').forEach(row => {
+        [...row.children].forEach((cell, index) => cell.dataset.label = headers[index] || '');
+      });
+      table.classList.add('mobile');
+      table.closest('.table-wrap')?.classList.add('responsive');
+    });
+  </script>
+</body>
+</html>
