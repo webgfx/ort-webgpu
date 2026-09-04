@@ -43,29 +43,6 @@ Each request allows up to **128 output tokens**; TTFT stops at the first emitted
 | LiteRT-LM Native WebGPU · MTP on | 54.1 ms | 128.4 ms | 137.6 ms | 244.6 ms | 472.8 ms |
 | llama.cpp Vulkan | 216.2 ms | 249.6 ms | 308.4 ms | 443.6 ms | 703.7 ms |
 
-## Model Conversion and Runtime Optimization Analysis
-
-### INT4 ONNX + ONNX Runtime GenAI
-
-- WebGPU graph capture enabled.
-- Prefill-prefix pruning enabled and verified.
-- Decoder logits are `[batch, 1, 262144]`.
-- 278 decoder `MatMulNBits` operations, 35 block-quantized per-layer embeddings, and one block-quantized main embedding.
-- No MTP drafter.
-
-### INT4 LITERTLM + LiteRT-LM Native
-
-- Official Google AI Edge native LiteRT-LM library (`litert-lm.dll`) invoked through Python bindings.
-- Native WebGPU execution over D3D12.
-- Dedicated `prefill_128`, `prefill_1024`, `decode`, and `verify` graphs.
-- Bundled MTP drafter.
-- MTP benchmark acceptance: 37.3%; long-form decode improves 17.4%, with increased TTFT.
-
-### Q4_K_M GGUF + llama.cpp
-
-- Vulkan, full GPU offload, and flash attention.
-- `draft-mtp` requires a separate compatible MTP-head GGUF; none was installed.
-
 ## Prefill Optimization: Before vs After
 
 | Metric | Before | After | Change |
@@ -93,6 +70,29 @@ Each request allows up to **128 output tokens**; TTFT stops at the first emitted
 | llama.cpp | 10/10 | 5/5 coherent completions |
 
 Core capability tests cover arithmetic, factual knowledge, translation, pattern completion, classification, grammar, basic science, and common-sense reasoning under greedy decoding. Long-form generation uses temperature 0.7. Deterministic source-model output/logit comparison is recommended to isolate the ONNX long-form issue.
+
+## Model Conversion and Runtime Optimization Analysis
+
+### INT4 ONNX + ONNX Runtime GenAI
+
+- WebGPU graph capture enabled.
+- Prefill-prefix pruning enabled and verified.
+- Decoder logits are `[batch, 1, 262144]`.
+- 278 decoder `MatMulNBits` operations, 35 block-quantized per-layer embeddings, and one block-quantized main embedding.
+- No MTP drafter.
+
+### INT4 LITERTLM + LiteRT-LM Native
+
+- Official Google AI Edge native LiteRT-LM library (`litert-lm.dll`) invoked through Python bindings.
+- Native WebGPU execution over D3D12.
+- Dedicated `prefill_128`, `prefill_1024`, `decode`, and `verify` graphs.
+- Bundled MTP drafter.
+- MTP benchmark acceptance: 37.3%; long-form decode improves 17.4%, with increased TTFT.
+
+### Q4_K_M GGUF + llama.cpp
+
+- Vulkan, full GPU offload, and flash attention.
+- `draft-mtp` requires a separate compatible MTP-head GGUF; none was installed.
 
 ## Methodology and Caveats
 
