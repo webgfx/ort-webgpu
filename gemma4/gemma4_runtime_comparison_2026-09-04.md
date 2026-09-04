@@ -13,6 +13,8 @@
 
 All stacks use Gemma 4 E2B-IT (5.1B total / approximately 2.3B effective parameters, 35 text layers, GQA, per-layer embeddings, 262,144-token vocabulary). They are different conversions and quantization formats, so results describe complete model-plus-runtime stacks.
 
+**Model context:** Per-Layer Embeddings account for much of the total parameter count while only part of the model is active in each inference layer, explaining the 2.3B effective size. The ONNX and LiteRT-LM packages include text, vision, and audio components, whereas the tested GGUF contains only the text model. Prefill-prefix pruning reduces prompt-processing work, while MTP speculative decoding targets token generation; they optimize different phases.
+
 | Artifact | Size | Format and contents | Published model |
 |---|---:|---|---|
 | Gemma 4 ONNX WebGPU | 3.47 GB | INT4 decoder, embeddings, vision/audio graphs; prefill-prefix pruning | [onnx-webgpu](https://huggingface.co/webai-community/ai-models/tree/main/gemma-4-E2B-it/onnx-webgpu) |
@@ -102,7 +104,7 @@ Core capability tests cover arithmetic, factual knowledge, translation, pattern 
 
 ## Reproducibility
 
-Run the benchmark scripts first, keep their JSON outputs beside the generators, then generate the Markdown and HTML reports.
+Run the benchmark scripts first, keep their JSON outputs beside the generator, then generate the Markdown report.
 
 | Script | Purpose |
 |---|---|
@@ -111,6 +113,5 @@ Run the benchmark scripts first, keep their JSON outputs beside the generators, 
 | `benchmark_llamacpp_gemma4.py` | llama.cpp Vulkan server benchmark |
 | `benchmark_prefill_scaling.py` | TTFT at 128–4,096 input tokens |
 | `generate_runtime_comparison.py` | Generate the Markdown report |
-| `generate_runtime_comparison_html.py` | Generate the standalone HTML report |
 
 See `README.md` for dependencies, model-path options, and exact commands.

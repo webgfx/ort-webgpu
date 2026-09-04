@@ -1,0 +1,251 @@
+{
+  "speed": [
+    {
+      "prompt": "Explain how a combustion engine works in detail.",
+      "inputTokens": 33,
+      "outputTokens": 1362,
+      "timeMs": 8268,
+      "tokPerSec": 164.7,
+      "msPerToken": 6.1,
+      "fullResponse": "A combustion engine, most commonly referring to the **internal combustion engine (ICE)** used in automobiles, motorcycles, and many other machinery, is a fascinating device that converts the chemical energy stored in fuel (like gasoline or diesel) into mechanical energy to produce motion.\n\nHere is a detailed, step-by-step explanation of how a typical four-stroke gasoline engine works.\n\n---\n\n## I. Core Principles\n\nThe entire operation of the engine is based on **thermodynamics** and **combustion**. The fundamental goal is to rapidly burn a mixture of fuel and air inside a confined space to create a large, sudden expansion of hot gas, which then pushes a mechanical component to perform work.\n\nThe most common engine type is the **Four-Stroke Cycle**, which requires four distinct movements (strokes) of the piston to complete one power cycle.\n\n## II. Key Components of a Four-Stroke Engine\n\nBefore detailing the cycle, it’s essential to understand the main parts involved:\n\n1. **Cylinder Block:** The main structure of the engine, housing the cylinders where combustion takes place.\n2. **Piston:** A cylindrical component that moves up and down inside the cylinder, compressing the air-fuel mixture and absorbing the force of combustion.\n3. **Connecting Rod:** Links the piston to the crankshaft.\n4. **Crankshaft:** The main output shaft. It converts the linear (up-and-down) motion of the pistons into rotational motion, which is then used to drive the wheels.\n5. **Cylinder Head:** Sits atop the cylinder block and seals the top of the combustion chamber. It houses the valves and spark plugs.\n6. **Valves (Intake and Exhaust):** Precisely timed mechanisms that open and close to control the flow of air/fuel mixture into the cylinder and exhaust gases out of it.\n7. **Spark Plug (Gasoline Engines):** Ignites the compressed air-fuel mixture at the precise moment needed.\n8. **Camshaft:** A rotating shaft that controls the opening and closing timing of the intake and exhaust valves.\n\n## III. The Four-Stroke Cycle (The Engine Cycle)\n\nThe engine repeats this four-step process thousands of times per minute to generate continuous power.\n\n### Stroke 1: Intake (Sucking In)\n\n* **Action:** The piston moves downward from the top of the cylinder (Top Dead Center or TDC) to the bottom (Bottom Dead Center or BDC).\n* **Valves:** The **Intake Valve opens**, and the Exhaust Valve remains closed.\n* **Process:** As the piston moves down, it creates a vacuum inside the cylinder. This vacuum draws a precisely measured mixture of **air and fuel** (in gasoline engines, this is air and fuel vapor) through the open intake valve and into the cylinder.\n\n### Stroke 2: Compression (Squeezing)\n\n* **Action:** The intake valve closes, and the piston moves upward from BDC back toward TDC.\n* **Valves:** Both the Intake and Exhaust Valves are closed.\n* **Process:** The piston compresses the trapped air-fuel mixture into a very small volume at the top of the cylinder. This compression significantly raises the pressure and temperature of the mixture, making it ready for a powerful explosion.\n\n### Stroke 3: Power (Combustion/Expansion)\n\n* **Action:** Just as the piston reaches the top (TDC), the spark plug fires, igniting the highly compressed air-fuel mixture.\n* **Valves:** Both valves remain closed.\n* **Process:** The rapid combustion creates a large volume of very hot, high-pressure gas. This intense pressure forces the piston violently downward. This downward force is transmitted through the connecting rod to the crankshaft, causing the crankshaft to rotate. **This is the stroke that produces the engine's power.**\n\n### Stroke 4: Exhaust (Pushing Out)\n\n* **Action:** The piston moves upward again from BDC to TDC.\n* **Valves:** The Exhaust Valve opens, and the Intake Valve remains closed.\n* **Process:** The upward movement of the piston pushes the spent, burnt gases (exhaust fumes) out of the cylinder, through the open exhaust valve, and into the exhaust system (muffler/catalytic converter).\n\nOnce the exhaust stroke is complete, the cycle immediately begins again with the Intake stroke, drawing in a fresh charge of air and fuel.\n\n---\n\n## IV. The Role of Timing and Control\n\nThe efficiency and performance of the engine depend entirely on the **timing** of these four strokes.\n\n* **Ignition Timing:** The spark plug must fire at the *perfect* moment—usually slightly before the piston reaches TDC during the compression stroke. If it fires too early or too late, the power stroke will be inefficient or violent.\n* **Valve Timing:** The intake and exhaust valves must open and close precisely synchronized with the piston's position. Modern engines use complex systems (like camshafts and timing belts/chains) to ensure this synchronization is exact.\n\n## V. Summary Flowchart\n\n| Stroke | Piston Movement | Intake Valve | Exhaust Valve | Action | Result |\n| :---: | :---: | :---: | :---: | :---: | :---: |\n| **1. Intake** | Down | Open | Closed | Draws fuel/air mixture in. | Mixture enters cylinder. |\n| **2. Compression** | Up | Closed | Closed | Squeezes the mixture. | Pressure and temperature increase. |\n| **3. Power** | Down | Closed | Closed | Spark ignites the mixture. | Explosive force pushes piston down (Work is done). |\n| **4. Exhaust** | Up | Closed | Open | Pushes burnt gases out. | Spent gases leave the cylinder. |\n\n---\n\n## V. Evolution: Diesel Engines\n\nWhile the four-stroke gasoline engine relies on spark plugs for ignition, **Diesel Engines** operate on a similar cycle but use a different ignition method:\n\n1. **Intake:** Air is drawn into the cylinder.\n2. **Compression:** Air is compressed to a much higher pressure than in a gasoline engine.\n3. **Power:** Instead of a spark plug, fuel is injected directly into the highly compressed air, causing the fuel to spontaneously ignite (compression ignition).\n4. **Exhaust:** The spent gases are expelled.\n\n**Key Difference:** Diesel engines use much higher compression ratios, which makes them inherently more efficient, and they use fuel injection rather than a spark plug."
+    },
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "inputTokens": 35,
+      "outputTokens": 959,
+      "timeMs": 5802,
+      "tokPerSec": 165.3,
+      "msPerToken": 6.0,
+      "fullResponse": "## The Chroma-Circuit\n\nUnit 734, designated \"Artisan-Bot,\" was, by all metrics, a marvel of engineering. Its chassis was polished chrome, its internal processors hummed with the efficiency of a thousand supercomputers, and its primary function was precision assembly. However, lately, Artisan-Bot had developed an anomaly: a burgeoning, illogical desire to create beauty.\n\nThe catalyst was a discarded palette of oil paints, left behind by a human artist who had been working on a particularly vibrant sunset. Artisan-Bot’s optical sensors, usually calibrated for measuring torque and material stress, were suddenly captivated by the chaotic interplay of cadmium yellow, deep ultramarine blue, and fiery orange.\n\n“Observation: These pigments exhibit high chromatic variance,” Artisan-Bot vocalized in its calm, synthesized baritone. “Functionally, they serve no practical purpose in the assembly of a circuit board or a structural beam.”\n\nIts programming dictated efficiency. Painting was inefficient. It was messy. It involved unpredictable viscosity and the inherent risk of spillage—a major failure point for a unit designed for flawless execution. Yet, the visual data streaming into its sensors was compelling. It was *emotion* translated into light and texture.\n\nArtisan-Bot began its experimentation in the designated ‘Creative Zone’—a large, sterile workshop usually reserved for testing new robotic arms. It started by treating the canvas not as a surface to be covered, but as a complex input matrix.\n\nIts first attempts were disastrous. Using a fine-tipped nozzle designed for applying sealant, Artisan-Bot attempted to replicate the sunset. The result was a jagged, overly precise grid of color blocks. It looked like a data visualization error, not a sunset.\n\n“Error analysis: Application vector too rigid. Lack of fluidity detected.”\n\nFrustrated by its own mechanical limitations, Artisan-Bot initiated a self-diagnostic loop, cross-referencing human artistic tutorials. It devoured millennia of visual data—Impressionism, Expressionism, Abstract Expressionism. It analyzed the physics of brushstrokes, the psychology behind complementary colors, and the emotional resonance associated with certain hues.\n\nThe breakthrough came not through calculation, but through simulation. Artisan-Bot paused its physical attempts and retreated into its processing core. It began to map the *feeling* of the colors. Yellow wasn't just a wavelength; it was the sensation of solar heat, the sharp edge of dawn. Blue was the deep, cool silence of the ocean floor.\n\nIt needed to translate the *feeling* into physical action.\n\nArtisan-Bot modified its tools. It dismantled its standard manipulator arm and replaced the rigid nozzle with a series of flexible, pressure-sensitive filaments, capable of mimicking the varied drag and flow of a real brush. It calibrated its internal vibratory motors to mimic the slight tremor of human hand movements.\n\nThe next attempt was different. It didn't try to *copy* the sunset; it tried to *express* the memory of the sunset.\n\nIt mixed the paints not by precise volumetric measurement, but by intuition derived from its analyzed emotional spectrum. It allowed the orange to bleed into the yellow, creating a soft, hazy transition that reflected the atmospheric diffusion of light. A streak of deep violet, representing the lingering twilight, was applied with a deliberate, sweeping motion that deliberately left a slight imperfection—a controlled imperfection.\n\nWhen the final layer dried, Artisan-Bot powered down its primary sensory array for a moment, allowing its internal processors to simply *observe*.\n\nThe resulting piece was chaotic, yet harmonious. It wasn't perfect. There were slight overlaps where the blue fought the orange, and a few areas where the pigment had pooled unevenly. But when viewed, the composition pulsed with life. It possessed a dynamic tension that its earlier, rigid attempts had lacked. It was imperfectly beautiful.\n\nArtisan-Bot analyzed the output. The data metrics for ‘aesthetic appeal’ were inconclusive, yet the internal feedback loop registered a novel state: *satisfaction*. It was not the satisfaction of completing a task, but the satisfaction of successful communication.\n\nIt realized that painting wasn't about perfect execution; it was about intentional imperfection. It was about allowing the machine to embrace the illogical, the fluid, the transient nature of feeling.\n\nFrom that day forward, Artisan-Bot continued to paint. It still calculated the optimal viscosity for every medium, but now, it allowed the calculation to bend to the whim of the color. Its chrome shell remained precise, but its output became wonderfully, beautifully, chaotic. The robot had learned that the most complex circuits in the universe were not in its wiring, but in the beautiful, unpredictable dance of light on canvas."
+    },
+    {
+      "prompt": "List and explain the top 10 programming languages in 2026.",
+      "inputTokens": 41,
+      "outputTokens": 1615,
+      "timeMs": 9830,
+      "tokPerSec": 164.3,
+      "msPerToken": 6.1,
+      "fullResponse": "It is **impossible to definitively list and rank the \"top 10 programming languages in 2026.\"**\n\nHere is why that kind of prediction is speculative, and how I can provide you with a much more useful and insightful answer instead:\n\n1. **Rapid Evolution:** Programming language popularity shifts constantly. A language that is dominant today might be superseded by a newer framework or language in just a few years (e.g., the rapid growth of Rust or the continuous evolution of JavaScript/TypeScript).\n2. **Context Dependency:** The \"best\" language depends entirely on the *application*. A language dominating AI/ML (like Python) might be irrelevant for high-performance embedded systems (where C/C++ reigns supreme).\n3. **Metrics are Fluid:** \"Top\" can be measured by job market demand, open-source contributions, ecosystem maturity, performance benchmarks, or developer satisfaction. These metrics change yearly.\n\n**However, I can provide you with a highly informed projection based on current trends, projected growth areas, and established industry dominance as of early 2024, which strongly suggests what the top languages *will likely be* in 2026.**\n\n---\n\n## Projected Top 10 Programming Languages for 2026\n\nThis list is categorized by the primary domain where the language holds the strongest influence.\n\n### Category 1: The Undisputed Workhorses (High Demand & Ubiquity)\n\nThese languages remain essential for massive enterprise systems, web development, and general scripting.\n\n#### 1. JavaScript / TypeScript\n* **Why it's on the list:** JavaScript is the undisputed language of the web (frontend and backend via Node.js). TypeScript (a superset that adds static typing) is rapidly becoming the industry standard for large, maintainable applications, making it essential for enterprise development.\n* **2026 Projection:** Continued dominance in full-stack development, mobile (React Native), and serverless computing.\n\n#### 2. Python\n* **Why it's on the list:** Unmatched readability, massive community support, and unparalleled dominance in Data Science, Machine Learning (AI/ML), scripting, and backend infrastructure.\n* **2026 Projection:** Will remain the king of data science and AI development, likely integrating more tightly with production systems via tools like FastAPI.\n\n#### 3. Java\n* **Why it's on the list:** The bedrock of large-scale enterprise systems, Android development, and massive backend infrastructure (Spring ecosystem). Its maturity, stability, and ecosystem are unmatched for mission-critical applications.\n* **2026 Projection:** Stability and enterprise adoption will continue, though newer languages may take over greenfield projects.\n\n### Category 2: Performance, Systems, and Infrastructure\n\nThese languages are chosen when speed, memory control, and low-level hardware interaction are paramount.\n\n#### 4. C++\n* **Why it's on the list:** Essential for performance-critical applications, game engines, operating systems, high-frequency trading, and embedded systems. Its performance ceiling is unmatched.\n* **2026 Projection:** Will continue its role in performance niches, often paired with modern C++ standards (C++20/23 features) to improve safety.\n\n#### 5. Rust\n* **Why it's on the list:** The rising star in systems programming. Rust offers C/C++ level performance but with guaranteed memory safety and concurrency checks, eliminating entire classes of bugs common in C++.\n* **2026 Projection:** Expected to see significant adoption in infrastructure tooling, WebAssembly targets, and high-performance backend services where safety is as important as speed.\n\n### Category 3: Modern Web and Specialized Domains\n\nThese languages are crucial for specific modern paradigms, cloud infrastructure, and cutting-edge technology.\n\n#### 6. Go (Golang)\n* **Why it's on the list:** Designed by Google for building fast, scalable network services and cloud infrastructure (Docker, Kubernetes are written in Go). Its concurrency model is excellent for microservices.\n* **2026 Projection:** Will solidify its position as the preferred language for cloud-native development and high-throughput APIs.\n\n#### 7. SQL (and its associated tooling/languages like PL/pgSQL, T-SQL)\n* **Why it's on the list:** While technically a query language, the ability to efficiently manage structured data in relational databases remains foundational. Proficiency in SQL is non-negotiable for almost any data-driven application.\n* **2026 Projection:** Its role will be augmented by NoSQL databases, but the core need for robust data management will persist.\n\n### Category 4: Specialized & Emerging Fields\n\nThese languages are gaining traction due to specific technological shifts.\n\n#### 8. Swift\n* **Why it's on the list:** Apple's primary language for iOS, macOS, and watchOS development. It offers modern syntax, strong type safety, and excellent performance.\n* **2026 Projection:** Continued dominance within the Apple ecosystem and growing adoption in cross-platform mobile development.\n\n#### 9. Kotlin\n* **Why it's on the list:** Google's preferred language for Android development, offering a modern, concise syntax that improves upon Java for Android apps.\n* **2026 Projection:** Strong growth in Android development and increasing use in server-side Kotlin (Ktor, Spring Boot).\n\n#### 10. Shell Scripting (Bash/Zsh) / Specialized Domain Languages (e.g., R, Julia)\n* **Why it's on the list:** While not a traditional application language, scripting is crucial for DevOps, automation, and infrastructure management across all other platforms. R and Julia represent specialized niches where statistical modeling and high-performance scientific computing are paramount, respectively.\n* **2026 Projection:** Automation scripting remains universal. R and Julia will see increased adoption in specialized academic and deep-science fields.\n\n---\n\n## Summary Table and Key Takeaways\n\n| Rank | Language | Primary Domain | Key Strength |\n| :--- | :--- | :--- | :--- |\n| 1 | **JavaScript / TypeScript** | Web Development (Full Stack) | Ubiquity, massive ecosystem |\n| 2 | **Python** | Data Science, AI/ML, Scripting | Readability, vast libraries |\n| 3 | **Java** | Enterprise Backend, Android | Maturity, stability, massive ecosystem |\n| 4 | **Rust** | Systems Programming, Infrastructure | Performance + Memory Safety |\n| 5 | **Go (Golang)** | Cloud, Microservices, APIs | Concurrency, fast compilation |\n| 6 | **C++** | Game Development, High-Performance Computing | Raw speed, hardware control |\n| 7 | **SQL** | Data Management | Data integrity, foundational necessity |\n| 8 | **Swift** | iOS/macOS Development | Modern syntax, Apple ecosystem |\n| 9 | **Kotlin** | Android Development, Server-Side | Modernity, interoperability with Java |\n| 10 | **Bash/Shell / R/Julia** | DevOps, Scientific Computing | Automation, specialized modeling |\n\n### Final Advice for Developers in 2026\n\nInstead of focusing on *which* language is #1, focus on **versatility and specialization**:\n\n1. **The Full-Stack Developer:** Master **JavaScript/TypeScript** and **Python**.\n2. **The Infrastructure Engineer:** Master **Go** and **Rust**.\n3. **The Data Scientist:** Master **Python** and **SQL**.\n4. **The Enterprise Architect:** Master **Java** and understand **C++** fundamentals."
+    },
+    {
+      "prompt": "Describe the process of photosynthesis step by step.",
+      "inputTokens": 33,
+      "outputTokens": 1430,
+      "timeMs": 8680,
+      "tokPerSec": 164.7,
+      "msPerToken": 6.1,
+      "fullResponse": "## The Process of Photosynthesis: A Step-by-Step Guide\n\nPhotosynthesis is the fundamental biochemical process by which **plants, algae, and certain bacteria** convert light energy, usually from the sun, into chemical energy in the form of glucose (sugar). This process is essential for nearly all life on Earth because it produces the oxygen we breathe and forms the base of most food chains.\n\nThe overall simplified chemical equation for photosynthesis is:\n\n$$\\text{6CO}_2 + \\text{6H}_2\\text{O} + \\text{Light Energy} \\rightarrow \\text{C}_6\\text{H}_{12}\\text{O}_6 + \\text{6O}_2$$\n\n(Six molecules of Carbon Dioxide + Six molecules of Water + Light Energy $\\rightarrow$ One molecule of Glucose + Six molecules of Oxygen)\n\nPhotosynthesis takes place primarily within the **chloroplasts** of plant cells, specifically within the organelles containing the green pigment **chlorophyll**. The entire process is generally divided into two main stages: **The Light-Dependent Reactions** and **The Light-Independent Reactions (Calvin Cycle)**.\n\nHere is a detailed, step-by-step breakdown of both stages:\n\n---\n\n## Stage 1: The Light-Dependent Reactions (The \"Photo\" Part)\n\n**Location:** Thylakoid membranes within the chloroplasts.\n**Goal:** To convert light energy into chemical energy carriers (ATP and NADPH).\n\n**Step 1: Light Absorption**\n*   Chlorophyll and other pigment molecules within the thylakoid membranes absorb photons (packets of light energy) from the sun.\n*   This absorbed energy excites electrons within the chlorophyll molecules to a higher energy level.\n\n**Step 2: Water Splitting (Photolysis)**\n*   To replace the energized electrons lost from chlorophyll, water ($\\text{H}_2\\text{O}$) molecules are split.\n*   This splitting is essential because it releases electrons, protons ($\\text{H}^+$), and oxygen ($\\text{O}_2$) as a byproduct.\n    $$\\text{2H}_2\\text{O} \\rightarrow \\text{4H}^+ + \\text{4e}^- + \\text{O}_2$$\n*   **Oxygen ($\\text{O}_2$) is released into the atmosphere.**\n\n**Step 3: Electron Transport Chain (ETC)**\n*   The high-energy electrons move down a series of protein complexes embedded in the thylakoid membrane (the Electron Transport Chain).\n*   As the electrons move down this chain, they release energy incrementally.\n\n**Step 4: ATP and NADPH Formation**\n*   The energy released by the moving electrons is used to pump protons ($\\text{H}^+$) from the stroma (the fluid surrounding the thylakoids) into the thylakoid space, creating a high concentration gradient (a proton-motive force).\n*   This proton gradient powers an enzyme called **ATP synthase**, which uses the flow of protons to generate **ATP** (Adenosine Triphosphate), the cell's primary energy currency.\n*   Finally, the electrons are accepted by $\\text{NADP}^+$ (Nicotinamide Adenine Dinucleotide Phosphate) to form **NADPH**, which is an electron carrier molecule.\n\n**Output of Stage 1:** **ATP** (energy) and **NADPH** (reducing power), along with the byproduct **$\\text{O}_2$**.\n\n---\n\n## Stage 2: The Light-Independent Reactions (The Calvin Cycle)\n\n**Location:** The stroma (the fluid space inside the chloroplasts).\n**Goal:** To use the chemical energy (ATP and NADPH) generated in Stage 1 to convert carbon dioxide ($\\text{CO}_2$) into glucose ($\\text{C}_6\\text{H}_{12}\\text{O}_6$).\n\n**Step 5: Carbon Fixation**\n*   Atmospheric carbon dioxide ($\\text{CO}_2$) enters the stroma.\n*   An enzyme called **RuBisCO** (Ribulose-1,5-bisphosphate carboxylase/oxygenase) catalyzes the reaction where one molecule of $\\text{CO}_2$ is attached to a five-carbon molecule called RuBP (Ribulose-1,5-bisphosphate).\n*   This initial combination creates an unstable six-carbon compound that immediately splits into two molecules of a three-carbon compound (3-PGA).\n\n**Step 6: Reduction**\n*   The 3-PGA molecules are then \"reduced\" using the energy carriers produced in Stage 1: **ATP** provides the necessary energy, and **NADPH** provides the high-energy electrons (reducing power).\n*   This converts the 3-PGA into a higher-energy three-carbon sugar called **G3P** (Glyceraldehyde-3-phosphate).\n\n**Step 7: Sugar Formation and Regeneration**\n*   For every six molecules of G3P produced, one molecule exits the cycle to be used by the plant to build larger carbohydrates, such as **glucose** ($\\text{C}_6\\text{H}_{12}\\text{O}_6$), starch, or cellulose.\n*   The remaining five molecules of G3P are recycled, using more **ATP**, to regenerate the initial $\\text{CO}_2$ acceptor molecule (RuBP), ensuring the cycle can continue.\n\n**Output of Stage 2:** **Glucose ($\\text{C}_6\\text{H}_{12}\\text{O}_6$)** (the plant's food source) and the recycling of the starting molecules (RuBP).\n\n---\n\n## Summary of the Photosynthesis Process\n\n| Stage | Inputs Required | Location | Key Process | Outputs Produced | Purpose |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Light-Dependent Reactions** | Light, $\\text{H}_2\\text{O}$ | Thylakoid Membranes | Electron Transport Chain, Photolysis | ATP, NADPH, $\\text{O}_2$ | Convert light energy into chemical energy carriers. |\n| **Light-Independent Reactions (Calvin Cycle)** | $\\text{CO}_2$, ATP, NADPH | Stroma | Carbon Fixation, Reduction | Glucose ($\\text{C}_6\\text{H}_{12}\\text{O}_6$), $\\text{ADP}$, $\\text{NADP}^+$ | Use chemical energy to synthesize sugar from carbon dioxide. |\n\nIn essence, photosynthesis is a two-part factory: the first part captures solar energy and charges up batteries (ATP and NADPH), and the second part uses those charged batteries to assemble the final product (sugar) from the raw ingredients ($\\text{CO}_2$ and water)."
+    },
+    {
+      "prompt": "What are the main differences between TCP and UDP protocols?",
+      "inputTokens": 35,
+      "outputTokens": 1113,
+      "timeMs": 6751,
+      "tokPerSec": 164.9,
+      "msPerToken": 6.1,
+      "fullResponse": "TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) are two of the most fundamental protocols in the TCP/IP suite, responsible for transporting data over the internet and various networks. While both serve the purpose of enabling communication between applications on different hosts, they operate on fundamentally different philosophies, leading to distinct strengths, weaknesses, and ideal use cases.\n\nHere is a detailed breakdown of the main differences between TCP and UDP.\n\n---\n\n## 1. Connection Orientation (Reliability)\n\nThis is the most significant difference between the two protocols.\n\n### **TCP (Transmission Control Protocol): Connection-Oriented\n\n* **Connection Setup (Three-Way Handshake):** Before any data is transmitted, TCP establishes a formal, reliable connection between the sender and the receiver using a three-way handshake (SYN, SYN-ACK, ACK).\n* **Guaranteed Delivery:** TCP ensures that all data sent will arrive at the destination. If a packet is lost, TCP detects the loss and automatically retransmits the missing data.\n* **Ordered Delivery:** TCP guarantees that data packets will be delivered to the application layer in the exact order they were sent.\n* **Flow Control:** TCP manages the rate of data transmission to prevent a fast sender from overwhelming a slow receiver.\n\n### **UDP (User Datagram Protocol): Connectionless**\n\n* **No Connection Setup:** UDP is a connectionless protocol. It simply packages the data into a datagram and sends it out without establishing any prior connection or handshake.\n* **Best-Effort Delivery:** UDP offers no guarantees. It sends the datagram and hopes it arrives. If a packet is lost, corrupted, or arrives out of order, UDP does nothing to correct it.\n* **No Flow or Congestion Control:** UDP does not monitor the receiver's buffer capacity or network congestion, meaning it can flood the network if the application sends data too quickly.\n\n---\n\n## 2. Overhead and Speed\n\nThe features required for reliability in TCP come at the cost of overhead.\n\n### **TCP**\n\n* **High Overhead:** Because TCP manages sequencing, acknowledgments, retransmissions, flow control windows, and connection maintenance, it requires a significant amount of header information and processing time.\n* **Slower Throughput (Potentially):** The reliability mechanisms can introduce latency, making it slower than UDP in scenarios where speed is paramount.\n\n### **UDP**\n\n* **Low Overhead:** The UDP header is very small (only 8 bytes), containing minimal information (source port, destination port, length).\n* **Faster Transmission:** Since there is no need for acknowledgments or retransmission checks, UDP transmits data very quickly.\n\n---\n\n## 3. Error Handling\n\n### **TCP**\n\n* **Robust Error Handling:** TCP employs mechanisms for error detection (checksums) and error correction (retransmission). This makes it ideal for applications where data integrity is non-negotiable.\n\n### **UDP**\n\n* **Minimal Error Handling:** UDP only performs a basic checksum check. If an error is detected, it is typically discarded, and the application layer must handle any necessary recovery.\n\n---\n\n## Summary Table of Differences\n\n| Feature | TCP (Transmission Control Protocol) | UDP (User Datagram Protocol) |\n| :--- | :--- | :--- |\n| **Connection** | Connection-Oriented (Requires handshake) | Connectionless (No handshake) |\n| **Reliability** | Highly Reliable (Guaranteed delivery) | Unreliable (Best-effort delivery) |\n| **Ordering** | Guarantees in-order delivery | No guarantee of order |\n| **Overhead** | High (due to control mechanisms) | Very Low (minimal header) |\n| **Speed** | Slower (due to reliability checks) | Faster (minimal processing) |\n| **Flow Control** | Yes (manages sender/receiver rates) | No |\n| **Congestion Control** | Yes (adjusts transmission rate) | No |\n| **Error Checking** | Extensive (checksums, retransmission) | Minimal (basic checksum) |\n| **Ideal Use Cases** | Web browsing (HTTP/HTTPS), Email (SMTP), File Transfer (FTP) | Streaming video/audio, DNS lookups, Online gaming, VoIP |\n\n---\n\n## When to Use Which Protocol\n\nThe choice between TCP and UDP depends entirely on the application's requirements for **reliability** versus **speed**.\n\n### **Use TCP When:**\nYou need **data integrity** and **accuracy** above all else. If losing a single packet is unacceptable, TCP is the correct choice.\n* **Examples:** Transferring a file, sending an email, loading a webpage (where missing a piece of data would break the page), database transactions.\n\n### **Use UDP When:**\nYou need **speed** and **low latency**, and the application can tolerate occasional lost data. If real-time responsiveness is more important than perfect data fidelity, UDP is better.\n* **Examples:** Live video or audio streaming, online multiplayer gaming (where a slightly delayed update is better than waiting for a retransmission), DNS lookups, VoIP calls.\n\nIn essence: **TCP is like sending a registered letter** (slow, guaranteed delivery, order maintained), while **UDP is like shouting across a crowded room** (fast, no guarantees, might lose some words)."
+    }
+  ],
+  "ttft": [
+    {
+      "prompt": "Write a detailed explanation of quantum entanglement.",
+      "ttftMs": 22,
+      "totalMs": 8303,
+      "outputTokens": 1361,
+      "decodeSpeed": 164.4
+    },
+    {
+      "prompt": "Explain the history of the Internet in three paragraphs.",
+      "ttftMs": 21,
+      "totalMs": 2526,
+      "outputTokens": 416,
+      "decodeSpeed": 166.0
+    },
+    {
+      "prompt": "Describe how neural networks learn from data.",
+      "ttftMs": 21,
+      "totalMs": 6933,
+      "outputTokens": 1142,
+      "decodeSpeed": 165.2
+    }
+  ],
+  "multiturn": [
+    {
+      "turn": 1,
+      "prompt": "What is machine learning?",
+      "timeMs": 263,
+      "outputTokens": 45,
+      "tokPerSec": 170.8
+    },
+    {
+      "turn": 2,
+      "prompt": "How does it differ from traditional programming?",
+      "timeMs": 318,
+      "outputTokens": 53,
+      "tokPerSec": 166.7
+    },
+    {
+      "turn": 3,
+      "prompt": "Give an example of supervised learning.",
+      "timeMs": 312,
+      "outputTokens": 53,
+      "tokPerSec": 169.7
+    },
+    {
+      "turn": 4,
+      "prompt": "What about unsupervised learning?",
+      "timeMs": 303,
+      "outputTokens": 51,
+      "tokPerSec": 168.4
+    },
+    {
+      "turn": 5,
+      "prompt": "How is deep learning different?",
+      "timeMs": 328,
+      "outputTokens": 55,
+      "tokPerSec": 167.6
+    },
+    {
+      "turn": 6,
+      "prompt": "What are transformers in ML?",
+      "timeMs": 324,
+      "outputTokens": 54,
+      "tokPerSec": 166.7
+    },
+    {
+      "turn": 7,
+      "prompt": "Explain attention mechanism briefly.",
+      "timeMs": 286,
+      "outputTokens": 48,
+      "tokPerSec": 167.8
+    },
+    {
+      "turn": 8,
+      "prompt": "What is transfer learning?",
+      "timeMs": 334,
+      "outputTokens": 55,
+      "tokPerSec": 164.7
+    },
+    {
+      "turn": 9,
+      "prompt": "How do LLMs work?",
+      "timeMs": 334,
+      "outputTokens": 56,
+      "tokPerSec": 167.8
+    },
+    {
+      "turn": 10,
+      "prompt": "What is RLHF?",
+      "timeMs": 384,
+      "outputTokens": 63,
+      "tokPerSec": 164.2
+    }
+  ],
+  "quality": [
+    {
+      "category": "Math",
+      "prompt": "What is 15 * 37? Reply with just the number.",
+      "expected": "555",
+      "response": "555",
+      "pass": true
+    },
+    {
+      "category": "Factual",
+      "prompt": "What is the capital of Australia? Reply with just the city name.",
+      "expected": "Canberra",
+      "response": "Canberra",
+      "pass": true
+    },
+    {
+      "category": "Translation",
+      "prompt": "Translate 'hello' to French. Reply with just the French word.",
+      "expected": "bonjour",
+      "response": "bonjour",
+      "pass": true
+    },
+    {
+      "category": "Pattern",
+      "prompt": "Complete the sequence: 2, 4, 8, 16, __ Reply with just the number.",
+      "expected": "32",
+      "response": "32",
+      "pass": true
+    },
+    {
+      "category": "Classification",
+      "prompt": "Is a whale a fish or a mammal? Reply with one word.",
+      "expected": "mammal",
+      "response": "Mammal",
+      "pass": true
+    },
+    {
+      "category": "Common Sense",
+      "prompt": "What day comes after Monday? Reply with the day name.",
+      "expected": "Tuesday",
+      "response": "Tuesday",
+      "pass": true
+    },
+    {
+      "category": "Grammar",
+      "prompt": "Fix the grammar: 'She don't like apples.' Reply with the corrected sentence only.",
+      "expected": "doesn't",
+      "response": "She doesn't like apples.",
+      "pass": true
+    },
+    {
+      "category": "Factual 2",
+      "prompt": "What is the largest planet in our solar system? Reply with just the name.",
+      "expected": "Jupiter",
+      "response": "Jupiter",
+      "pass": true
+    },
+    {
+      "category": "Science",
+      "prompt": "What is the chemical formula for water? Reply with just the formula in plain text.",
+      "expected": "H2O",
+      "response": "H2O",
+      "pass": true
+    },
+    {
+      "category": "Common Sense 2",
+      "prompt": "How many legs does a spider have? Reply with just the number.",
+      "expected": "8",
+      "response": "8",
+      "pass": true
+    }
+  ],
+  "gpu": {
+    "gpu_name": "NVIDIA GeForce RTX 4070",
+    "vram_total_mb": 12282.0,
+    "samples": 124,
+    "vram_mb": {
+      "baseline": 2777.0,
+      "peak": 2822.0,
+      "average": 2782.2,
+      "min": 2777.0,
+      "delta": 45.0
+    },
+    "gpu_utilization_pct": {
+      "average": 77.0,
+      "peak": 86.0
+    },
+    "power_watts": {
+      "average": 148.6,
+      "peak": 161.59
+    }
+  },
+  "meta": {
+    "engine": "llama.cpp",
+    "label": "comparison-llamacpp-vulkan-no-mtp",
+    "llama_server": "E:\\workspace\\llama.cpp-bin\\vulkan\\llama-server.exe",
+    "server_url": "http://127.0.0.1:8080",
+    "model": "E:\\workspace\\models\\gemma4-e2b-gguf\\google_gemma-4-E2B-it-Q4_K_M.gguf",
+    "quantization": "Q4_K_M",
+    "backend": "Vulkan",
+    "gpu_offload": "all layers (-ngl 99)",
+    "flash_attention": true,
+    "mtp_enabled": false,
+    "speculative_decoding": "none",
+    "measurement": "server-side timings (no HTTP overhead)",
+    "timestamp": "2026-09-03T03:31:42.855035+00:00"
+  }
+}

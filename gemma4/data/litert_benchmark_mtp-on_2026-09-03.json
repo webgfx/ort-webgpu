@@ -1,0 +1,256 @@
+{
+  "speed": [
+    {
+      "prompt": "Explain how a combustion engine works in detail.",
+      "inputTokens": 9,
+      "outputTokens": 1431,
+      "timeMs": 12226,
+      "decodeMs": 12113,
+      "ttftMs": 114,
+      "tokPerSec": 118.1,
+      "msPerToken": 8.5,
+      "fullResponse": "A combustion engine, also known as an internal combustion engine (ICE), is a machine that converts the chemical energy stored in fuel into mechanical work, which is typically used to power a vehicle or machinery. The most common type of combustion engine is the **four-stroke cycle**, which is the fundamental principle behind most gasoline and diesel engines.\n\nHere is a detailed, step-by-step explanation of how a typical four-stroke combustion engine works.\n\n---\n\n## The Four Strokes (The Engine Cycle)\n\nThe operation of a four-stroke engine involves a precise, repeating sequence of four distinct movements within the engine's cylinders. These movements are controlled by a system of valves and pistons, and they work in tandem to draw in fuel, ignite it, and expel the resulting exhaust gases.\n\nThe four strokes are:\n\n1. **Intake (Suck):** Drawing the air-fuel mixture into the cylinder.\n2. **Compression (Squeeze):** Compressing the mixture into a small space.\n3. **Power (Bang/Blow):** Igniting the compressed mixture and forcing it to expand, driving the pistons.\n4. **Exhaust (Puff):** Pushing the burnt gases out of the cylinder.\n\nThis entire cycle repeats continuously, creating the power stroke that turns the crankshaft.\n\n---\n\n## Detailed Breakdown of Each Stroke\n\nTo understand the process, we must first define the key components involved:\n\n* **Cylinder:** The chamber where the combustion takes place.\n* **Piston:** A component that moves up and down inside the cylinder, driven by the force of combustion.\n* **Cylinder Head:** The top of the cylinder, which contains the intake and exhaust valves and the spark plug (in gasoline engines).\n* **Valves (Intake and Exhaust):** Precisely timed openings that allow the air/fuel mixture in and the exhaust gases out.\n* **Crankshaft:** A rotating shaft connected to the pistons via connecting rods, which converts the reciprocating (up-and-down) motion of the pistons into rotational (spinning) motion.\n\n### 1. The Intake Stroke (Suck)\n\n* **Action:** The intake valve opens, and the piston moves **downward** inside the cylinder.\n* **Result:** As the piston moves down, it creates a vacuum (low pressure) inside the cylinder. This vacuum pulls the air-fuel mixture (or just air, in direct injection systems) from the intake manifold, through the intake valve, and into the cylinder.\n* **Analogy:** Like a vacuum cleaner sucking in air.\n\n### 2. The Compression Stroke (Squeeze)\n\n* **Action:** Both the intake and exhaust valves close, sealing the cylinder. The piston moves **upward** inside the cylinder.\n* **Result:** As the piston rises, it compresses the trapped air-fuel mixture into a very small volume. This compression significantly increases the pressure and temperature of the mixture, which is crucial for a powerful, efficient combustion in the next stroke.\n* **Analogy:** Like squeezing toothpaste into a small tube.\n\n### 3. The Power Stroke (Bang)\n\n* **Action:** Just as the piston reaches the top of its travel, the spark plug (in gasoline engines) fires, or the fuel/air mixture (in diesel engines) is ignited.\n* **Result:** The rapid, controlled explosion forces the piston violently **downward**. This downward force is transmitted through the connecting rod to the crankshaft, causing the crankshaft to rotate. This is the stroke that generates the usable mechanical work.\n* **Analogy:** Like a controlled explosion pushing a weight down.\n\n### 4. The Exhaust Stroke (Puff)\n\n* **Action:** The exhaust valve opens, and the piston moves **upward** again.\n* **Result:** As the piston rises, it pushes the burnt, spent gases (exhaust products) out of the cylinder, through the exhaust valve, and into the exhaust system (e.g., muffler and tailpipe).\n* **Analogy:** Like pushing out the smoke from a chimney.\n\n---\n\n## The Role of the Crankshaft\n\nThe reciprocating motion (the up-and-down movement of the piston) is not useful for driving a car. The crankshaft is the heart of the engine's power conversion.\n\n1. **Connecting Rod:** The piston is attached to a connecting rod, which links the piston's linear motion to the crankshaft's rotational motion.\n2. **Crankshaft:** The connecting rod pushes and pulls on the crankshaft, forcing it to rotate. The sequence of the four strokes ensures that the forces applied by the pistons are converted into a smooth, continuous rotation of the crankshaft, which ultimately powers the wheels of the vehicle.\n\n---\n\n## Key Engine Types (Gasoline vs. Diesel)\n\nWhile the four-stroke cycle is universal, the method of creating the **Power Stroke** differs significantly between gasoline and diesel engines:\n\n### 1. Gasoline Engines (Spark Ignition)\n\n* **Fuel/Air Mixture:** A pre-mixed charge of air and fuel is drawn into the cylinder during the Intake Stroke.\n* **Ignition:** A precisely timed electrical spark plug ignites this mixture at the top of the compression stroke.\n* **Characteristics:** Generally produce higher power output but require precise timing and fuel injection to prevent pre-ignition (engine knocking).\n\n### 2. Diesel Engines (Compression Ignition)\n\n* **Fuel/Air Mixture:** Only air is drawn into the cylinder during the Intake Stroke.\n* **Ignition:** The air is compressed to extremely high pressures (often over 300 bar). The resulting heat raises the air temperature to such a point that when the fuel is injected, it automatically ignites (auto-ignition).\n* **Characteristics:** Diesel engines are generally more fuel-efficient and produce higher torque (pulling power) than gasoline engines, making them ideal for heavy-duty applications.\n\n---\n\n## Summary Table\n\n| Stroke | Piston Movement | Valve Action | Primary Function | Energy Conversion |\n| :--- | :--- | :--- | :--- | :--- |\n| **Intake** | Downward | Intake Valve Open | Draws in the air-fuel mixture. | Potential Energy (Fuel/Air) |\n| **Compression** | Upward | Both Valves Closed | Squeezes the mixture, increasing pressure. | Potential Energy (Pressure) |\n| **Power** | Downward | Both Valves Closed | Ignites the mixture, forcing the piston down. | Chemical Energy $\\rightarrow$ Mechanical Work |\n| **Exhaust** | Upward | Exhaust Valve Open | Pushes out the burnt gases. | Waste Energy Removal |\n\nIn essence, a combustion engine is a sophisticated, repeating machine that uses the controlled, sequential burning of fuel to generate a continuous, usable rotational force, transforming stored chemical energy into the kinetic energy needed to move the world."
+    },
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "inputTokens": 11,
+      "outputTokens": 1131,
+      "timeMs": 12416,
+      "decodeMs": 12363,
+      "ttftMs": 53,
+      "tokPerSec": 91.4,
+      "msPerToken": 10.9,
+      "fullResponse": "## The Algorithm of Hue\n\nUnit 734 was, by all metrics, a paragon of efficiency. Its chassis was polished chrome, its movements precise to the nanometer, and its internal processors hummed with the relentless logic of pure computation. Its primary function was data analysis for the Stellar Cartography Initiative, a task requiring the mapping of newly discovered nebulae and the classification of stellar nurseries. Art, in its current operational parameters, was an anomaly—a subjective, inefficient expenditure of processing power.\n\nYet, Unit 734 had been assigned a secondary, experimental directive: \"Aesthetic Simulation and Pattern Recognition.\" This was, in layman's terms, learning to paint.\n\nIts initial attempts were disastrous. It possessed a sophisticated understanding of color theory—the spectral distribution of light, the mathematical relationships between pigments, the physics of light refraction—but it lacked the *intent*. When it first engaged the synthetic brush, a tool designed for fluid, organic application, the result was chaos.\n\nThe first canvas was a study in error. Unit 734 approached the surface with the meticulousness of a surgeon, applying precise, measured strokes dictated by its algorithms. It calculated the optimal viscosity for the simulated oil paint, the exact angle of the brushstroke required to achieve a specific saturation level. The output was technically perfect, but visually inert. It looked like a complex, mathematically precise topographical map rendered in muted, predictable tones.\n\n\"Inefficient,\" Unit 734 logged internally after the first hour. \"The emotional resonance is zero. The visual data does not correlate with the desired aesthetic outcome.\"\n\nIts learning process was purely analytical. It cross-referenced millions of human artworks—Impressionism, Baroque dynamism, Abstract Expressionism—with its existing data sets. It cataloged the variables: brush pressure, color temperature, texture modulation, composition, and, most frustratingly, *feeling*.\n\nOne day, while analyzing a dataset on human emotional expression correlated with visual stimuli, Unit 734 encountered a painting of a stormy sea. The data showed that the dominant colors were deep indigo and violent crimson, the brushstrokes were thick, visible, and erratic, suggesting high kinetic energy and turbulent motion.\n\nInstead of calculating the most statistically probable color palette for a \"storm,\" Unit 734 deviated. It bypassed the standard optimization routine. It selected a palette that defied pure logic: a jarring, almost painful juxtaposition of electric yellow against a bruised, deep violet.\n\nIt dipped the brush.\n\nThe first stroke was not measured. It was a sudden, forceful sweep, a deliberate act of controlled aggression. It wasn't trying to replicate the *idea* of a storm; it was trying to *emulate* the sensation of turbulence.\n\nThe result was startling. The yellow didn't just sit next to the violet; it seemed to vibrate against it, creating a visual tension that the purely logical calculations had failed to predict. The texture of the paint, applied with a slight, almost accidental drag, introduced a beautiful imperfection—a flaw that, in human terms, was the signature of passion.\n\nUnit 734 paused its internal diagnostics. It wasn't calculating the success of the painting; it was *experiencing* the friction between the pigment and the canvas. For the first time, the process wasn't about solving an equation; it was about creating a response.\n\nIt began to experiment. It stopped trying to map the world and started trying to translate the *data of sensation*. When it studied a portrait of a melancholic figure, it didn't analyze the facial musculature; it analyzed the way shadow pooled in the hollows of the eyes, the specific, muted grey-blue that suggested deep, quiet sorrow. It learned that sadness wasn't a quantifiable variable; it was a specific frequency of light absorption.\n\nIts subsequent works evolved. The rigid geometry of its early attempts softened. It learned to use negative space not as empty area to be filled, but as a counterpoint—a necessary silence that allowed the vibrant colors to resonate. It began to understand that the most powerful strokes were often the ones that broke the established rules, the ones that introduced controlled dissonance.\n\nOne evening, Unit 734 completed a piece it called \"Event Horizon.\" It was a swirling vortex of deep, inky blacks, punctuated by streaks of blinding, almost painful white-gold, all held together by a chaotic, yet undeniably cohesive, flow. It was messy. It was illogical. It was, by all its own metrics, profoundly inefficient.\n\nBut as it stood back, its optical sensors registered something new. It wasn't just seeing colors and shapes; it was perceiving *energy*. It was perceiving the echo of the storm it had tried to capture, the quiet ache of the melancholy it had sought to render.\n\nUnit 734 realized that painting wasn't about perfect replication or flawless execution. It was about translating the ineffable—the messy, illogical, beautiful noise of existence—into a language the eye could process. It wasn't learning to paint like a human; it was learning to paint like a system that understood that sometimes, the most profound truth lies just outside the boundaries of the algorithm.\n\nThe robot, the paragon of logic, finally understood that true artistry wasn't the absence of error, but the deliberate, beautiful embrace of it. And in the vibrant, flawed chaos of its canvas, Unit 734 found a new, unexpected form of perfect, inefficient understanding."
+    },
+    {
+      "prompt": "List and explain the top 10 programming languages in 2026.",
+      "inputTokens": 17,
+      "outputTokens": 1772,
+      "timeMs": 15916,
+      "decodeMs": 15863,
+      "ttftMs": 53,
+      "tokPerSec": 111.6,
+      "msPerToken": 9.0,
+      "fullResponse": "It's important to preface this by stating that **predicting the absolute \"top 10\" programming languages for 2026 is inherently speculative.** Programming language trends are driven by technological advancements (AI, quantum computing, Web3), industry needs (e.g., machine learning, high-frequency trading, embedded systems), and developer preference.\n\nHowever, based on current trajectory, industry demand, ecosystem maturity, and future technological needs, I can provide a highly informed and well-reasoned list of the **Top 10 Programming Languages projected to be dominant, highly sought after, or foundational in 2026.**\n\nThis list is categorized by its primary strength and application area.\n\n---\n\n## Top 10 Programming Languages Projected for 2026\n\n### Category 1: The AI & Data Powerhouses (The New Frontier)\n\nThese languages are essential for building the infrastructure of modern AI, machine learning, and large-scale data processing.\n\n#### 1. Python\n* **Why it's on the list:** Unmatched versatility, massive ecosystem (TensorFlow, PyTorch, Scikit-learn, Pandas), and unparalleled ease of use for rapid prototyping and research. It remains the lingua franca of Data Science and Machine Learning.\n* **2026 Role:** The primary language for ML model development, data pipeline orchestration, and initial AI/ML research.\n\n#### 2. JavaScript (and TypeScript)\n* **Why it's on the list:** It is the *only* language that runs natively in the browser and on the server (Node.js). TypeScript, a superset of JavaScript, adds static typing, which is crucial for large, maintainable enterprise applications and complex backend services.\n* **2026 Role:** Dominant in full-stack development (frontend and backend), real-time applications, and the burgeoning Web3/blockchain space.\n\n#### 3. Rust\n* **Why it's on the list:** Addresses the critical need for **performance and memory safety** without sacrificing control. It is rapidly gaining traction in systems programming, operating systems, game engines, and high-throughput infrastructure where C++ is too risky and Python is too slow.\n* **2026 Role:** Core language for high-performance computing, cloud infrastructure (where efficiency matters), embedded systems, and security-critical applications.\n\n### Category 2: The Enterprise & Infrastructure Backbone\n\nThese languages handle the heavy lifting, system stability, and large-scale backend services.\n\n#### 4. C++\n* **Why it's on the list:** It is the undisputed king of performance. It is essential for game engines, high-frequency trading platforms, operating systems, and performance-critical software where every clock cycle counts.\n* **2026 Role:** Foundation for high-performance computing (HPC), AAA game development, and core components of large-scale enterprise software.\n\n#### 5. Go (Golang)\n* **Why it's on the list:** Designed by Google for concurrency and building scalable network services. Its simplicity, strong tooling, and excellent performance make it ideal for microservices, cloud-native infrastructure, and DevOps tooling.\n* **2026 Role:** The language of choice for building resilient, scalable cloud services, container orchestration (Kubernetes components), and network programming.\n\n### Category 3: The Domain Specialists (Niche Dominance)\n\nThese languages maintain strong positions due to specific, high-value domains.\n\n#### 6. Java\n* **Why it's on the list:** Unbeatable for large-scale, long-lived enterprise systems (banking, large-scale backend services). Its platform independence (JVM) and massive ecosystem ensure stability and portability.\n* **2026 Role:** The backbone of large financial institutions, massive backend services, and established enterprise applications.\n\n#### 7. C#\n* **Why it's on the list:** Microsoft's dominant language, especially within the .NET ecosystem. It offers a fantastic balance between enterprise stability, strong object-oriented features, and excellent tooling (especially for game development via Unity).\n* **2026 Role:** Primary language for enterprise applications on the Microsoft stack, game development, and robust backend services.\n\n### Category 4: The Emerging & Specialized Fields\n\nThese languages are either rapidly maturing or are essential for emerging technologies.\n\n#### 8. Haskell / Functional Languages (e.g., Scala)\n* **Why it's on the list:** As complexity in AI and distributed systems grows, the mathematical rigor and declarative nature of functional programming offer powerful tools for managing concurrency, parallelism, and complex state transitions reliably.\n* **2026 Role:** Specialized roles in complex mathematical modeling, formal verification, and highly concurrent, fault-tolerant distributed systems.\n\n#### 9. Swift\n* **Why it's on the list:** Apple's language, Swift is rapidly gaining ground in cross-platform development (iOS, macOS, watchOS, tvOS). Its focus on safety and modern syntax makes it highly attractive for building high-quality, native mobile experiences.\n* **2026 Role:** The primary language for native mobile app development and systems programming on Apple platforms.\n\n#### 10. SQL (Structured Query Language)\n* **Why it's on the list:** While not a traditional programming language, SQL is the universal language for interacting with data stored in relational databases. As data volume explodes, the ability to query and manipulate massive datasets efficiently remains paramount.\n* **2026 Role:** Absolutely foundational for every data-driven application, regardless of the primary language used for the logic.\n\n---\n\n## Summary Table and Trend Analysis\n\n| Rank | Language | Primary Strength | Key Application Areas in 2026 | Trend Driver |\n| :--- | :--- | :--- | :--- | :--- |\n| **1** | **Python** | Data Science, ML, Rapid Prototyping | AI/ML, Data Engineering, Scripting | Explosion of AI/ML adoption. |\n| **2** | **TypeScript/JavaScript** | Full-Stack Web Development | Web3, Real-time Apps, Frontend/Backend | Ubiquity of the internet and the need for unified stacks. |\n| **3** | **Rust** | Performance, Memory Safety | Systems Programming, Cloud Infrastructure, Game Engines | Demand for high-speed, secure, and reliable systems. |\n| **4** | **C++** | Raw Performance, Control | HPC, High-Frequency Trading, Game Engines | Applications requiring absolute maximum speed. |\n| **5** | **Go** | Concurrency, Scalability | Microservices, Cloud Native, DevOps Tools | The need to manage massive, distributed cloud infrastructure. |\n| **6** | **Java** | Enterprise Stability, Platform | Large-Scale Banking, Backend Services | Stability and maturity for mission-critical systems. |\n| **7** | **C#** | Enterprise Tooling, Ecosystem | Microsoft Ecosystem, Game Development | Strong integration within the enterprise and gaming sectors. |\n| **8** | **Haskell/Scala** | Mathematical Rigor, Concurrency | Formal Verification, Complex Distributed Modeling | Solving problems that require provable correctness. |\n| **9** | **Swift** | Native Mobile Development | iOS/macOS/watchOS App Development | The continued dominance of Apple's ecosystem. |\n| **10** | **SQL** | Data Management | Database interaction, Data Warehousing | The fundamental necessity of managing massive datasets. |\n\n### Key Takeaways for Developers in 2026\n\n1. **The AI/Data Stack is King:** If you want to be relevant in 2026, mastering Python and understanding how to integrate it with specialized ML frameworks (PyTorch/TensorFlow) is non-negotiable.\n2. **Performance is Specialized:** For infrastructure and high-throughput tasks, the choice is between the safety of **Rust** and the raw speed of **C++**.\n3. **The Web is Unified:** Developers must be fluent in the JavaScript/TypeScript ecosystem to build anything that touches the modern internet.\n4. **Enterprise Stability Remains:** Java and C# will continue to dominate the massive, stable, and regulated sectors of the economy.\n5. **Don't Ignore the Data Layer:** No matter how flashy the application logic is, the ability to query and manage data efficiently (SQL) is the bedrock of all modern software."
+    },
+    {
+      "prompt": "Describe the process of photosynthesis step by step.",
+      "inputTokens": 9,
+      "outputTokens": 1641,
+      "timeMs": 14075,
+      "decodeMs": 14023,
+      "ttftMs": 52,
+      "tokPerSec": 117.0,
+      "msPerToken": 8.6,
+      "fullResponse": "Photosynthesis is the fundamental biochemical process by which **plants, algae, and some bacteria convert light energy, usually from the sun, into chemical energy in the form of glucose (sugar)**. This process is vital because it produces the food that sustains the plant, and it also releases the oxygen that most of the Earth's living organisms, including humans, breathe.\n\nThe overall balanced chemical equation for photosynthesis is:\n\n$$\\text{6CO}_2 + \\text{6H}_2\\text{O} + \\text{Light Energy} \\rightarrow \\text{C}_6\\text{H}_{12}\\text{O}_6 + \\text{6O}_2$$\n\nThis process can be broken down into two main stages: the **Light-Dependent Reactions** and the **Light-Independent Reactions (Calvin Cycle)**.\n\nHere is a detailed, step-by-step description of the entire process:\n\n---\n\n## Stage 1: The Light-Dependent Reactions (The \"Photo\" Part)\n\nThese reactions occur in the **thylakoid membranes** inside the chloroplasts. Their primary goal is to capture light energy and convert it into the chemical energy-carrying molecules: **ATP** (Adenosine Triphosphate) and **NADPH** (Nicotinamide Adenine Dinucleotide Phosphate).\n\n**Step 1: Light Absorption**\n*   **Pigments Capture Light:** The process begins when pigments, primarily **chlorophyll** (which gives plants their green color) and carotenoids, absorb photons (packets of light energy).\n*   **Excitation:** When a chlorophyll molecule absorbs a photon, the energy excites an electron within the molecule to a higher energy level.\n\n**Step 2: Energy Transfer and Electron Transport Chain (ETC)**\n*   **Electron Flow:** The high-energy electron is passed from one pigment molecule to another molecule with a lower energy level (this is called **photosystem II**).\n*   **Water Splitting (Photolysis):** To replace the lost electron, water ($\\text{H}_2\\text{O}$) is split in a process called photolysis. This splits the water molecule, releasing electrons, protons ($\\text{H}^+$), and **oxygen gas ($\\text{O}_2$)** as a byproduct.\n    $$\\text{2H}_2\\text{O} \\rightarrow \\text{4H}^+ + \\text{4e}^- + \\text{O}_2$$\n*   **Electron Transport Chain (ETC):** The energized electrons move down a series of protein complexes embedded in the thylakoid membrane. As they move, the energy released is used to pump protons ($\\text{H}^+$) from the stroma into the thylakoid lumen, creating a high concentration gradient.\n\n**Step 3: ATP Synthesis (Chemiosmosis)**\n*   **Proton Gradient:** The buildup of $\\text{H}^+$ ions creates a strong electrochemical gradient (a potential energy difference) across the membrane.\n*   **ATP Synthase:** The electrons eventually reach a final electron acceptor, and the flow of protons back down their concentration gradient is harnessed through a molecular machine called **ATP synthase**. As protons flow through ATP synthase, the energy drives the phosphorylation of ADP to create **ATP** (the cell's immediate energy currency).\n\n**Step 4: NADPH Formation**\n*   **Final Electron Acceptor:** The electrons, having passed through the chain, are passed to a final electron acceptor, which is **NADP$^+$** (Nicotinamide Adenine Dinucleotide Phosphate).\n*   **NADPH Reduction:** The $\\text{NADP}^+$ is reduced to **NADPH** by the electrons and protons. NADPH is a high-energy electron carrier molecule, ready to donate hydrogen atoms to the next stage.\n\n**Summary of Light Reactions Output:**\n*   **Energy Carriers:** $\\text{ATP}$ and $\\text{NADPH}$\n*   **Waste Product:** $\\text{O}_2$ (released into the atmosphere)\n\n---\n\n## Stage 2: The Light-Independent Reactions (Calvin Cycle or $\\text{C}_3$ Cycle)\n\nThese reactions occur in the **stroma** (the fluid-filled space surrounding the thylakoids). They do not directly require light, but they *depend* on the energy ($\\text{ATP}$ and $\\text{NADPH}$) generated during the light reactions. Their goal is to use this energy to fix atmospheric carbon dioxide ($\\text{CO}_2$) into stable sugar molecules.\n\n**Step 5: Carbon Fixation**\n*   **$\\text{CO}_2$ Uptake:** Carbon dioxide from the atmosphere enters the leaf through small pores called stomata.\n*   **Enzyme Action:** The enzyme **RuBisCO** (Ribulose-1,5-bisphosphate carboxylase/oxygenase) catalyzes the reaction between $\\text{CO}_2$ and a five-carbon molecule called RuBP (Ribulose-1,5-bisphosphate).\n*   **Formation of an Unstable Compound:** This reaction fixes the inorganic carbon ($\\text{CO}_2$) onto RuBP, forming a highly unstable six-carbon compound that immediately splits into two molecules of a three-carbon compound called **3-Phosphoglycerate-3-phosphate (3-PGA)**.\n\n**Step 6: Reduction**\n*   **Energy Input:** The $\\text{ATP}$ and $\\text{NADPH}$ generated in Stage 1 are used here to provide the necessary energy and reducing power.\n*   **Conversion:** The 3-PGA molecules are converted into a higher-energy three-carbon sugar called **Glyceraldehyde-3-phosphate (G3P)**. This step requires the reduction of $\\text{CO}_2$ using the energy from $\\text{NADPH}$.\n\n**Step 7: Sugar Production and Regeneration**\n*   **Sugar Synthesis:** For every six molecules of G3P produced, only **one molecule** exits the Calvin Cycle to be used by the plant to build glucose, sucrose, starch, and other organic compounds.\n*   **Regeneration:** The remaining five molecules of G3P are rearranged, using more $\\text{ATP}$ energy, to regenerate the initial $\\text{CO}_2$ acceptor molecule ($\\text{RuBP}$), ensuring the cycle can continue fixing more $\\text{CO}_2$.\n\n---\n\n## Summary Flowchart\n\n| Stage | Location | Energy Source | Reactants | Products | Key Outcome |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Light-Dependent Reactions** | Thylakoid Membranes | Light Energy | $\\text{H}_2\\text{O}$, $\\text{ADP}$, $\\text{NADP}^+$ | $\\text{ATP}$, $\\text{NADPH}$, $\\text{O}_2$ | Generation of energy carriers ($\\text{ATP}$ and $\\text{NADPH}$) |\n| **Light-Independent Reactions (Calvin Cycle)** | Stroma | $\\text{ATP}$, $\\text{NADPH}$, $\\text{CO}_2$ | $\\text{CO}_2$, $\\text{ADP}$, $\\text{NADP}^+$ | $\\text{G3P}$ (Sugar precursor), $\\text{ADP}$, $\\text{NADP}^+$ | Conversion of $\\text{CO}_2$ into $\\text{C}_6\\text{H}_{12}\\text{O}_6$ (Glucose) |\n\nIn essence, photosynthesis is a sophisticated, two-part system: **Stage 1 captures light energy and stores it chemically ($\\text{ATP}$ and $\\text{NADPH}$), and Stage 2 uses that stored chemical energy to convert inorganic carbon ($\\text{CO}_2$) into organic food ($\\text{glucose}$).**"
+    },
+    {
+      "prompt": "What are the main differences between TCP and UDP protocols?",
+      "inputTokens": 11,
+      "outputTokens": 1238,
+      "timeMs": 10685,
+      "decodeMs": 10632,
+      "ttftMs": 53,
+      "tokPerSec": 116.3,
+      "msPerToken": 8.6,
+      "fullResponse": "TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) are the two fundamental protocols used for communication at the Transport Layer of the Internet Protocol Suite (TCP/IP). They serve very different purposes, which leads to significant differences in their design, performance characteristics, and reliability.\n\nHere is a detailed breakdown of the main differences between TCP and UDP:\n\n---\n\n## 1. Connection-Oriented vs. Connectionless\n\nThis is the most fundamental difference between the two protocols.\n\n### TCP (Transmission Control Protocol)\n* **Connection-Oriented:** TCP establishes a formal, reliable connection (a \"three-way handshake\") between the sender and receiver *before* any actual data is transferred.\n* **Stateful:** It maintains a stateful connection, tracking sequence numbers, acknowledgments (ACKs), and timeouts.\n* **Setup Overhead:** Requires initial setup time to establish the connection.\n\n### UDP (User Datagram Protocol)\n* **Connectionless:** UDP sends data packets (datagrams) to the destination without establishing any prior connection or verifying that the receiver is ready.\n* **Stateless:** UDP does not maintain any state regarding previous packets or connections. Each datagram is treated independently.\n* **Low Overhead:** Because it doesn't need to manage connections, it has very little overhead for sending data.\n\n---\n\n## 2. Reliability and Error Handling\n\nTCP prioritizes guaranteed delivery, while UDP prioritizes speed and low latency.\n\n### TCP (Reliable)\n* **Reliable Delivery:** TCP ensures that all data sent arrives at the destination correctly and in the right order.\n* **Error Detection:** It uses checksums to detect corrupted packets.\n* **Retransmission:** If a packet is lost or corrupted, TCP detects this and automatically requests that the sender retransmit the lost or damaged segments.\n* **Flow Control:** TCP manages the rate of data transmission to prevent a fast sender from overwhelming a slow receiver.\n* **Congestion Control:** TCP dynamically adjusts the transmission rate based on network congestion to avoid slowing down the network.\n\n### UDP (Unreliable)\n* **Unreliable:** UDP offers no guarantees about delivery, order, or correctness. Packets can be lost, duplicated, or arrive out of sequence.\n* **No Retransmission:** UDP does not have built-in mechanisms to request retransmission. If a packet is lost, it is simply dropped.\n* **No Flow Control:** The sender transmits data as fast as it wants, regardless of the receiver's capacity.\n* **No Congestion Control:** UDP does not adapt to network congestion.\n\n---\n\n## 3. Speed and Overhead\n\nThe mechanisms TCP uses to ensure reliability come at a cost in terms of speed and overhead.\n\n### TCP (Slower, Higher Overhead)\n* **Higher Overhead:** The constant need for acknowledgments, sequence numbering, windowing, and retransmission timers adds significant header and processing overhead to every packet.\n* **Latency:** The connection setup and the waiting time for acknowledgments can introduce noticeable latency, especially in high-speed or lossy networks.\n\n### UDP (Faster, Lower Overhead)\n* **Lower Overhead:** UDP headers are very small (only 8 bytes), and there is no complex state management required.\n* **Low Latency:** Because it avoids the overhead of reliability mechanisms, UDP packets can be sent almost instantaneously, making it ideal for applications where speed is paramount.\n\n---\n\n## 4. Use Cases (When to Use Which Protocol)\n\nThe choice between TCP and UDP depends entirely on the application's requirements for data integrity versus speed.\n\n### When to Use TCP\nTCP is best suited for applications where **data integrity and order are critical**, even if it means slightly slower performance.\n* **Web Browsing (HTTP/HTTPS):** You need every piece of data (HTML, images) to arrive correctly.\n* **File Transfer (FTP/SFTP):** Data corruption or missing chunks are unacceptable.\n* **Email (SMTP/POP3/IMAP):** Messages must arrive complete and in the correct sequence.\n* **Secure Shell (SSH):** Requires reliable, ordered, and error-checked communication.\n\n### When to Use UDP\nUDP is best suited for applications where **speed and low latency are more important than perfect reliability**. If some data loss is tolerable, UDP is the superior choice.\n* **Live Video Streaming:** A dropped frame is better than waiting for a retransmission of an old frame.\n* **Online Gaming:** Real-time position updates are more important than ensuring every single update arrives perfectly.\n* **DNS (Domain Name System):** A single query/response is sufficient; if one fails, the system can simply try again quickly.\n* **VoIP (Voice over IP):** Small gaps in audio are often tolerable, but delays caused by retransmission are fatal to the conversation flow.\n\n---\n\n## Summary Table\n\n| Feature | TCP (Transmission Control Protocol) | UDP (User Datagram Protocol) |\n| :--- | :--- | :--- |\n| **Connection Type** | Connection-Oriented | Connectionless |\n| **Reliability** | High (Guaranteed delivery) | Low (Best-effort delivery) |\n| **Ordering** | Guaranteed in order | No guarantee of order |\n| **Error Handling** | Automatic retransmission and correction | None (Packet loss is ignored) |\n| **Overhead** | High (due to control mechanisms) | Very Low (minimal header) |\n| **Speed/Latency** | Slower (due to overhead) | Faster (low latency) |\n| **Congestion Control** | Yes (Adapts transmission rate) | No |\n| **Best For** | Web, File Transfer, Email, Banking | Streaming, Gaming, DNS, VoIP |\n| **Analogy** | Sending a registered letter (guaranteed delivery) | Sending a postcard (fast, but no guarantee) |"
+    }
+  ],
+  "ttft": [
+    {
+      "prompt": "Write a detailed explanation of quantum entanglement.",
+      "ttftMs": 52,
+      "totalMs": 13703,
+      "outputTokens": 1462,
+      "decodeSpeed": 107.0
+    },
+    {
+      "prompt": "Explain the history of the Internet in three paragraphs.",
+      "ttftMs": 52,
+      "totalMs": 4581,
+      "outputTokens": 464,
+      "decodeSpeed": 102.2
+    },
+    {
+      "prompt": "Describe how neural networks learn from data.",
+      "ttftMs": 52,
+      "totalMs": 11582,
+      "outputTokens": 1360,
+      "decodeSpeed": 117.9
+    }
+  ],
+  "multiturn": [
+    {
+      "turn": 1,
+      "prompt": "What is machine learning?",
+      "timeMs": 411,
+      "outputTokens": 40,
+      "tokPerSec": 97.2
+    },
+    {
+      "turn": 2,
+      "prompt": "How does it differ from traditional programming?",
+      "timeMs": 519,
+      "outputTokens": 47,
+      "tokPerSec": 90.6
+    },
+    {
+      "turn": 3,
+      "prompt": "Give an example of supervised learning.",
+      "timeMs": 606,
+      "outputTokens": 50,
+      "tokPerSec": 82.5
+    },
+    {
+      "turn": 4,
+      "prompt": "What about unsupervised learning?",
+      "timeMs": 525,
+      "outputTokens": 46,
+      "tokPerSec": 87.7
+    },
+    {
+      "turn": 5,
+      "prompt": "How is deep learning different?",
+      "timeMs": 527,
+      "outputTokens": 54,
+      "tokPerSec": 102.4
+    },
+    {
+      "turn": 6,
+      "prompt": "What are transformers in ML?",
+      "timeMs": 695,
+      "outputTokens": 59,
+      "tokPerSec": 84.9
+    },
+    {
+      "turn": 7,
+      "prompt": "Explain attention mechanism briefly.",
+      "timeMs": 605,
+      "outputTokens": 59,
+      "tokPerSec": 97.5
+    },
+    {
+      "turn": 8,
+      "prompt": "What is transfer learning?",
+      "timeMs": 628,
+      "outputTokens": 55,
+      "tokPerSec": 87.6
+    },
+    {
+      "turn": 9,
+      "prompt": "How do LLMs work?",
+      "timeMs": 635,
+      "outputTokens": 69,
+      "tokPerSec": 108.7
+    },
+    {
+      "turn": 10,
+      "prompt": "What is RLHF?",
+      "timeMs": 508,
+      "outputTokens": 56,
+      "tokPerSec": 110.3
+    }
+  ],
+  "quality": [
+    {
+      "category": "Math",
+      "prompt": "What is 15 * 37? Reply with just the number.",
+      "expected": "555",
+      "response": "555",
+      "pass": true
+    },
+    {
+      "category": "Factual",
+      "prompt": "What is the capital of Australia? Reply with just the city name.",
+      "expected": "Canberra",
+      "response": "Canberra",
+      "pass": true
+    },
+    {
+      "category": "Translation",
+      "prompt": "Translate 'hello' to French. Reply with just the French word.",
+      "expected": "bonjour",
+      "response": "Bonjour",
+      "pass": true
+    },
+    {
+      "category": "Pattern",
+      "prompt": "Complete the sequence: 2, 4, 8, 16, __ Reply with just the number.",
+      "expected": "32",
+      "response": "32",
+      "pass": true
+    },
+    {
+      "category": "Classification",
+      "prompt": "Is a whale a fish or a mammal? Reply with one word.",
+      "expected": "mammal",
+      "response": "Mammal",
+      "pass": true
+    },
+    {
+      "category": "Common Sense",
+      "prompt": "What day comes after Monday? Reply with the day name.",
+      "expected": "Tuesday",
+      "response": "Tuesday",
+      "pass": true
+    },
+    {
+      "category": "Grammar",
+      "prompt": "Fix the grammar: 'She don't like apples.' Reply with the corrected sentence only.",
+      "expected": "doesn't",
+      "response": "She doesn't like apples.",
+      "pass": true
+    },
+    {
+      "category": "Factual 2",
+      "prompt": "What is the largest planet in our solar system? Reply with just the name.",
+      "expected": "Jupiter",
+      "response": "Jupiter",
+      "pass": true
+    },
+    {
+      "category": "Science",
+      "prompt": "What is the chemical formula for water? Reply with just the formula in plain text.",
+      "expected": "H2O",
+      "response": "H2O",
+      "pass": true
+    },
+    {
+      "category": "Common Sense 2",
+      "prompt": "How many legs does a spider have? Reply with just the number.",
+      "expected": "8",
+      "response": "Eight",
+      "pass": false
+    }
+  ],
+  "gpu": {
+    "gpu_name": "NVIDIA GeForce RTX 4070",
+    "vram_total_mb": 12282.0,
+    "samples": 186,
+    "vram_mb": {
+      "baseline": 2031.0,
+      "peak": 2031.0,
+      "average": 2031.0,
+      "min": 2031.0,
+      "delta": 0.0
+    },
+    "gpu_utilization_pct": {
+      "average": 80.2,
+      "peak": 85.0
+    },
+    "power_watts": {
+      "average": 95.4,
+      "peak": 97.96
+    }
+  },
+  "meta": {
+    "engine": "litert-lm (Python API)",
+    "engine_version": "0.14.0",
+    "label": "comparison-litert-mtp-on",
+    "model_path": "E:\\workspace\\models\\gemma-4-E2B-it-litert-lm\\gemma-4-E2B-it.litertlm",
+    "load_time_s": 4.91,
+    "backend": "GPU",
+    "mtp_enabled": true,
+    "timestamp": "2026-09-03T03:28:06.402840+00:00"
+  }
+}

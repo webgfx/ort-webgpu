@@ -1,9 +1,10 @@
-"""Generate Markdown aligned with the Gemma 4 HTML comparison."""
+"""Generate the Gemma 4 model and runtime comparison report."""
 import json
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parent
-OUT=ROOT/'gemma4_runtime_comparison_2026-09-03.md'
+DATA=ROOT/'data'
+OUT=ROOT/'gemma4_runtime_comparison_2026-09-04.md'
 HF_ROOT='https://huggingface.co/webai-community/ai-models/tree/main/gemma-4-E2B-it'
 RUNS=[
  ('ONNX Runtime GenAI · Prefill Optimization','ort_benchmark_pr479_verified_2026-09-04.json','INT4 ONNX / WebGPU'),
@@ -13,11 +14,11 @@ RUNS=[
 PF=[('ONNX Runtime WebGPU · Prefill Optimization','prefill_scaling_ort_webgpu_pr479_2026-09-04.json'),('LiteRT-LM Native WebGPU · MTP off','prefill_scaling_litert_mtp-off_2026-09-03.json'),('LiteRT-LM Native WebGPU · MTP on','prefill_scaling_litert_mtp-on_2026-09-03.json'),('llama.cpp Vulkan','prefill_scaling_llamacpp_vulkan_2026-09-03.json')]
 def avg(x): return sum(x)/len(x)
 def main():
- rows=[(n,f,fmt,json.loads((ROOT/f).read_text(encoding='utf-8'))) for n,f,fmt in RUNS]
- pf=[(n,f,json.loads((ROOT/f).read_text(encoding='utf-8'))) for n,f in PF]
+ rows=[(n,f,fmt,json.loads((DATA/f).read_text(encoding='utf-8'))) for n,f,fmt in RUNS]
+ pf=[(n,f,json.loads((DATA/f).read_text(encoding='utf-8'))) for n,f in PF]
  L=['# Gemma 4 E2B Model + Inference Runtime Comparison','', '> Hardware: NVIDIA RTX 4070 12 GB, driver 591.44, Windows 11. ONNX Runtime uses the WebGPU EP; native LiteRT-LM uses WebGPU over D3D12; llama.cpp uses Vulkan. Measurements collected 2026-09-03 and 2026-09-04.','',
  '## Executive Summary','', '- llama.cpp Vulkan leads decode throughput at **164.8 tok/s** without MTP.','- LiteRT MTP raises long-form decode from **94.5 to 110.9 tok/s**.','- ONNX prefill-prefix pruning reduces length-controlled TTFT by **66.4–80.2%** versus the previous unpruned artifact.','- All stacks score **10/10** on core capability tests; the ONNX stack retains a long-form coherence limitation.','',
- '## What Models and Artifacts Were Tested?','', 'All stacks use Gemma 4 E2B-IT (5.1B total / approximately 2.3B effective parameters, 35 text layers, GQA, per-layer embeddings, 262,144-token vocabulary). They are different conversions and quantization formats, so results describe complete model-plus-runtime stacks.','',
+ '## What Models and Artifacts Were Tested?','', 'All stacks use Gemma 4 E2B-IT (5.1B total / approximately 2.3B effective parameters, 35 text layers, GQA, per-layer embeddings, 262,144-token vocabulary). They are different conversions and quantization formats, so results describe complete model-plus-runtime stacks.','', '**Model context:** Per-Layer Embeddings account for much of the total parameter count while only part of the model is active in each inference layer, explaining the 2.3B effective size. The ONNX and LiteRT-LM packages include text, vision, and audio components, whereas the tested GGUF contains only the text model. Prefill-prefix pruning reduces prompt-processing work, while MTP speculative decoding targets token generation; they optimize different phases.','',
  '| Artifact | Size | Format and contents | Published model |','|---|---:|---|---|',f'| Gemma 4 ONNX WebGPU | 3.47 GB | INT4 decoder, embeddings, vision/audio graphs; prefill-prefix pruning | [onnx-webgpu]({HF_ROOT}/onnx-webgpu) |',f'| Gemma 4 LITERTLM | 2.59 GB | Native INT4 multimodal container with MTP drafter | [litert-lm]({HF_ROOT}/litert-lm) |',f'| Gemma 4 GGUF | 3.46 GB | Text Q4_K_M target model; no MTP-head GGUF installed | [gguf]({HF_ROOT}/gguf) |','',f'[Open the complete Gemma 4 E2B model collection on Hugging Face]({HF_ROOT})','',
  '## Overall Model + Runtime Stack Results','', '| Model + runtime stack | Format/backend | Long decode | Multi-turn | Core Capability Accuracy | Avg / peak VRAM |','|---|---|---:|---:|---:|---:|']
  for n,f,fmt,d in rows:
@@ -33,6 +34,6 @@ def main():
  '## Generation Quality Assessment','', '| Stack | Core Capability Accuracy | Long-form coherence |','|---|---:|---|','| ONNX Runtime GenAI · Prefill Optimization | 10/10 | 1/5 clean; four malformed, repetitive, or multilingual tails |','| LiteRT-LM Native · MTP off | 10/10 | 5/5 coherent completions |','| LiteRT-LM Native · MTP on | 10/10 | 5/5 coherent completions |','| llama.cpp | 10/10 | 5/5 coherent completions |','',
  'Core capability tests cover arithmetic, factual knowledge, translation, pattern completion, classification, grammar, basic science, and common-sense reasoning under greedy decoding. Long-form generation uses temperature 0.7. Deterministic source-model output/logit comparison is recommended to isolate the ONNX long-form issue.','',
  '## Methodology and Caveats','', '- Decode excludes prefill.','- LiteRT token counts are approximate; ORT and llama.cpp use runtime/tokenizer counts.','- llama.cpp TTFT includes local HTTP/SSE delivery, so compare it directionally with in-process ORT/LiteRT.','- Absolute VRAM includes runtime state and other GPU allocations.','- One throughput run per stack does not provide confidence intervals; TTFT-by-length uses three measured samples per point.','',
- '## Reproducibility','', 'Run the benchmark scripts first, keep their JSON outputs beside the generators, then generate the Markdown and HTML reports.','', '| Script | Purpose |','|---|---|','| `benchmark_ort_gemma4.py` | ONNX Runtime GenAI performance, memory, and quality |','| `benchmark_litert_gemma4.py` | Native LiteRT-LM benchmark with MTP on or off |','| `benchmark_llamacpp_gemma4.py` | llama.cpp Vulkan server benchmark |','| `benchmark_prefill_scaling.py` | TTFT at 128–4,096 input tokens |','| `generate_runtime_comparison.py` | Generate the Markdown report |','| `generate_runtime_comparison_html.py` | Generate the standalone HTML report |','', 'See `README.md` for dependencies, model-path options, and exact commands.']
+ '## Reproducibility','', 'Run the benchmark scripts first, keep their JSON outputs beside the generator, then generate the Markdown report.','', '| Script | Purpose |','|---|---|','| `benchmark_ort_gemma4.py` | ONNX Runtime GenAI performance, memory, and quality |','| `benchmark_litert_gemma4.py` | Native LiteRT-LM benchmark with MTP on or off |','| `benchmark_llamacpp_gemma4.py` | llama.cpp Vulkan server benchmark |','| `benchmark_prefill_scaling.py` | TTFT at 128–4,096 input tokens |','| `generate_runtime_comparison.py` | Generate the Markdown report |','', 'See `README.md` for dependencies, model-path options, and exact commands.']
  OUT.write_text('\n'.join(L)+'\n',encoding='utf-8')
 if __name__=='__main__': main()

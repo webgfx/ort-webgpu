@@ -11,9 +11,8 @@ Reproducible comparison of Gemma 4 E2B model packages running with ONNX Runtime 
 | `benchmark_llamacpp_gemma4.py` | llama.cpp server benchmark using Vulkan |
 | `benchmark_prefill_scaling.py` | TTFT benchmark at 128–4,096 input tokens |
 | `generate_runtime_comparison.py` | Generate the Markdown report |
-| `generate_runtime_comparison_html.py` | Generate the standalone HTML report |
 
-The report generators read benchmark JSON files produced by the four benchmark scripts. Keep those data files in the same directory when regenerating reports, but they do not need to be linked from the published reports.
+The report generator reads the eight canonical benchmark JSON files under `data/`. Benchmark scripts can write new results anywhere; copy or rename accepted results into `data/` using the filenames declared near the top of `generate_runtime_comparison.py` before regenerating the report.
 
 ## Dependencies
 
@@ -115,17 +114,15 @@ The prefill script currently keeps its model/runtime defaults near the top of th
 
 ## Generate reports
 
-The generators currently expect the canonical result filenames declared near the top of each script. Adjust those filenames when using newly generated data.
+The generator expects the canonical result filenames declared near the top of the script. Adjust those filenames when using newly generated data.
 
 ```powershell
 python generate_runtime_comparison.py
-python generate_runtime_comparison_html.py
 ```
 
 Outputs:
 
-- `gemma4_runtime_comparison_2026-09-03.md`
-- `gemma4_runtime_comparison_2026-09-03.html`
+- `gemma4_runtime_comparison_2026-09-04.md`
 
 ## Published models
 
