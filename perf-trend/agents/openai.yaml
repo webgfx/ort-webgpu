@@ -1,0 +1,7 @@
+interface:
+  display_name: "ORT WebGPU Performance Trend"
+  short_description: "Collect prefill and decode performance data"
+  default_prompt: "Use $perf-trend to collect controlled performance data for a new ORT WebGPU feature."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,35 @@
+{
+  "ortRepo": "${ORT_REPO}",
+  "genaiRepo": "${ORT_GENAI_REPO}",
+  "ortRef": "origin/main",
+  "genaiRef": "origin/main",
+  "outputRoot": "${ORT_WEBGPU_PERF_ROOT}",
+  "backupRoot": "${ORT_WEBGPU_PERF_ROOT}\\runtime",
+  "worktreeRoot": "${ORT_WEBGPU_WORKTREE_ROOT}",
+  "startDate": "2024-12-02",
+  "anchorDay": 2,
+  "models": [
+    {
+      "name": "Phi-4-mini-instruct",
+      "path": "${ORT_WEBGPU_PERF_ROOT}\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct"
+    }
+  ],
+  "promptLengths": [
+    1024
+  ],
+  "generationLength": 128,
+  "repetitions": 5,
+  "warmup": 1,
+  "buildConfig": "Release",
+  "cmakeGenerator": "Visual Studio 17 2022",
+  "cmakePath": "${ORT_CMAKE}",
+  "cmakePolicyVersionMinimum": "3.5",
+  "genaiCxxFlags": "/EHsc /wd4834",
+  "patchLegacyExtensionsMacro": true,
+  "refreshPinnedArchiveHashes": true,
+  "parallelJobs": 4,
+  "runtimeBackend": "webgpu",
+  "dawnBackend": "d3d12",
+  "buildTimeoutSeconds": 14400,
+  "benchmarkTimeoutSeconds": 1800
+}

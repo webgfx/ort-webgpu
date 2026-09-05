@@ -1,0 +1,114 @@
+{
+  "ortRepo": "${ORT_REPO}",
+  "genaiRepo": "${ORT_GENAI_REPO}",
+  "ortRef": "origin/main",
+  "genaiRef": "origin/main",
+  "snapshots": [
+    {
+      "key": "02-subgroup-prefill",
+      "anchorDate": "2025-01-14",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "80d8931f1d835fe29d89cced25f05be6690f81b6",
+      "genaiCommit": "874d9b691be81ef45eb2e208ac25415bffe8f1e2"
+    },
+    {
+      "key": "03-dp4a-prefill",
+      "anchorDate": "2025-01-21",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "58c29d34b2f29d2d3836e15c45e05a1bde0c8ad6",
+      "genaiCommit": "2ac98d4b1216c9f6a52e23c89b8f6b8334811bf5"
+    },
+    {
+      "key": "03-gqa-flash-prefill",
+      "anchorDate": "2025-02-22",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "9799c3fbd26fd5dd5cc161abc2a84bd21ba91a30",
+      "genaiCommit": "b247a9370565d9596d442c9f22a552582aecff98"
+    },
+    {
+      "key": "04-gqa-flash-decode",
+      "anchorDate": "2025-04-08",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "18f91e55e8cdb8ce264fc773e91adfd725851cd6",
+      "genaiCommit": "ab3dd3d84ca64ecfccac52fd520f9f00414cba82"
+    },
+    {
+      "key": "06-shared-memory-broadcast",
+      "anchorDate": "2025-08-26",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "cf05366785adc3d59ff026a58496a5e8864bd024",
+      "genaiCommit": "4af78a70c79128f75b4535f31afa5632bdc0bb93"
+    },
+    {
+      "key": "06-gqa-rope",
+      "anchorDate": "2025-11-21",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "96926a073329f45b532ecf7f6595c767d1b071a7",
+      "genaiCommit": "240fa1b253b6d3daafde143f29a24442a8a63d68"
+    },
+    {
+      "key": "08-graph-capture",
+      "anchorDate": "2026-04-08",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "f7751fed1721d504e5d033ddce321c12fc2c4877",
+      "genaiCommit": "7054dc56351891da8b1604b4434387f121967aa5"
+    },
+    {
+      "key": "07-prune",
+      "anchorDate": "2026-03-04",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "bdd672aac93b73448803dccb5132c9213e6c7a67",
+      "genaiCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e"
+    },
+    {
+      "key": "10-flashattention-max-k-step",
+      "anchorDate": "2026-05-14",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "b36d8dbd503ed1b1e56eb8819080b29821e18fe1",
+      "genaiCommit": "85aa0ce4b60f7f048c7c2f86e219a0d237a893e9"
+    },
+    {
+      "key": "09-matmulnbits-mlp",
+      "anchorDate": "2026-05-28",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "88ca23fcd59d62f1f62df100932c581747a6c681",
+      "genaiCommit": "6e6a2e83606256601b5ec3fa84ca1eada9c00624"
+    },
+    {
+      "key": "11-flashattention-decode-tuning",
+      "anchorDate": "2026-07-09",
+      "runtimeBackend": "webgpu",
+      "ortCommit": "1ad2a1f2ec4d019704dcee269b46ecd984489398",
+      "genaiCommit": "645069050ba1d42146a2230571dab6b2d00a6c6e"
+    }
+  ],
+  "outputRoot": "${ORT_WEBGPU_PERF_ROOT}\\milestone-state",
+  "backupRoot": "${ORT_WEBGPU_PERF_ROOT}\\runtime-milestones",
+  "worktreeRoot": "${ORT_WEBGPU_WORKTREE_ROOT}\\milestone-runtime",
+  "startDate": "2025-01-14",
+  "anchorDay": 14,
+  "models": [
+    {
+      "name": "Phi-4-mini-instruct",
+      "path": "${ORT_WEBGPU_PERF_ROOT}\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct"
+    }
+  ],
+  "promptLengths": [
+    1024
+  ],
+  "generationLength": 128,
+  "repetitions": 5,
+  "warmup": 1,
+  "buildConfig": "Release",
+  "cmakeGenerator": "Visual Studio 17 2022",
+  "cmakePath": "${ORT_CMAKE}",
+  "cmakePolicyVersionMinimum": "3.5",
+  "genaiCxxFlags": "/EHsc /wd4834",
+  "patchLegacyExtensionsMacro": true,
+  "refreshPinnedArchiveHashes": true,
+  "parallelJobs": 4,
+  "runtimeBackend": "webgpu",
+  "dawnBackend": "d3d12",
+  "buildTimeoutSeconds": 14400,
+  "benchmarkTimeoutSeconds": 1800
+}

@@ -1,0 +1,927 @@
+{
+  "schemaVersion": 1,
+  "title": "ORT WebGPU Phi-4 Milestone Trend",
+  "promptLength": 1024,
+  "generationLength": 128,
+  "batchSize": 1,
+  "maxKvCacheLength": 8192,
+  "repetitions": 5,
+  "warmup": 1,
+  "targetGpu": "NVIDIA GeForce RTX 5080",
+  "builderOptions": [
+    {
+      "name": "accuracy_level",
+      "legacyNames": [
+        "int4_accuracy_level"
+      ],
+      "seriesValue": "4",
+      "profile": "standard",
+      "requirement": "Optional; explicitly pinned for reproducibility",
+      "currentDefault": "4 for WebGPU and CPU; 0 for other EPs",
+      "description": "Selects the minimum MatMulNBits activation-compute accuracy. Level 4 uses INT8 activation quantization and INT8 compute for the INT4 weights.",
+      "defaultHistory": [
+        {
+          "date": "2026-07-20",
+          "value": "Unchanged; renamed from int4_accuracy_level",
+          "commit": "c99375ee21279624948065190af189215eff9dab",
+          "pr": 2275
+        },
+        {
+          "date": "2025-05-13",
+          "value": "4 for WebGPU and CPU; 0 for other EPs",
+          "commit": "c83a1427c256cd557009a9409f82a23ce114ea9e",
+          "pr": 1474
+        },
+        {
+          "date": "2025-02-21",
+          "value": "4 for CPU; 0 for other EPs",
+          "commit": "dee416044a024534251e4a298070e3f37b614121",
+          "pr": 1265
+        },
+        {
+          "date": "2024-09-05",
+          "value": "0",
+          "commit": "de6a6714f97de58fd8fe10644280702b1cfe02ac",
+          "pr": 879
+        },
+        {
+          "date": "2024-02-22",
+          "value": "Unset (quantizer-selected)",
+          "commit": "781ad7df3dbd507b39cf61e9acf1291ea766e86c",
+          "pr": 107
+        }
+      ]
+    },
+    {
+      "name": "is_symmetric",
+      "legacyNames": [
+        "int4_is_symmetric"
+      ],
+      "seriesValue": "true",
+      "profile": "standard",
+      "requirement": "Optional; explicitly pinned for reproducibility",
+      "currentDefault": "true",
+      "description": "Uses signed symmetric weight quantization (INT4 here); false selects unsigned asymmetric weights (UINT4).",
+      "defaultHistory": [
+        {
+          "date": "2026-07-20",
+          "value": "true; renamed from int4_is_symmetric",
+          "commit": "c99375ee21279624948065190af189215eff9dab",
+          "pr": 2275
+        },
+        {
+          "date": "2024-11-22",
+          "value": "true (option introduced)",
+          "commit": "17061e0b14a53b2e2a0a202f6cc15964ae2605b1",
+          "pr": 1053
+        }
+      ]
+    },
+    {
+      "name": "block_size",
+      "legacyNames": [
+        "int4_block_size"
+      ],
+      "seriesValue": "32",
+      "profile": "standard",
+      "requirement": "Optional; explicitly pinned for reproducibility",
+      "currentDefault": "32",
+      "description": "Sets the MatMulNBits weight-quantization group size. The standard Phi-4 profile pins 32 so model layout remains comparable across builder revisions.",
+      "defaultHistory": [
+        {
+          "date": "2026-07-20",
+          "value": "32; renamed from int4_block_size",
+          "commit": "c99375ee21279624948065190af189215eff9dab",
+          "pr": 2275
+        },
+        {
+          "date": "2024-02-22",
+          "value": "32 (option introduced)",
+          "commit": "781ad7df3dbd507b39cf61e9acf1291ea766e86c",
+          "pr": 107
+        }
+      ]
+    },
+    {
+      "name": "algo_config",
+      "legacyNames": [
+        "int4_algo_config"
+      ],
+      "seriesValue": "rtn_last",
+      "profile": "standard",
+      "requirement": "Mandatory for this profile; current default is not rtn_last",
+      "currentDefault": "default (the quantizer's built-in RTN path)",
+      "description": "Selects the weight-only quantization method. rtn_last means RTN with the final LM-head MatMul promoted to INT8; it is retained as a legacy compound value.",
+      "defaultHistory": [
+        {
+          "date": "2026-07-21",
+          "value": "default; rtn_last became an alias for rtn plus last_matmul:int8",
+          "commit": "b8659f2b813e8dd6254a92d5885fd72b838283d2",
+          "pr": 2234
+        },
+        {
+          "date": "2026-07-20",
+          "value": "default; renamed from int4_algo_config",
+          "commit": "c99375ee21279624948065190af189215eff9dab",
+          "pr": 2275
+        },
+        {
+          "date": "2025-11-25",
+          "value": "default; rtn_last added",
+          "commit": "f748f24fbb3612d855a9162ddedf005d25e5df79",
+          "pr": 1885
+        },
+        {
+          "date": "2025-05-04",
+          "value": "default (option introduced)",
+          "commit": "89a288984f860b7a6cb0436d3989630a55a8ab0f",
+          "pr": 1444
+        }
+      ]
+    },
+    {
+      "name": "enable_webgpu_graph",
+      "legacyNames": [],
+      "seriesValue": "true",
+      "profile": "standard",
+      "requirement": "Mandatory for graph-ready exports; current default is false",
+      "currentDefault": "false",
+      "description": "Emits a WebGPU graph-capture-compatible model and provider configuration. Stored benchmark configs still disable capture except during the graph-capture measurement.",
+      "defaultHistory": [
+        {
+          "date": "2025-10-24",
+          "value": "false (option introduced)",
+          "commit": "50ac67cc5d2b880eb8052dc43175c2ec325d4996",
+          "pr": 1788
+        }
+      ]
+    },
+    {
+      "name": "shared_embeddings",
+      "legacyNames": [],
+      "seriesValue": "true",
+      "profile": "standard",
+      "requirement": "Mandatory for Phi-4; valid only for models with tied embeddings",
+      "currentDefault": "Source model tie_word_embeddings (true for Phi-4 mini)",
+      "description": "Shares the tied input-embedding and LM-head weights to reduce model size. It is valid only when the source model declares tied embeddings.",
+      "defaultHistory": [
+        {
+          "date": "2026-07-01",
+          "value": "Model-dependent; explicit true is rejected for untied models",
+          "commit": "97227263e8d4407d3895f43c19fb11afc1289dd9",
+          "pr": 2237
+        },
+        {
+          "date": "2025-11-25",
+          "value": "Source model tie_word_embeddings (option introduced)",
+          "commit": "f748f24fbb3612d855a9162ddedf005d25e5df79",
+          "pr": 1885
+        }
+      ]
+    },
+    {
+      "name": "prune_lm_head",
+      "legacyNames": [],
+      "seriesValue": "true",
+      "profile": "standard",
+      "requirement": "Mandatory for the current post-prune profile; false or omitted for pre-prune controls",
+      "currentDefault": "false",
+      "description": "Computes LM-head logits only for the final prompt token, removing unnecessary full-sequence LM-head work during prefill. Keep it disabled only when reproducing a pre-prune historical control.",
+      "defaultHistory": [
+        {
+          "date": "2026-03-03",
+          "value": "false (option introduced)",
+          "commit": "d4abc956204dc6eadd068eef0c0a8995584caa54",
+          "pr": 1995
+        }
+      ]
+    }
+  ],
+  "ortGenaiBenchmarkOptions": [
+    {
+      "tool": "C++ and Python",
+      "option": "-i / --input_folder",
+      "value": "<model directory>",
+      "description": "Selects the ORT GenAI model directory used by the benchmark."
+    },
+    {
+      "tool": "C++ and Python",
+      "option": "-b / --batch_size",
+      "value": "1",
+      "description": "Runs a single sequence per benchmark invocation."
+    },
+    {
+      "tool": "C++ and Python",
+      "option": "-l / --prompt_lengths",
+      "value": "1024",
+      "description": "Uses the fixed 1024-token prompt workload."
+    },
+    {
+      "tool": "C++ and Python",
+      "option": "-g / --generation_lengths",
+      "value": "128",
+      "description": "Generates 128 tokens after prefill."
+    },
+    {
+      "tool": "C++ model_benchmark.exe",
+      "option": "-ml / --max_length",
+      "value": "8192",
+      "description": "Sets the maximum sequence length and KV-cache capacity to 8K when the historical C++ binary supports this option."
+    },
+    {
+      "tool": "Python benchmark.py",
+      "option": "-m / --max_lengths",
+      "value": "8192",
+      "description": "Python-runner equivalent of the C++ -ml 8192 setting."
+    },
+    {
+      "tool": "C++ and Python",
+      "option": "-r / --repetitions",
+      "value": "5",
+      "description": "Collects five measured repetitions."
+    },
+    {
+      "tool": "C++ and Python",
+      "option": "-w / --warmup",
+      "value": "1",
+      "description": "Runs one warmup before measurement."
+    }
+  ],
+  "importantGenaiConfigOptions": [
+    {
+      "path": "provider_options.webgpu.enableGraphCapture",
+      "location": "webgpu provider options",
+      "profile": "\"0\" stored; \"1\" for the controlled graph-capture performance run",
+      "description": "Enables command-graph capture and replay. Keep the archived model config disabled so the graph-capture milestone remains an explicit benchmark-time override."
+    },
+    {
+      "path": "provider_options.webgpu.validationMode",
+      "location": "webgpu provider options",
+      "profile": "\"basic\" stored; \"disabled\" for the controlled performance run",
+      "description": "Avoids WebGPU validation overhead in measured runs while retaining basic validation in the archived model config."
+    },
+    {
+      "path": "optimization.disable_specified_optimizers",
+      "location": "decoder session_options",
+      "profile": "\"ConstantFolding\" when constant folding should be disabled",
+      "description": "Disables only ORT's ConstantFolding transformer. The ORT default is an empty value, so no optimizer is disabled; this primarily changes session creation rather than steady-state throughput."
+    },
+    {
+      "path": "provider_options.webgpu.multiRotaryCacheConcatOffset",
+      "location": "webgpu provider options",
+      "profile": "\"4096\" only for a model with concatenated short/long rotary caches",
+      "description": "Supplies the split offset required by the concatenated multi-RoPE cache layout; omit it for models that do not use that layout."
+    }
+  ],
+  "genaiConfigOptions": [
+    {
+      "path": "provider_options.webgpu.enableGraphCapture",
+      "area": "Graph capture",
+      "requirement": "Optional",
+      "profile": "\"0\" stored; \"1\" only in the controlled graph run",
+      "currentDefault": "\"0\"",
+      "description": "Captures and replays the WebGPU command graph. The published stored configs keep it disabled."
+    },
+    {
+      "path": "provider_options.webgpu.validationMode",
+      "area": "Validation",
+      "requirement": "Optional",
+      "profile": "\"basic\" stored; \"disabled\" only in the graph performance run",
+      "currentDefault": "Release builds skip validation when omitted",
+      "description": "Selects disabled, wgpuOnly, basic, or full WebGPU validation."
+    },
+    {
+      "path": "provider_options.webgpu.multiRotaryCacheConcatOffset",
+      "area": "Rotary cache",
+      "requirement": "Conditional",
+      "profile": "\"4096\" for concatenated short/long rotary caches",
+      "currentDefault": "\"0\" (disabled)",
+      "description": "Splits a concatenated multi-RoPE cache at the supplied element offset."
+    },
+    {
+      "path": "provider_options.webgpu.sessionBufferPoolGenerations",
+      "area": "Graph capture",
+      "requirement": "Optional",
+      "profile": "\"1\"",
+      "currentDefault": "\"1\"",
+      "description": "Controls retained session buffer generations; 0 disables pooling."
+    },
+    {
+      "path": "provider_options.webgpu.enableInt64",
+      "area": "Execution",
+      "requirement": "Optional",
+      "profile": "Omitted",
+      "currentDefault": "\"0\"",
+      "description": "Enables WebGPU INT64 support; graph capture enables the needed path implicitly."
+    },
+    {
+      "path": "provider_options.webgpu.preferredLayout",
+      "area": "Layout",
+      "requirement": "Optional",
+      "profile": "Omitted",
+      "currentDefault": "NHWC",
+      "description": "Selects the preferred tensor layout: NHWC or NCHW."
+    },
+    {
+      "path": "provider_options.webgpu.kvCacheQuantizationBits",
+      "area": "KV cache",
+      "requirement": "Optional",
+      "profile": "\"0\"",
+      "currentDefault": "\"0\"",
+      "description": "Experimental KV-cache quantization; supported values are currently 0 and 4 bits."
+    },
+    {
+      "path": "provider_options.webgpu.dawnBackendType",
+      "area": "Adapter",
+      "requirement": "Optional",
+      "profile": "D3D12 on Windows",
+      "currentDefault": "Platform and build dependent",
+      "description": "Selects the native Dawn backend, currently D3D12 or Vulkan."
+    },
+    {
+      "path": "provider_options.webgpu.powerPreference",
+      "area": "Adapter",
+      "requirement": "Optional",
+      "profile": "high-performance",
+      "currentDefault": "high-performance",
+      "description": "Requests a high-performance or low-power adapter."
+    },
+    {
+      "path": "provider_options.webgpu.storageBufferCacheMode",
+      "area": "Buffer cache",
+      "requirement": "Optional",
+      "profile": "bucket",
+      "currentDefault": "bucket",
+      "description": "Controls storage-buffer reuse: disabled, lazyRelease, simple, or bucket."
+    },
+    {
+      "path": "provider_options.webgpu.uniformBufferCacheMode",
+      "area": "Buffer cache",
+      "requirement": "Optional",
+      "profile": "simple",
+      "currentDefault": "simple",
+      "description": "Controls uniform-buffer reuse."
+    },
+    {
+      "path": "provider_options.webgpu.queryResolveBufferCacheMode",
+      "area": "Buffer cache",
+      "requirement": "Optional",
+      "profile": "disabled",
+      "currentDefault": "disabled",
+      "description": "Controls query-resolve-buffer reuse."
+    },
+    {
+      "path": "provider_options.webgpu.defaultBufferCacheMode",
+      "area": "Buffer cache",
+      "requirement": "Optional",
+      "profile": "disabled",
+      "currentDefault": "disabled",
+      "description": "Sets the fallback buffer-cache mode."
+    },
+    {
+      "path": "provider_options.webgpu.maxNumPendingDispatches",
+      "area": "Dispatch",
+      "requirement": "Optional",
+      "profile": "\"16\"",
+      "currentDefault": "\"16\"",
+      "description": "Bounds queued dispatches; valid values are 1 through 4096."
+    },
+    {
+      "path": "provider_options.webgpu.maxStorageBufferBindingSize",
+      "area": "Memory",
+      "requirement": "Optional",
+      "profile": "\"0\" (adapter limit)",
+      "currentDefault": "\"0\"",
+      "description": "Overrides the storage-buffer binding limit; nonzero values must be at least 128 MB."
+    },
+    {
+      "path": "provider_options.webgpu.preserveDevice",
+      "area": "Device lifetime",
+      "requirement": "Optional",
+      "profile": "\"0\"",
+      "currentDefault": "\"0\"",
+      "description": "Preserves the WebGPU device after the execution-provider context is released."
+    },
+    {
+      "path": "provider_options.webgpu.forceCpuNodeNames",
+      "area": "Diagnostics",
+      "requirement": "Optional",
+      "profile": "Omitted",
+      "currentDefault": "Empty",
+      "description": "Forces newline-separated node names to CPU for diagnosis."
+    },
+    {
+      "path": "provider_options.webgpu.enablePIXCapture",
+      "area": "Diagnostics",
+      "requirement": "Optional",
+      "profile": "\"0\"",
+      "currentDefault": "\"0\"",
+      "description": "Enables PIX capture when ORT was built with PIX support."
+    },
+    {
+      "path": "provider_options.webgpu.deviceId",
+      "area": "External device",
+      "requirement": "Optional",
+      "profile": "\"0\"",
+      "currentDefault": "\"0\"",
+      "description": "Selects the device identifier for provider initialization."
+    },
+    {
+      "path": "provider_options.webgpu.webgpuInstance",
+      "area": "External device",
+      "requirement": "Optional",
+      "profile": "Omitted",
+      "currentDefault": "Null / omitted",
+      "description": "Supplies an externally managed WebGPU instance for native integration."
+    },
+    {
+      "path": "provider_options.webgpu.webgpuDevice",
+      "area": "External device",
+      "requirement": "Optional",
+      "profile": "Omitted",
+      "currentDefault": "Null / omitted",
+      "description": "Supplies an externally managed WebGPU device."
+    },
+    {
+      "path": "provider_options.webgpu.dawnProcTable",
+      "area": "External device",
+      "requirement": "Optional",
+      "profile": "Omitted",
+      "currentDefault": "Null / omitted",
+      "description": "Supplies a Dawn procedure table for native embedding."
+    }
+  ],
+  "optimizationGroups": [
+    {
+      "id": "prefill",
+      "title": "Prefill optimizations",
+      "kicker": "Prompt processing",
+      "description": "Increase throughput across the full prompt.",
+      "metric": "prefillTps",
+      "metricLabel": "prefill tok/s",
+      "reference": {
+        "date": "2024-12-02",
+        "label": "December 2, 2024 starting measurement",
+        "chartLabel": "Starting point",
+        "measurement": {
+          "prefillTps": 272.116
+        },
+        "ortCommit": "8c52fa392434e25ccdf0a0645a4eb6e4865074fa",
+        "genaiCommit": "c5745fd6d91a2ba2d94c6a52f6255652dde02508",
+        "note": "Measured on RTX 5080 with the archived December 2 runtime snapshot and the maintained accuracy-level-4, graph-ready, unfused-RoPE model."
+      },
+      "stages": [
+        {
+          "id": "02-subgroup-prefill",
+          "summary": "Use WebGPU subgroup operations in MatMulNBits to exchange quantized tiles within a wave."
+        },
+        {
+          "id": "03-dp4a-prefill",
+          "summary": "Use packed four-lane integer dot products for the quantized MatMulNBits prefill path."
+        },
+        {
+          "id": "03-gqa-flash-prefill",
+          "summary": "Enable the FlashAttention path for grouped-query attention during prompt processing."
+        },
+        {
+          "id": "06-shared-memory-broadcast",
+          "summary": "Broadcast FlashAttention K/V values through workgroup shared memory on NVIDIA GPUs."
+        },
+        {
+          "id": "07-prune",
+          "summary": "Evaluate the LM head only for the final prompt token instead of every prompt token."
+        },
+        {
+          "id": "10-flashattention-max-k-step",
+          "summary": "Select a larger FlashAttention max K-step dynamically from the NVIDIA workgroup-memory budget."
+        }
+      ]
+    },
+    {
+      "id": "decode",
+      "title": "Decode optimizations",
+      "kicker": "Token generation",
+      "description": "Reduce per-token dispatch, attention, and quantized MLP overhead.",
+      "metric": "decodeTps",
+      "metricLabel": "decode tok/s",
+      "reference": {
+        "date": "2024-12-11",
+        "label": "December 2024 starting measurement",
+        "chartLabel": "Starting point",
+        "measurement": {
+          "decodeTps": 69.96
+        }
+      },
+      "stages": [
+        {
+          "id": "04-gqa-flash-decode",
+          "summary": "Introduce Flash Decoding for one-token generation and GQA KV-cache reads."
+        },
+        {
+          "id": "06-gqa-rope",
+          "summary": "Fuse packed-QKV splitting with rotary embedding in the GQA generation path."
+        },
+        {
+          "id": "08-graph-capture",
+          "label": "WebGPU graph capture",
+          "summary": "Enable WebGPU graph capture in ORT GenAI and replay generation commands to reduce CPU submission overhead."
+        },
+        {
+          "id": "09-matmulnbits-mlp",
+          "summary": "Fuse quantized MatMulNBits MLP work in the token-generation path."
+        },
+      {
+        "id": "11-flashattention-decode-tuning",
+        "summary": "Increase FlashAttention decode occupancy with a larger workgroup and K tile."
+      }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "id": "02-subgroup-prefill",
+      "label": "Subgroup MatMulNBits",
+      "chartLabel": "Subgroup",
+      "date": "2025-01-14",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\02-subgroup-prefill",
+      "milestoneCommit": "80d8931f1d835fe29d89cced25f05be6690f81b6",
+      "milestoneTitle": "Use subgroup for MatMulNBits (#23224)",
+      "milestonePr": 23224,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 23224, "mergeDate": "2025-01-13", "mergeCommit": "80d8931f1d835fe29d89cced25f05be6690f81b6", "owner": "qjia7", "role": "Adds the subgroup WebGPU MatMulNBits path."}
+      ],
+      "majorContributors": ["Jiajia Qin"],
+      "applicability": "WebGPU devices with subgroup support running quantized MatMulNBits during prompt processing.",
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true"],
+      "chartMetrics": ["prefillTps"],
+      "features": ["pure 4-bit", "GQA", "separate RoPE", "shared KV", "subgroup MatMulNBits"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+          "builderDate": "2025-10-27",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+          "note": "Measured with the isolated subgroup runtime reconstructed from the exact January 2025 ORT milestone."
+        }
+      ]
+    },
+    {
+      "id": "03-dp4a-prefill",
+      "label": "DP4A MatMulNBits",
+      "chartLabel": "DP4A",
+      "date": "2025-01-21",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\03-dp4a-prefill",
+      "milestoneCommit": "58c29d34b2f29d2d3836e15c45e05a1bde0c8ad6",
+      "milestoneTitle": "DP4A MatMulNBits accuracy-level 4 path (#23365)",
+      "milestonePr": 23365,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 23365, "mergeDate": "2025-01-21", "mergeCommit": "58c29d34b2f29d2d3836e15c45e05a1bde0c8ad6", "owner": "sushraja-msft", "role": "Adds the accuracy-level 4 DP4A MatMulNBits kernel."}
+      ],
+      "majorContributors": ["sushraja-msft"],
+      "applicability": "INT4 MatMulNBits with int4_accuracy_level=4 on WebGPU devices that support the DP4A path; primarily improves prefill.",
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true"],
+      "chartMetrics": ["prefillTps"],
+      "features": ["pure 4-bit", "GQA", "separate RoPE", "shared KV", "subgroup + DP4A MatMulNBits"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+          "builderDate": "2025-10-27",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+          "note": "Regenerated with explicit int4_accuracy_level=4 and measured with the exact January 2025 DP4A ORT milestone."
+        }
+      ]
+    },
+    {
+      "id": "03-gqa-flash-prefill",
+      "label": "Flash Attention",
+      "chartLabel": "Flash Attention",
+      "date": "2025-02-22",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\gqa-fa-candidate",
+      "milestoneCommit": "9799c3fbd26fd5dd5cc161abc2a84bd21ba91a30",
+      "milestoneTitle": "Enable FlashAttention for GQA (#23761)",
+      "milestonePr": 23761,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 23761, "mergeDate": "2025-02-22", "mergeCommit": "9799c3fbd26fd5dd5cc161abc2a84bd21ba91a30", "owner": "qjia7", "role": "Enables the FlashAttention execution path for GQA."}
+      ],
+      "majorContributors": ["Jiajia Qin"],
+      "applicability": "Grouped-query attention during prompt processing; this is the change that enables the GQA FlashAttention path.",
+      "controlledMeasurement": {
+        "parent": 2258.14,
+        "candidate": 2713.62,
+        "metricLabel": "prefill tok/s",
+        "parentCommit": "50c835d98c1318a5a5bc3a6bca3012f19a36975c",
+        "candidateCommit": "9799c3fbd26fd5dd5cc161abc2a84bd21ba91a30",
+        "evidence": "experiments\\flashattention-isolation\\state\\results\\gqa-fa-parent and gqa-fa-candidate"
+      },
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true"],
+      "features": ["pure 4-bit", "GQA", "separate RoPE", "shared KV", "FlashAttention prefill"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+          "builderDate": "2025-10-27",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "04-gqa-flash-decode",
+      "label": "Flash Decoding",
+      "chartLabel": "Flash Decoding",
+      "date": "2025-04-08",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\04-gqa-flash-decode",
+      "milestoneCommit": "18f91e55e8cdb8ce264fc773e91adfd725851cd6",
+      "milestoneTitle": "Flash Decoding for generation (#23808)",
+      "milestonePr": 23808,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 23808, "mergeDate": "2025-04-08", "mergeCommit": "18f91e55e8cdb8ce264fc773e91adfd725851cd6", "owner": "qjia7", "role": "Adds Flash Decoding for one-token generation."}
+      ],
+      "majorContributors": ["Jiajia Qin"],
+      "applicability": "One-token GQA generation with KV-cache reads; targets decode rather than full-prompt processing.",
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true"],
+      "features": ["pure 4-bit", "GQA", "separate RoPE", "shared KV", "Flash Decoding"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+          "builderDate": "2025-10-27",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "06-shared-memory-broadcast",
+      "label": "Shared-memory broadcasting",
+      "chartLabel": "SHM Broadcast",
+      "date": "2025-08-26",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\shm-broadcast-candidate",
+      "milestoneCommit": "cf05366785adc3d59ff026a58496a5e8864bd024",
+      "milestoneTitle": "Optimize FlashAttention for NVIDIA with shared-memory K/V broadcasting (#25777)",
+      "milestonePr": 25777,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 25777, "mergeDate": "2025-08-26", "mergeCommit": "cf05366785adc3d59ff026a58496a5e8864bd024", "owner": "qjia7", "role": "Broadcasts FlashAttention K/V values through workgroup shared memory."}
+      ],
+      "majorContributors": ["Jiajia Qin"],
+      "applicability": "NVIDIA WebGPU FlashAttention. The PR reports about 10% at 1K and 12% at 2K on RTX 2000 Ada by broadcasting K/V through workgroup shared memory.",
+      "controlledMeasurement": {
+        "parent": 3049.88,
+        "candidate": 3235.9,
+        "metricLabel": "prefill tok/s",
+        "parentCommit": "5b021b24f3a131a3a49c77e099aa24a970f4b74b",
+        "candidateCommit": "cf05366785adc3d59ff026a58496a5e8864bd024",
+        "evidence": "experiments\\flashattention-isolation\\state\\results\\shm-broadcast-parent and shm-broadcast-candidate"
+      },
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true"],
+      "chartMetrics": ["prefillTps"],
+      "features": ["pure 4-bit", "GQA", "separate RoPE", "shared KV", "shared-memory K/V broadcast"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+          "builderDate": "2025-10-27",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "06-gqa-rope",
+      "label": "GQA fused RoPE",
+      "chartLabel": "GQA RoPE",
+      "date": "2025-11-21",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\06-gqa-rope",
+      "milestoneCommit": "cf8476b134ddca733d63ec31f113aba50261a54b",
+      "milestoneTitle": "Fused SplitPackedQKV with FusedQKRotaryEmbedding (#26447)",
+      "milestonePr": 26447,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 26563, "mergeDate": "2025-11-21", "mergeCommit": "96926a073329f45b532ecf7f6595c767d1b071a7", "owner": "xiaofeihan1", "role": "Also fuses CopyKVCache into the packed-QKV/RoPE path used by static-KV FlashAttention."},
+        {"repository": "onnxruntime", "number": 26447, "mergeDate": "2025-11-11", "mergeCommit": "cf8476b134ddca733d63ec31f113aba50261a54b", "owner": "xiaofeihan1", "role": "Fuses SplitPackedQKV with FusedQKRotaryEmbedding."},
+        {"repository": "onnxruntime-genai", "number": 1847, "mergeDate": "2025-10-30", "mergeCommit": "240fa1b253b6d3daafde143f29a24442a8a63d68", "owner": "xiaofeihan1", "role": "Emits GQA with fused RotaryEmbedding for WebGPU models."},
+        {"repository": "onnxruntime", "number": 26400, "mergeDate": "2025-10-27", "mergeCommit": "771a4d49cd2385702c911d6390e38e5539242f83", "owner": "xiaofeihan1", "role": "Fuses GeneratePositionIDs into FusedQKRotaryEmbedding."},
+        {"repository": "onnxruntime", "number": 26297, "mergeDate": "2025-10-16", "mergeCommit": "90d92f82000433d99dd47aec8383968b1f36c977", "owner": "xiaofeihan1", "role": "Adds RotaryEmbedding support and fused Q/K RoPE to WebGPU FlashAttention."}
+      ],
+      "majorContributors": ["Xiaofei Han"],
+      "applicability": "GQA decode using the fused-RoPE model graph; combines packed-QKV splitting and rotary embedding.",
+      "controlledMeasurement": {
+        "parent": 73.0331,
+        "candidate": 87.72,
+        "metricLabel": "decode tok/s",
+        "comparisonLabel": "Same runtime: separate RoPE → fused RoPE",
+        "evidence": "gitignore\\perf-trend\\logs\\gqa-rope-unfused-control.log and logs\\milestone-runs\\06-gqa-rope-Phi-4-mini-instruct.log"
+      },
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true"],
+      "features": ["pure 4-bit", "GQA", "fused RoPE", "shared KV"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "experiments\\pre-prune-fused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "240fa1b253b6d3daafde143f29a24442a8a63d68",
+          "builderDate": "2025-10-29",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "08-graph-capture",
+      "label": "WebGPU graph capture",
+      "chartLabel": "Graph Capture",
+      "date": "2026-04-08",
+      "backend": "webgpu",
+      "milestoneRepo": "onnxruntime-genai",
+      "runtime": "runtime-milestones\\08-graph-capture",
+      "milestoneCommit": "32d101d997c9f73b85ee16faac55b0ab67e82f45",
+      "milestoneTitle": "Enable graph capture for WebGPU (#1848)",
+      "milestonePr": 1848,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 27948, "mergeDate": "2026-04-08", "mergeCommit": "f7751fed1721d504e5d033ddce321c12fc2c4877", "owner": "qjia7", "role": "Fixes partial-buffer uploads that corrupted the one-token attention-mask update and caused device loss during graph replay."},
+        {"repository": "onnxruntime-genai", "number": 2021, "mergeDate": "2026-03-18", "mergeCommit": "7054dc56351891da8b1604b4434387f121967aa5", "owner": "qjia7", "role": "Keeps WebGPU search and token buffers on CPU while graph capture is enabled, removing the prompt-processing regression."},
+        {"repository": "onnxruntime", "number": 27453, "mergeDate": "2026-02-26", "mergeCommit": "c6491e0e12af947c0190499b698410c217eb6a74", "owner": "qjia7", "role": "Makes captured WebGPU buffers immediately reusable and reduces GraphCacheManager memory overhead."},
+        {"repository": "onnxruntime-genai", "number": 1991, "mergeDate": "2026-02-25", "mergeCommit": "2807d94105997f67d1a0a19c0239b7ff90d45cca", "owner": "qjia7", "role": "Emits the WebGPU capture provider settings and rotary-cache offset from the common model builder."},
+        {"repository": "onnxruntime", "number": 27434, "mergeDate": "2026-02-25", "mergeCommit": "88855c7fa94da8c42c205d6ca5ee7a88a815daea", "owner": "qjia7", "role": "Adds the configurable multi-rotary-cache concat offset consumed by graph-ready Phi models."},
+        {"repository": "onnxruntime-genai", "number": 1895, "mergeDate": "2026-01-24", "mergeCommit": "827e0c3e9ee082aa4054d29790f8b11050b461eb", "owner": "qjia7", "role": "Runs helper operations such as Cast through cached WebGPU graph models; reported 116.2 → 130.4 decode tok/s on RTX 5080."},
+        {"repository": "onnxruntime", "number": 26673, "mergeDate": "2026-01-24", "mergeCommit": "da9b0a54f737e64784d518c7544c72e5275e77fd", "owner": "qjia7", "role": "Adds the WebGPU INT64 Range path required for ONNX-graph position-ID updates during continuous decoding."},
+        {"repository": "onnxruntime", "number": 27077, "mergeDate": "2026-01-24", "mergeCommit": "ca0cd21bf4e6fd7168c2bfc54bb8c505b779c2d0", "owner": "qjia7", "role": "Uses lazy release for WebGPU prepack buffers and flushes completed initializer uploads to prevent device-memory loss."},
+        {"repository": "onnxruntime", "number": 26450, "mergeDate": "2025-12-15", "mergeCommit": "0aebe823cd7acd46251ad1721e4579b37f6c6e79", "owner": "qjia7", "role": "Registers WebGPU data transfer required explicitly by ORT GenAI #1848."},
+        {"repository": "onnxruntime-genai", "number": 1848, "mergeDate": "2025-11-25", "mergeCommit": "32d101d997c9f73b85ee16faac55b0ab67e82f45", "owner": "qjia7", "role": "Integrates WebGPU graph capture and device tensor operations in ORT GenAI."},
+        {"repository": "onnxruntime", "number": 26384, "mergeDate": "2025-10-29", "mergeCommit": "f7fd3b522d100482988194f3ecc905102b83032f", "owner": "qjia7", "role": "Makes GQA consume sequence length on GPU; described as the final ORT functionality required for WebGPU graph capture."},
+        {"repository": "onnxruntime-genai", "number": 1788, "mergeDate": "2025-10-24", "mergeCommit": "50ac67cc5d2b880eb8052dc43175c2ec325d4996", "owner": "qjia7", "role": "Adds the graph-ready WebGPU model-builder option."},
+        {"repository": "onnxruntime", "number": 26334, "mergeDate": "2025-10-20", "mergeCommit": "8ab27d9f3defb39bcd22a3bf2c6eb59151fd4526", "owner": "qjia7", "role": "Removes the num_workgroups penalty from indirect dispatch; reported 125 → 145 decode tok/s on RTX 5080."},
+        {"repository": "onnxruntime", "number": 25610, "mergeDate": "2025-10-15", "mergeCommit": "f0015b956723ec98efa8292a0628f99a5b6e8b3d", "owner": "qjia7", "role": "Adds the WebGPU INT64 Cast path needed to keep graph-mode processing on device."},
+        {"repository": "onnxruntime", "number": 26207, "mergeDate": "2025-10-14", "mergeCommit": "cd4ac4943465fbbadbbc622dcfd11f453a27a2c1", "owner": "qjia7", "role": "Uses indirect dispatch in FlashAttention for dynamic sequence lengths under capture."},
+        {"repository": "onnxruntime", "number": 25934, "mergeDate": "2025-09-18", "mergeCommit": "f6b405c9c50fe855e8745b5774d385de7238ec84", "owner": "qjia7", "role": "Adds dispatchWorkgroupsIndirect support to WebGPU programs."},
+        {"repository": "onnxruntime", "number": 25945, "mergeDate": "2025-09-15", "mergeCommit": "21325309c163513585c1757c23aad6381d0b8583", "owner": "qjia7", "role": "Unifies present-sequence-length handling in FlashAttention in preparation for capture."},
+        {"repository": "onnxruntime", "number": 24900, "mergeDate": "2025-07-07", "mergeCommit": "e63e053b14910b3c867938ca02f3107d0456e2c6", "owner": "qjia7", "role": "Adds graph capture and replay to the WebGPU execution provider."}
+      ],
+      "majorContributors": ["Jiajia Qin"],
+      "applicability": "ORT GenAI token generation with WebGPU graph capture explicitly enabled for the run; the archived model config keeps capture disabled.",
+      "enableGraphCapture": true,
+      "controlledMeasurement": {
+        "parent": 110.358,
+        "candidate": 173.119,
+        "metricLabel": "decode tok/s",
+        "comparisonLabel": "Same exact runtime/model: graph capture disabled → enabled; mean of two controlled repeats",
+        "evidence": "experiments\\graph-capture-controlled\\measurement-1 and experiments\\graph-capture-controlled\\measurement-2"
+      },
+      "modelOptions": ["int4_algo_config=rtn_last", "int4_is_symmetric=true", "int4_accuracy_level=4", "int4_block_size=32", "enable_webgpu_graph=true", "shared_embeddings=true", "prune_lm_head=true"],
+      "features": ["pure 4-bit", "GQA", "fused RoPE", "shared KV", "graph capture"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+          "builderDate": "2026-03-04",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+          "note": "Measured with the first archived compatible runtime/model pair; the 2025-12 runtime failed because WebGPU device data transfer was not yet available."
+        }
+      ]
+    },
+    {
+      "id": "07-prune",
+      "label": "Prune LM head",
+      "chartLabel": "Prune LM head",
+      "date": "2026-03-04",
+      "backend": "webgpu",
+      "milestoneRepo": "onnxruntime-genai",
+      "runtime": "runtime-milestones\\07-prune",
+      "milestoneCommit": "cc8ae96927d75b882e796a37abb8e9a27a47fd80",
+      "milestoneTitle": "Allow pruned models for prefill (#1995)",
+      "milestonePr": 1995,
+      "relatedPrs": [
+        {"repository": "onnxruntime-genai", "number": 2000, "mergeDate": "2026-03-04", "mergeCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e", "owner": "kunal-vaishnavi", "role": "Applies the immediate post-review corrections to the pruning implementation and documentation."},
+        {"repository": "onnxruntime-genai", "number": 1995, "mergeDate": "2026-03-03", "mergeCommit": "d4abc956204dc6eadd068eef0c0a8995584caa54", "owner": "fs-eire", "role": "Adds both the pruned LM-head export option and runtime support for its fixed logits shape."}
+      ],
+      "majorContributors": ["Yulong Wang", "kunal-vaishnavi"],
+      "applicability": "Phi-style prompt processing with a model exported using prune_lm_head=true so the LM head evaluates only the final prompt token.",
+      "controlledMeasurement": {
+        "parent": 3112.78,
+        "candidate": 4276.76,
+        "metricLabel": "prefill tok/s",
+        "comparisonLabel": "Same builder/runtime: prune_lm_head=false → true",
+        "evidence": "experiments\\prune-accuracy4\\measurement-2\\control.log and experiments\\prune-accuracy4\\measurement-2\\candidate.log"
+      },
+      "reportedImpact": "ORT GenAI #1995 reports 1851.4 → 2757.5 prefill tok/s (1.48×) for Phi-4 Mini on an NVIDIA RTX 4070 Ti; this is context, not the RTX 5080 series measurement.",
+      "modelOptions": ["int4_is_symmetric=true", "int4_accuracy_level=4", "enable_webgpu_graph=true", "prune_lm_head=true"],
+      "chartMetrics": ["prefillTps"],
+      "features": ["pure 4-bit", "GQA", "fused RoPE", "shared KV", "pruned LM head"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "experiments\\prune-accuracy4\\candidate\\Phi-4-mini-instruct",
+          "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+          "builderDate": "2026-03-04",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "10-flashattention-max-k-step",
+      "label": "Increase max K-step",
+      "chartLabel": "Max K-step",
+      "date": "2026-05-14",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\10-flashattention-max-k-step",
+      "milestoneCommit": "b36d8dbd503ed1b1e56eb8819080b29821e18fe1",
+      "milestoneTitle": "Enable dynamic max_k_step in FlashAttention for NVIDIA (#28511)",
+      "milestonePr": 28511,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 28511, "mergeDate": "2026-05-14", "mergeCommit": "b36d8dbd503ed1b1e56eb8819080b29821e18fe1", "owner": "guschmue", "role": "Selects FlashAttention max K-step from the NVIDIA workgroup-memory limit."},
+        {"repository": "onnxruntime", "number": 27780, "mergeDate": "2026-05-14", "mergeCommit": "938b607523b39902f78e10f9b1d43d09cffcd99f", "owner": "xenova", "role": "Introduces the dynamic FlashAttention max K-step selection that #28511 applies to NVIDIA."}
+      ],
+      "majorContributors": ["Guenther Schmuelling", "Joshua Lochner"],
+      "applicability": "NVIDIA WebGPU FlashAttention when the adapter workgroup-memory budget permits a larger dynamic K-step.",
+      "reportedImpact": "ORT #28511 reports a 10–15% prefill improvement on an NVIDIA RTX 5060 Ti; this is context, not an isolated RTX 5080 measurement.",
+      "modelOptions": ["int4_algo_config=rtn_last", "int4_is_symmetric=true", "int4_accuracy_level=4", "int4_block_size=32", "enable_webgpu_graph=true", "shared_embeddings=true", "prune_lm_head=true"],
+      "chartMetrics": ["prefillTps"],
+      "features": ["pure 4-bit", "GQA", "fused RoPE", "shared KV", "pruned LM head", "dynamic FlashAttention max K-step"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+          "builderDate": "2026-03-04",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "09-matmulnbits-mlp",
+      "label": "MatMulNBits MLP generation",
+      "chartLabel": "MLP Fusion",
+      "date": "2026-05-28",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\09-matmulnbits-mlp",
+      "milestoneCommit": "88ca23fcd59d62f1f62df100932c581747a6c681",
+      "milestoneTitle": "QKV and MLP layer fusions (#28280)",
+      "milestonePr": 28280,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 28280, "mergeDate": "2026-05-28", "mergeCommit": "88ca23fcd59d62f1f62df100932c581747a6c681", "owner": "hariharans29", "role": "Adds WebGPU graph fusions and fused QKV/MLP MatMulNBits kernels."}
+      ],
+      "majorContributors": ["Hariharan Seshadri"],
+      "applicability": "Quantized Phi-4 token generation with a compatible fused QKV/MLP model and runtime path.",
+      "enableGraphCapture": true,
+      "modelOptions": ["int4_algo_config=rtn_last", "int4_is_symmetric=true", "int4_accuracy_level=4", "int4_block_size=32", "enable_webgpu_graph=true", "shared_embeddings=true", "prune_lm_head=true"],
+      "features": ["pure 4-bit", "GQA", "fused RoPE", "shared KV", "graph capture", "MLP generation fusion"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+          "builderDate": "2026-03-04",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    },
+    {
+      "id": "11-flashattention-decode-tuning",
+      "label": "FlashAttention decode tuning",
+      "chartLabel": "FA Decode Tune",
+      "date": "2026-07-09",
+      "backend": "webgpu",
+      "runtime": "runtime-milestones\\11-flashattention-decode-tuning",
+      "milestoneCommit": "1ad2a1f2ec4d019704dcee269b46ecd984489398",
+      "milestoneTitle": "FlashAttention decode workgroup and K-tile tuning (#29586)",
+      "milestonePr": 29586,
+      "relatedPrs": [
+        {"repository": "onnxruntime", "number": 29586, "mergeDate": "2026-07-09", "mergeCommit": "1ad2a1f2ec4d019704dcee269b46ecd984489398", "owner": "qjia7", "role": "Raises FlashAttentionDecodeQKV's workgroup from 64 to 128 and K tile from 8 to 32 to improve decode occupancy."},
+        {"repository": "onnxruntime", "number": 29593, "mergeDate": "2026-07-07", "mergeCommit": "ced4d830b985071f1d79e1ebcdacbf0ff52f591d", "owner": "qjia7", "role": "Fixes the GQA decode split-reduce head-size bounds race before applying the larger decode tile."},
+        {"repository": "onnxruntime", "number": 29247, "mergeDate": "2026-06-26", "mergeCommit": "92b4c663496d575c3e22f1e5cfee922b35a6962e", "owner": "qjia7", "role": "Extends the shared GQA FlashAttention implementation to batched and right-padded prompts and updates its decode dispatch inputs."}
+      ],
+      "majorContributors": ["Jiajia Qin"],
+      "applicability": "WebGPU GQA one-token generation using FlashAttentionDecodeQKV; the larger workgroup and K tile primarily improve decode on GPUs such as NVIDIA RTX 50-series devices.",
+      "controlledMeasurement": {
+        "parent": 179.79,
+        "candidate": 206.271,
+        "metricLabel": "decode tok/s",
+        "comparisonLabel": "Same model, GenAI, graph-capture setting, and 8K workload: ORT #29247 → #29586; candidate repeat 205.916 tok/s",
+        "evidence": "logs\\milestone-runs\\10-gqa-decode-tune-Phi-4-mini-instruct.log and experiments\\flashattention-decode-tuning\\measurement-1.log / measurement-2.log"
+      },
+      "reportedImpact": "ORT #29586 reports 257 → 282 decode tok/s (1.10×) on Qwen3-1.7B graph-prune; this is context, not the Phi-4 RTX 5080 measurement.",
+      "runtimeNotes": {
+        "onnxruntime-genai": "Uses the last compatible commit before ORT GenAI #2227 adopted an experimental ORT ModelPackage API unavailable at the exact #29586 ORT merge."
+      },
+      "enableGraphCapture": true,
+      "modelOptions": ["int4_algo_config=rtn_last", "int4_is_symmetric=true", "int4_accuracy_level=4", "int4_block_size=32", "enable_webgpu_graph=true", "shared_embeddings=true", "prune_lm_head=true"],
+      "features": ["pure 4-bit", "GQA", "fused RoPE", "shared KV", "graph capture", "MLP fusion", "FlashAttention decode tuning"],
+      "models": [
+        {
+          "name": "Phi-4-mini-instruct",
+          "path": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+          "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+          "builderDate": "2026-03-04",
+          "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66"
+        }
+      ]
+    }
+  ]
+}
