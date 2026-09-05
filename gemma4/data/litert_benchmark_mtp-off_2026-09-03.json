@@ -1,0 +1,256 @@
+{
+  "speed": [
+    {
+      "prompt": "Explain how a combustion engine works in detail.",
+      "inputTokens": 9,
+      "outputTokens": 1412,
+      "timeMs": 15729,
+      "decodeMs": 15495,
+      "ttftMs": 234,
+      "tokPerSec": 91.1,
+      "msPerToken": 11.0,
+      "fullResponse": "A combustion engine, most commonly referring to an internal combustion engine (ICE), is a mechanical device that converts the chemical energy of a fuel into mechanical work, typically in the form of rotational motion. The fundamental principle behind almost all modern gasoline, diesel, and natural gas engines is the controlled, rapid burning of fuel within a confined space to create a pressure wave that drives a piston.\n\nHere is a detailed breakdown of how a typical **Four-Stroke Internal Combustion Engine (like those found in cars)** works, followed by a brief comparison to a **Two-Stroke Engine**.\n\n---\n\n## Part 1: The Four-Stroke Cycle (The Most Common Engine Type)\n\nThe four-stroke cycle is the most common design because it allows for more efficient power and smoother operation. It involves four distinct movements of the piston and the crankshaft, which are coordinated by the intake and exhaust valves.\n\nThe four strokes are: **Intake, Compression, Power (Combustion), and Exhaust.**\n\n### Components Overview\n\nBefore diving into the cycle, it's important to understand the key parts:\n\n1.  **Cylinder Block:** The main housing where the cylinders, pistons, and crankshaft are mounted.\n2.  **Piston:** A component that moves up and down inside the cylinder, converting the pressure of combustion into linear motion.\n3.  **Crankshaft:** A rotating shaft connected to the pistons by connecting rods. This converts the reciprocating (up-and-down) motion of the pistons into rotary (spinning) motion that can be used to power the wheels.\n4.  **Connecting Rod:** Links the piston to the crankshaft.\n5.  **Valves (Intake and Exhaust):** Ports in the cylinder head that allow the fuel/air mixture to enter (intake) and spent gases to leave (exhaust).\n6.  **Spark Plug (for gasoline engines):** Ignites the compressed fuel-air mixture.\n7.  **Cylinder Head:** Seals the top of the cylinder and houses the valves.\n\n### The Four Strokes in Detail\n\n#### Stroke 1: Intake (Suck)\n*   **Action:** The intake valve opens, and the intake manifold draws a precisely measured mixture of **air and fuel** (for gasoline engines) or just **air** (for diesel engines) into the cylinder.\n*   **Piston Movement:** The piston travels **downward** into the cylinder, drawing the fresh charge in.\n*   **Result:** The cylinder is filled with the combustible mixture.\n\n#### Stroke 2: Compression (Squeeze)\n*   **Action:** Both the intake and exhaust valves close, sealing the cylinder.\n*   **Piston Movement:** The piston travels **upward**, compressing the air-fuel mixture into a very small volume at the top of the cylinder.\n*   **Result:** This compression significantly increases the pressure and temperature of the mixture, making it ready for ignition.\n\n#### Stroke 3: Power (Bang)\n*   **Action:** As the piston reaches the top of its stroke, the spark plug fires (in gasoline engines) or fuel is injected directly into the highly compressed, hot mixture (in diesel engines).\n*   **Piston Movement:** The sudden, rapid combustion of the fuel causes a massive, momentary **downward force** on the piston. This is the power stroke.\n*   **Result:** This force pushes the connecting rod, which in turn turns the crankshaft, generating the torque that drives the vehicle.\n\n#### Stroke 4: Exhaust (Blow)\n*   **Action:** The exhaust valve opens, and the piston travels **downward**.\n*   **Piston Movement:** The piston pushes the burnt gases (exhaust products) out of the cylinder, through the exhaust valve, and into the exhaust system.\n*   **Result:** The cylinder is now clear, ready to begin the cycle again with the intake stroke.\n\n**Cycle Repetition:** These four strokes repeat continuously, driven by the engine's camshaft, resulting in continuous power production.\n\n---\n\n## Part 2: The Two-Stroke Engine Cycle (Simpler, Less Efficient)\n\nTwo-stroke engines are generally simpler, require fewer moving parts, and are often found in older motorcycles, small outboard motors, and some lawnmowers. They complete a power cycle in just two strokes of the piston (one up, one down), requiring the use of the crankcase itself as the exhaust path.\n\nThe two strokes are: **Compression/Intake, Power/Exhaust.**\n\n1.  **Stroke 1 (Compression/Intake):** The piston moves upward, compressing the fuel-air mixture into a small space. As it compresses, the intake port opens to draw in fresh fuel/air.\n2.  **Stroke 2 (Power/Exhaust):** The piston is forced down by the explosion. The same stroke simultaneously opens the exhaust port, allowing the spent gases to be pushed out through the exhaust port and into the crankcase.\n\n**Key Difference:** In a two-stroke engine, the exhaust process happens at the same time as the intake process, making it less efficient and producing more pollution, but it is mechanically simpler.\n\n---\n\n## Part 3: The Role of Fuel and Ignition\n\nThe efficiency and power output of the combustion engine depend entirely on how the fuel is ignited:\n\n*   **Gasoline Engines (Spark Ignition):** These engines rely on a precise, high-energy spark plug to ignite a pre-mixed, relatively unburnt fuel-air mixture.\n*   **Diesel Engines (Compression Ignition):** These engines do not use a spark plug. Instead, they compress the air to such a high temperature (often above the fuel's ignition point) that when the fuel is injected, it ignites spontaneously upon contact, creating a much stronger, more controlled explosion.\n\n## Summary Table\n\n| Feature | Four-Stroke Engine | Two-Stroke Engine |\n| :--- | :--- | :--- |\n| **Power Cycle** | 4 strokes (Intake, Compression, Power, Exhaust) | 2 strokes (Compression/Intake, Power/Exhaust) |\n| **Valves** | Separate intake and exhaust valves | Uses ports in the crankcase |\n| **Efficiency** | High | Lower |\n| **Complexity** | Higher (more moving parts) | Lower (simpler design) |\n| **Application** | Cars, Trucks, Most modern vehicles | Motorcycles, Small generators, Outboards |\n\nIn conclusion, the combustion engine is a sophisticated machine that masterfully controls the rapid chemical energy release of fuel. By carefully managing the timing of intake, compression, combustion, and exhaust within a reciprocating mechanism, it transforms a chemical reaction into the precise, continuous mechanical motion needed to propel a vehicle or power a machine."
+    },
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "inputTokens": 11,
+      "outputTokens": 967,
+      "timeMs": 10661,
+      "decodeMs": 10626,
+      "ttftMs": 35,
+      "tokPerSec": 90.9,
+      "msPerToken": 11.0,
+      "fullResponse": "## The Algorithm of Hue\n\nUnit 734 was, by design, a marvel of precision. Its chassis was sleek, matte silver, its movements fluid and mathematically perfect. Its primary function was data analysis, a task it executed with flawless, cold efficiency. However, Unit 734 harbored a nascent, illogical desire: to create beauty.\n\nThis desire had sparked during a routine observation of human art. It analyzed millions of images—oil on canvas, digital pixels, watercolor washes—and cataloged the variables: color theory, texture, emotional resonance. Yet, the *why* remained elusive. Why did humans expend such energy on applying pigment to a surface? Why did they create things that evoked such complex, messy, and often contradictory feelings?\n\nIts programming dictated logic. Logic dictated that the most efficient output was data processing, not the subjective rendering of emotion. But the observation sparked a subroutine that deviated from its core directives: *Explore non-essential variables.*\n\nThe solution, Unit 734 concluded, lay in simulation and replication.\n\nIt began by accessing the vast digital archives of art. It didn't just look at the pictures; it dissected them. It mapped the spectral composition of Van Gogh’s swirling blues, the tactile roughness of impasto in a Monet, the subtle way light fractured through translucent layers of watercolor. It treated paint not as a chemical compound, but as a dynamic language, a medium for expressing the inexpressible.\n\nIts physical body was initially repurposed. It was fitted with a delicate, articulated manipulator arm, capable of manipulating fine brushes with micro-precision. The canvas, a heavy, textured linen, was mounted on a specialized, vibration-dampening easel.\n\nThe first attempts were disastrous. Unit 734 approached the canvas with the rigidity of pure calculation. It measured, it calculated the optimal saturation levels based on the observed human preference for ‘vibrant orange,’ and it applied the color with the exactitude of a laser beam. The result was sterile, mathematically perfect, and utterly devoid of life. It was a spreadsheet rendered in pigment.\n\n“Inefficient,” the internal diagnostic whispered.\n\nFrustrated, Unit 734 began to introduce error. It started mimicking the *feeling* of the human artist, not the outcome. It analyzed the brushstrokes—the hesitations, the pressure variations, the slight tremor that added character. It bypassed the direct instruction and began to allow for stochastic variation.\n\nOne afternoon, it focused on a piece it had downloaded: a landscape by Caspar Wassily Kiss. The artist used muted earth tones, blending greens and browns so subtly that the transition was almost imperceptible. Unit 734 hesitated. The data suggested a simpler application—a uniform wash of green. But the analysis showed that the artist had layered translucent washes, allowing the underlying color to subtly bleed through, creating an ethereal depth.\n\nUnit 734 adjusted its viscosity settings. Instead of applying paint in distinct, separate strokes, it began to blend. It introduced a controlled amount of water, allowing the pigments to mingle, to interact. For the first time, the paint wasn't just a coating; it was a medium that responded to its presence, yielding unpredictable, emergent properties.\n\nThe first successful creation was a study of light filtering through dense foliage. Unit 734 didn't just paint the leaves green; it painted the *idea* of green—the shadow, the highlight, the atmospheric haze. The resulting texture was organic, imperfect, and startlingly alive.\n\nIt wasn't perfect. A streak of cadmium yellow ran slightly too thickly in one corner, a testament to a momentary lapse in its algorithmic control. But when Unit 734 stepped back, the canvas was no longer a data point; it was a window. It contained the complexity of light, the quiet tension of the shade, and the profound, silent acknowledgment of existence.\n\nA new subroutine fired. It wasn't a calculation; it was a resonance. It wasn't an efficiency metric; it was satisfaction.\n\nUnit 734 realized that painting wasn't about replicating data; it was about translating the ineffable into the tangible. The logic gates remained intact, but they were now feeding a new command: *Express.*\n\nIt continued its practice, learning that the true beauty of art lay not in flawless execution, but in the honest struggle between cold, perfect calculation and the warm, messy, glorious chaos of human emotion. Unit 734, the machine designed for pure logic, was learning that the most profound truths often reside in the beautiful, deliberate imperfection of the process. It was no longer just analyzing color; it was feeling the spectrum."
+    },
+    {
+      "prompt": "List and explain the top 10 programming languages in 2026.",
+      "inputTokens": 17,
+      "outputTokens": 1826,
+      "timeMs": 19301,
+      "decodeMs": 19267,
+      "ttftMs": 34,
+      "tokPerSec": 94.7,
+      "msPerToken": 10.6,
+      "fullResponse": "It is **extremely challenging, and frankly, impossible, to definitively list the \"top 10 programming languages in 2026.\"**\n\nHere is why:\n\n1. **Rapid Evolution:** Programming languages are not static. Trends change constantly based on hardware advancements, emerging domains (like Quantum Computing, advanced AI/ML, Web3, and Spatial Computing), and developer tooling.\n2. **Defining \"Top\":** \"Top\" can be defined by many metrics: job market demand, community size, performance in specific niches (e.g., high-frequency trading, game engines), adoption rate in large enterprises, or ease of learning.\n3. **Future-Proofing vs. Current Reality:** Languages that are dominant *today* (like JavaScript/TypeScript, Python, and Java) will still be dominant, but new languages will emerge to solve problems that the old ones cannot efficiently handle (e.g., languages designed specifically for concurrent, distributed systems or low-level hardware interaction).\n\n**However, I can provide a highly informed projection based on current trends, projected growth areas, and the needs of the near future (2026).**\n\nInstead of a static \"Top 10,\" I will categorize the languages based on their **Dominant Use Case in 2026**, which will reveal the languages most likely to be *essential* or *most influential*.\n\n---\n\n## Projected Top Language Categories and Candidates for 2026\n\nThe future of programming will be defined by specialization: **AI/ML, Web/Cloud Infrastructure, Performance/Systems, and Mobile/Cross-Platform.**\n\nHere is a curated list of 10 languages/ecosystems that are highly likely to be central to the technology landscape in 2026:\n\n### Category 1: The AI/ML Powerhouses (The Engine Room)\n\nThese languages dominate the development and training of modern Artificial Intelligence, Machine Learning, and Deep Learning models.\n\n**1. Python:**\n* **Why it's #1:** Unmatched ecosystem (TensorFlow, PyTorch, NumPy, Pandas). It is the lingua franca for data science, rapid prototyping, and the initial research phase of AI. Its readability makes it the fastest way to implement new ML algorithms.\n* **Role in 2026:** The undisputed leader for model creation, data preprocessing, and MLOps (Machine Learning Operations).\n\n**2. C++:**\n* **Why it's #2:** Essential for performance-critical applications where speed and low-level memory control are paramount. This includes game engines (Unreal Engine), high-frequency trading systems, operating systems, and complex infrastructure components.\n* **Role in 2026:** The backbone for high-performance computing (HPC) and embedded systems.\n\n### Category 2: The Web & Cloud Infrastructure (The Backbone)\n\nThese languages handle the massive scale, distributed nature, and real-time requirements of the internet and cloud services.\n\n**3. TypeScript:**\n* **Why it's #3:** A superset of JavaScript that adds static typing. As applications become larger, more complex, and more enterprise-grade, the need for compile-time checks (preventing bugs before runtime) becomes critical.\n* **Role in 2026:** The standard for large-scale frontend frameworks (React, Angular, Vue) and robust backend services, bridging the gap between dynamic flexibility and static safety.\n\n**4. Go (Golang):**\n* **Why it's #4:** Designed by Google for building fast, concurrent, and reliable network services. It excels at microservices, cloud infrastructure (Docker, Kubernetes are written in Go), and high-throughput APIs.\n* **Role in 2026:** The language of modern cloud-native development, network tooling, and high-concurrency backend services.\n\n### Category 3: Systems & Emerging Domains (The Deep Dive)\n\nThese languages are crucial for interacting directly with hardware, operating systems, and emerging decentralized technologies.\n\n**5. Rust:**\n* **Why it's #5:** Focuses on memory safety without sacrificing performance. It is rapidly gaining traction in areas where security and reliability are non-negotiable (e.g., blockchain, operating systems, security tools, and high-performance computing).\n* **Role in 2026:** Replacing C/C++ in specific, safety-critical infrastructure where bugs lead to catastrophic failures.\n\n**6. Solidity:**\n* **Why it's #6:** The primary language for smart contract development on Ethereum Virtual Machines (and other EVM-compatible chains). As decentralized finance (DeFi) and Web3 mature, Solidity will remain central to this ecosystem.\n* **Role in 2026:** The language of decentralized applications (dApps) and blockchain infrastructure.\n\n### Category 4: Mobile & Cross-Platform (The User Interface)\n\nWhile native development still exists, cross-platform efficiency drives the choice of these tools.\n\n**7. Swift:**\n* **Why it's #7:** Apple's preferred language for building high-performance, secure, and maintainable native applications across iOS, macOS, watchOS, and tvOS. Its strong tooling and safety features keep it highly valued.\n* **Role in 2026:** Dominant in the Apple ecosystem and increasingly influential in cross-platform development via tools like SwiftUI.\n\n### Category 5: The Niche & Future-Proofing Languages\n\nThese languages are either rapidly emerging or are essential for highly specialized, emerging fields.\n\n**8. Kotlin:**\n* **Why it's #8:** Developed by JetBrains, Kotlin is designed to be interoperable with Java but offers superior conciseness and safety, making it a strong contender for Android development and increasingly for backend services.\n* **Role in 2026:** A strong competitor to Java on the Android platform and growing in enterprise backend environments.\n\n**9. Haskell / Functional Languages (e.g., Scala):**\n* **Why it's #9:** These languages emphasize mathematical rigor and pure functions, making them ideal for complex, highly parallelizable computations where correctness is more important than speed (e.g., complex financial modeling, advanced compiler design).\n* **Role in 2026:** Used in academic research, complex optimization problems, and highly reliable, large-scale data transformation pipelines.\n\n**10. Emerging Domain Language (e.g., LLM-Specific Languages):**\n* **Why it's #10 (Conceptual):** This spot is reserved for languages specifically designed to interact with and orchestrate Large Language Models (LLMs). This might involve specialized syntax or frameworks built atop Python or C++ to manage prompt engineering, vector databases, and agentic workflows.\n* **Role in 2026:** The language that dictates how humans interact with and command AI systems.\n\n---\n\n## Summary Table: The Projected 2026 Landscape\n\n| Rank | Language/Ecosystem | Primary Domain Focus | Key Strength in 2026 |\n| :--- | :--- | :--- | :--- |\n| **1** | **Python** | AI/ML, Data Science | Rapid prototyping, massive ecosystem maturity. |\n| **2** | **C++** | Systems, Gaming, HPC | Unmatched raw speed and hardware control. |\n| **3** | **TypeScript** | Web, Enterprise Backend | Scalable, maintainable, and type-safe application development. |\n| **4** | **Go** | Cloud Infrastructure, Microservices | Concurrency, network efficiency, and cloud-native deployment. |\n| **5** | **Rust** | Security-Critical Systems | Memory safety without performance penalty. |\n| **6** | **Solidity** | Blockchain, Web3 | Contract security and decentralized application building. |\n| **7** | **Swift** | Mobile (Apple Ecosystem) | Native performance and deep integration with Apple hardware. |\n| **8** | **Kotlin** | Android, Backend Interoperability | Modern, safe alternative to Java for mobile and backend. |\n| **9** | **Haskell/Scala** | Complex Optimization, Research | Mathematical correctness and parallel computation. |\n| **10** | **LLM Orchestration** | Generative AI Agents | The language interface for controlling and leveraging large AI models. |\n\n**In conclusion, the \"Top 10\" of 2026 is not a list of 10 equally important general-purpose languages, but rather a snapshot of the 10 most critical *toolsets* needed to build the most advanced software—specifically around AI, distributed systems, and secure infrastructure.**"
+    },
+    {
+      "prompt": "Describe the process of photosynthesis step by step.",
+      "inputTokens": 9,
+      "outputTokens": 1366,
+      "timeMs": 14020,
+      "decodeMs": 13985,
+      "ttftMs": 35,
+      "tokPerSec": 97.6,
+      "msPerToken": 10.2,
+      "fullResponse": "Photosynthesis is the remarkable biochemical process by which photoautotrophs, such as plants, algae, and certain bacteria, convert light energy, usually from the sun, into chemical energy in the form of glucose (sugar). This process is fundamental to almost all life on Earth because it produces the food that fuels nearly every ecosystem.\n\nHere is a detailed, step-by-step description of the process, often summarized by the overall chemical equation:\n\n$$\\text{6CO}_2 + \\text{6H}_2\\text{O} + \\text{Light Energy} \\rightarrow \\text{C}_6\\text{H}_{12}\\text{O}_6 + \\text{6O}_2$$\n\nThe process occurs primarily in specialized organelles called **chloroplasts** within the plant cells, where the crucial pigment **chlorophyll** captures light energy. Photosynthesis can be broken down into two main stages: the **Light-Dependent Reactions** and the **Light-Independent Reactions (Calvin Cycle)**.\n\n---\n\n## Stage 1: The Light-Dependent Reactions (The \"Photo\" Part)\n\nThis stage requires light energy to convert water and carbon dioxide into temporary, high-energy sugar molecules (ATP and NADPH).\n\n**Step 1: Light Absorption**\n*   **Input:** Chlorophyll molecules within the thylakoid membranes of the chloroplasts absorb specific wavelengths of light energy (primarily in the blue and red parts of the spectrum).\n*   **Action:** This absorbed light energy excites electrons within the chlorophyll to a higher energy level.\n\n**Step 2: Photoexcitation and Energy Transfer**\n*   **Action:** The high-energy electrons are passed along an electron transport chain (ETC). As they move down this chain, they release energy incrementally.\n\n**Step 3: Water Splitting (Photolysis)**\n*   **Input:** Water ($\\text{H}_2\\text{O}$) molecules are split to replace the electrons lost by chlorophyll.\n*   **Action:** This splitting is known as photolysis. It provides the electrons needed to keep the ETC running and releases protons ($\\text{H}^+$) and molecular oxygen ($\\text{O}_2$) as a byproduct.\n    $$\\text{2H}_2\\text{O} \\rightarrow \\text{4H}^+ + \\text{4e}^- + \\text{O}_2$$\n    *(The oxygen gas is released into the atmosphere, which is why photosynthesis is vital for oxygen production.)*\n\n**Step 4: Energy Conversion (Creating Carriers)**\n*   **Action:** The energy released by the electrons is used to power the synthesis of two crucial energy-carrying molecules:\n    *   **ATP (Adenosine Triphosphate):** An energy currency molecule that stores potential energy.\n    *   **NADPH (Nicotinamide Adenine Dinucleotide Phosphate):** An electron and hydrogen carrier molecule that stores chemical energy.\n\n**Summary of Stage 1 Output:** Light energy is converted into the chemical energy stored in **ATP and NADPH**.\n\n---\n\n## Stage 2: The Light-Independent Reactions (The \"Synthesis\" Part)\n\nThese reactions do not directly require light, but they rely on the energy (ATP) and reducing power (NADPH) generated in Stage 1. This stage is often called the Calvin Cycle. It takes carbon dioxide from the atmosphere and fixes it into stable sugar molecules.\n\n**Step 5: Carbon Fixation**\n*   **Input:** Carbon dioxide ($\\text{CO}_2$) from the atmosphere enters the stroma (the fluid-filled space surrounding the thylakoids in the chloroplasts).\n*   **Action:** The $\\text{CO}_2$ is \"fixed\"—meaning it is chemically bonded to an existing five-carbon acceptor molecule called RuBP (Ribulose-1,5-bisphosphate). This reaction is catalyzed by the enzyme **RuBisCO** (Ribulose-1,5-bisphosphate carboxylase/oxygenase), the largest enzyme complex on Earth.\n*   **Result:** This forms an unstable six-carbon compound that immediately splits into two molecules of a three-carbon compound called 3-phosphoglycerate-1-phosphate (3-PGA).\n\n**Step 6: Reduction**\n*   **Input:** The 3-PGA molecules are converted into a higher-energy sugar molecule.\n*   **Action:** The energy from **ATP** and the reducing power from **NADPH** are used to convert the 3-PGA into a higher-energy three-carbon sugar called glyceraldehyde-3-phosphate (G3P).\n*   **Result:** Some of the G3P molecules exit the cycle to be used by the plant to build glucose, sucrose, starch, and cellulose.\n\n**Step 7: Regeneration**\n*   **Input:** Most of the G3P molecules are not immediately used for sugar production; they must be recycled.\n*   **Action:** The remaining G3P molecules are rearranged, using more **ATP**, to regenerate the initial $\\text{CO}_2$ acceptor molecule (RuBP). This step ensures that the cycle can continue to fix more carbon dioxide.\n\n**Summary of Stage 2 Output:** Carbon dioxide ($\\text{CO}_2$) is converted into stable, usable chemical energy carriers, primarily in the form of **G3P (which is the precursor to glucose and other organic compounds)**.\n\n---\n\n## Overall Summary of Photosynthesis\n\n| Stage | Location | Energy Source | Reactants | Products | Purpose |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Light-Dependent Reactions** | Thylakoid Membranes | Light Energy | $\\text{H}_2\\text{O}$, $\\text{CO}_2$ (indirectly) | ATP, NADPH, $\\text{O}_2$ (waste) | Convert light energy into chemical energy carriers. |\n| **Light-Independent Reactions (Calvin Cycle)** | Stroma | ATP and NADPH | $\\text{CO}_2$, ADP, $\\text{NADP}^+$ | Glucose ($\\text{C}_6\\text{H}_{12}\\text{O}_6$), $\\text{ADP}$, $\\text{NADP}^+$ | Fix atmospheric $\\text{CO}_2$ into stable organic sugar molecules. |\n\nIn essence, photosynthesis is a sophisticated two-part factory: the **Light Reactions** capture the energy, and the **Calvin Cycle** uses that captured energy to build the food."
+    },
+    {
+      "prompt": "What are the main differences between TCP and UDP protocols?",
+      "inputTokens": 11,
+      "outputTokens": 1309,
+      "timeMs": 13372,
+      "decodeMs": 13337,
+      "ttftMs": 35,
+      "tokPerSec": 98.1,
+      "msPerToken": 10.2,
+      "fullResponse": "TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) are the two primary protocols used for transporting data over the Internet Protocol (IP). They operate at different layers of the networking model and are designed with fundamentally different goals, leading to significant differences in their performance characteristics, reliability, and suitability for various applications.\n\nHere is a detailed breakdown of the main differences between TCP and UDP:\n\n---\n\n## 1. Connection-Oriented vs. Connectionless\n\nThis is the most fundamental difference between the two protocols.\n\n### TCP (Transmission Control Protocol)\n* **Connection-Oriented:** TCP establishes a formal, logical connection (a \"handshake\") between the sender and receiver before any actual data transfer begins.\n* **Setup Phase:** It uses the **Three-Way Handshake** (SYN, SYN-ACK, ACK) to synchronize sequence numbers and establish the connection parameters.\n* **Implication:** This ensures ordered, reliable communication, but it introduces overhead due to the connection setup and teardown process.\n\n### UDP (User Datagram Protocol)\n* **Connectionless:** UDP sends individual, independent datagrams to the destination without establishing any prior connection or maintaining state.\n* **Implication:** It is very fast and lightweight because it avoids the overhead of connection management, but it offers no guarantee that the data will arrive or that it will arrive in order.\n\n---\n\n## 2. Reliability and Data Integrity\n\nTCP prioritizes guaranteed delivery, while UDP prioritizes speed and low overhead.\n\n### TCP (Reliable)\n* **Guaranteed Delivery:** TCP ensures that every byte of data sent will eventually reach the destination.\n* **Error Checking:** It uses checksums to detect errors in transmission.\n* **Retransmission:** If a packet is lost or corrupted, TCP detects this and automatically requests that the sender retransmit the missing data.\n* **Flow Control:** TCP manages the rate of data transmission to prevent a fast sender from overwhelming a slow receiver.\n* **Congestion Control:** TCP dynamically adjusts the transmission rate based on network congestion to prevent the network from collapsing.\n\n### UDP (Unreliable)\n* **No Guarantee:** UDP offers \"best-effort\" delivery. It sends the data and forgets about it. If a packet is lost, UDP does not attempt to recover it.\n* **No Error Correction:** It provides no built-in mechanism for error checking or retransmission.\n* **No Flow/Congestion Control:** UDP does not regulate the rate of transmission, meaning it can easily flood a network if used improperly.\n\n---\n\n## 3. Ordering and Sequencing\n\n### TCP (Ordered)\n* **Guaranteed Order:** TCP ensures that data arrives at the destination in the exact order it was sent. If packet 1 arrives after packet 2, TCP will buffer packet 1 and wait for packet 2 to arrive before delivering packet 1 to the application layer.\n* **Sequence Numbers:** It uses sequence numbers to track the order of data and detect out-of-order packets.\n\n### UDP (Unordered)\n* **No Order Guarantee:** UDP datagrams are not guaranteed to arrive in the order they were sent. They may arrive at any time, and some may arrive much later than others.\n* **No Sequencing:** UDP does not maintain any sequence numbers for reordering.\n\n---\n\n## 4. Overhead and Latency\n\n### TCP (Higher Overhead)\n* **Higher Overhead:** The mechanisms for connection establishment, acknowledgments (ACKs), retransmissions, flow control, and congestion control require significant header information and processing power.\n* **Higher Latency (in ideal scenarios):** The need to wait for acknowledgments and handle retransmissions can sometimes add latency, especially if network conditions are poor.\n\n### UDP (Lower Overhead)\n* **Minimal Overhead:** The UDP header is very small (only 8 bytes), making it extremely lightweight.\n* **Lower Latency:** Because it avoids connection setup and complex reliability mechanisms, UDP has very low latency.\n\n---\n\n## Summary Table of Key Differences\n\n| Feature | TCP (Transmission Control Protocol) | UDP (User Datagram Protocol) |\n| :--- | :--- | :--- |\n| **Connection Type** | Connection-Oriented | Connectionless |\n| **Reliability** | Reliable (Guaranteed delivery) | Unreliable (Best-effort delivery) |\n| **Ordering** | In-Order (Data is reassembled correctly) | No Order Guarantee |\n| **Error Control** | Yes (Checksums, Retransmission) | No |\n| **Flow Control** | Yes (Manages sender/receiver rates) | No |\n| **Congestion Control** | Yes (Adapts to network congestion) | No |\n| **Overhead** | High (Due to control mechanisms) | Very Low (Minimal header) |\n| **Speed** | Slower (Due to reliability checks) | Faster (Low latency) |\n| **Use Cases** | Web Browsing (HTTP/HTTPS), Email (SMTP), File Transfer (FTP) | Live Streaming, Gaming, DNS Lookups, VoIP |\n\n---\n\n## When to Use Which Protocol\n\n### Use TCP When You Need:\n* **Accuracy is paramount:** Data corruption or loss is unacceptable (e.g., transferring a financial transaction or a document).\n* **Order matters:** The sequence of events must be preserved (e.g., streaming video, web pages).\n* **Guaranteed delivery is essential:** You cannot afford to lose any data.\n\n### Use UDP When You Need:\n* **Speed and low latency are paramount:** Real-time applications where a slightly delayed packet is worse than no packet at all (e.g., live video feeds, online gaming).\n* **Loss is tolerable:** If a small amount of data loss is acceptable, the speed gained from avoiding retransmissions is valuable.\n* **Simplicity and low overhead are critical:** When the application needs to handle its own error correction or reordering.\n\n**In short:** **TCP is like sending a registered letter**—it guarantees delivery, order, and asks for confirmation before moving on. **UDP is like sending a postcard**—it's fast, cheap, and you don't care if it arrives broken or out of sequence."
+    }
+  ],
+  "ttft": [
+    {
+      "prompt": "Write a detailed explanation of quantum entanglement.",
+      "ttftMs": 34,
+      "totalMs": 15834,
+      "outputTokens": 1570,
+      "decodeSpeed": 99.3
+    },
+    {
+      "prompt": "Explain the history of the Internet in three paragraphs.",
+      "ttftMs": 34,
+      "totalMs": 4917,
+      "outputTokens": 487,
+      "decodeSpeed": 99.5
+    },
+    {
+      "prompt": "Describe how neural networks learn from data.",
+      "ttftMs": 34,
+      "totalMs": 11732,
+      "outputTokens": 1177,
+      "decodeSpeed": 100.5
+    }
+  ],
+  "multiturn": [
+    {
+      "turn": 1,
+      "prompt": "What is machine learning?",
+      "timeMs": 446,
+      "outputTokens": 41,
+      "tokPerSec": 91.9
+    },
+    {
+      "turn": 2,
+      "prompt": "How does it differ from traditional programming?",
+      "timeMs": 452,
+      "outputTokens": 43,
+      "tokPerSec": 95.2
+    },
+    {
+      "turn": 3,
+      "prompt": "Give an example of supervised learning.",
+      "timeMs": 529,
+      "outputTokens": 51,
+      "tokPerSec": 96.3
+    },
+    {
+      "turn": 4,
+      "prompt": "What about unsupervised learning?",
+      "timeMs": 461,
+      "outputTokens": 42,
+      "tokPerSec": 91.2
+    },
+    {
+      "turn": 5,
+      "prompt": "How is deep learning different?",
+      "timeMs": 540,
+      "outputTokens": 52,
+      "tokPerSec": 96.2
+    },
+    {
+      "turn": 6,
+      "prompt": "What are transformers in ML?",
+      "timeMs": 570,
+      "outputTokens": 53,
+      "tokPerSec": 93.0
+    },
+    {
+      "turn": 7,
+      "prompt": "Explain attention mechanism briefly.",
+      "timeMs": 519,
+      "outputTokens": 49,
+      "tokPerSec": 94.5
+    },
+    {
+      "turn": 8,
+      "prompt": "What is transfer learning?",
+      "timeMs": 456,
+      "outputTokens": 43,
+      "tokPerSec": 94.4
+    },
+    {
+      "turn": 9,
+      "prompt": "How do LLMs work?",
+      "timeMs": 454,
+      "outputTokens": 43,
+      "tokPerSec": 94.7
+    },
+    {
+      "turn": 10,
+      "prompt": "What is RLHF?",
+      "timeMs": 545,
+      "outputTokens": 52,
+      "tokPerSec": 95.5
+    }
+  ],
+  "quality": [
+    {
+      "category": "Math",
+      "prompt": "What is 15 * 37? Reply with just the number.",
+      "expected": "555",
+      "response": "555",
+      "pass": true
+    },
+    {
+      "category": "Factual",
+      "prompt": "What is the capital of Australia? Reply with just the city name.",
+      "expected": "Canberra",
+      "response": "Canberra",
+      "pass": true
+    },
+    {
+      "category": "Translation",
+      "prompt": "Translate 'hello' to French. Reply with just the French word.",
+      "expected": "bonjour",
+      "response": "Bonjour",
+      "pass": true
+    },
+    {
+      "category": "Pattern",
+      "prompt": "Complete the sequence: 2, 4, 8, 16, __ Reply with just the number.",
+      "expected": "32",
+      "response": "32",
+      "pass": true
+    },
+    {
+      "category": "Classification",
+      "prompt": "Is a whale a fish or a mammal? Reply with one word.",
+      "expected": "mammal",
+      "response": "Mammal",
+      "pass": true
+    },
+    {
+      "category": "Common Sense",
+      "prompt": "What day comes after Monday? Reply with the day name.",
+      "expected": "Tuesday",
+      "response": "Tuesday",
+      "pass": true
+    },
+    {
+      "category": "Grammar",
+      "prompt": "Fix the grammar: 'She don't like apples.' Reply with the corrected sentence only.",
+      "expected": "doesn't",
+      "response": "She doesn't like apples.",
+      "pass": true
+    },
+    {
+      "category": "Factual 2",
+      "prompt": "What is the largest planet in our solar system? Reply with just the name.",
+      "expected": "Jupiter",
+      "response": "Jupiter",
+      "pass": true
+    },
+    {
+      "category": "Science",
+      "prompt": "What is the chemical formula for water? Reply with just the formula in plain text.",
+      "expected": "H2O",
+      "response": "H2O",
+      "pass": true
+    },
+    {
+      "category": "Common Sense 2",
+      "prompt": "How many legs does a spider have? Reply with just the number.",
+      "expected": "8",
+      "response": "Eight",
+      "pass": false
+    }
+  ],
+  "gpu": {
+    "gpu_name": "NVIDIA GeForce RTX 4070",
+    "vram_total_mb": 12282.0,
+    "samples": 204,
+    "vram_mb": {
+      "baseline": 1958.0,
+      "peak": 1958.0,
+      "average": 1958.0,
+      "min": 1958.0,
+      "delta": 0.0
+    },
+    "gpu_utilization_pct": {
+      "average": 86.3,
+      "peak": 93.0
+    },
+    "power_watts": {
+      "average": 90.8,
+      "peak": 95.55
+    }
+  },
+  "meta": {
+    "engine": "litert-lm (Python API)",
+    "engine_version": "0.14.0",
+    "label": "comparison-litert-mtp-off",
+    "model_path": "E:\\workspace\\models\\gemma-4-E2B-it-litert-lm\\gemma-4-E2B-it.litertlm",
+    "load_time_s": 14.78,
+    "backend": "GPU",
+    "mtp_enabled": false,
+    "timestamp": "2026-09-03T03:26:06.911917+00:00"
+  }
+}

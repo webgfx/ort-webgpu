@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "stack": "INT4 LITERTLM + LiteRT-LM, MTP on",
+    "backend": "WebGPU / D3D12",
+    "mtp": true,
+    "timestamp": "2026-09-03T09:00:58.124705+00:00",
+    "method": "per-length warmup then median TTFT from normal 128-token generations",
+    "requested_output_tokens": 128,
+    "warmups_per_length": 1,
+    "samples_per_length": 3,
+    "timing_boundary": "request submission to first streamed content token",
+    "model_loading_included": false
+  },
+  "prefill_scaling": [
+    {
+      "target_tokens": 128,
+      "input_tokens": 119,
+      "samples_ms": [
+        54.67,
+        53.47,
+        54.07
+      ],
+      "median_ms": 54.07,
+      "min_ms": 53.47,
+      "max_ms": 54.67
+    },
+    {
+      "target_tokens": 512,
+      "input_tokens": 503,
+      "samples_ms": [
+        129.07,
+        128.44,
+        126.91
+      ],
+      "median_ms": 128.44,
+      "min_ms": 126.91,
+      "max_ms": 129.07
+    },
+    {
+      "target_tokens": 1024,
+      "input_tokens": 1015,
+      "samples_ms": [
+        137.81,
+        137.63,
+        136.18
+      ],
+      "median_ms": 137.63,
+      "min_ms": 136.18,
+      "max_ms": 137.81
+    },
+    {
+      "target_tokens": 2048,
+      "input_tokens": 2039,
+      "samples_ms": [
+        238.81,
+        244.62,
+        247.24
+      ],
+      "median_ms": 244.62,
+      "min_ms": 238.81,
+      "max_ms": 247.24
+    },
+    {
+      "target_tokens": 4096,
+      "input_tokens": 4087,
+      "samples_ms": [
+        472.8,
+        472.69,
+        474.32
+      ],
+      "median_ms": 472.8,
+      "min_ms": 472.69,
+      "max_ms": 474.32
+    }
+  ]
+}

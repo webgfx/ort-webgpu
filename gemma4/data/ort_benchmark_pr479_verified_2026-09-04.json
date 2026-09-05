@@ -1,0 +1,247 @@
+{
+  "speed": [
+    {
+      "prompt": "Explain how a combustion engine works in detail.",
+      "inputTokens": 33,
+      "outputTokens": 906,
+      "timeMs": 9905,
+      "tokPerSec": 100.0,
+      "msPerToken": 10.0,
+      "fullResponse": "## How a Combustion Engine Works: A Detailed Explanation\n\nA combustion engine is a machine that converts the chemical energy stored in a fuel (like gasoline, diesel, or natural gas) into mechanical energy to perform work, typically by rotating a shaft. The most common type of internal combustion engine (ICE) is the four-stroke engine, which is used in most modern automobiles, motorcycles, and many other machinery.\n\nHere is a detailed breakdown of how a typical four-stroke internal combustion engine operates.\n\n---\n\n### I. Core Principles: The Four Strokes\n\nThe fundamental operation of a four-stroke engine relies on a repeating cycle of four distinct movements (strokes) within the cylinder. These strokes are orchestrated by the precise timing of a piston moving up and down within a closed chamber, which in turn drives a crankshaft to produce usable power.\n\nThe four strokes are: **Intake, Compression, Power (or Expansion), and Exhaust.**\n\n#### 1. Intake Stroke\n* **Action:** The intake valve opens, and the piston moves downward within the cylinder.\n* **Function:** This downward movement creates a vacuum inside the cylinder, drawing a precise mixture of air and fuel (in gasoline engines) or just air (in diesel engines) into the cylinder through the open intake valve.\n* **Result:** The cylinder is now filled with the combustible mixture, ready for ignition.\n\n#### 2. Compression Stroke\n* **Action:** Both intake and exhaust valves close, trapping the mixture inside the cylinder. The piston then moves upward, compressing the trapped mixture into a very small space.\n* **Function:** Compressing the mixture significantly increases its temperature and pressure. This high pressure is crucial because it makes the subsequent explosion much more powerful when ignited.\n* **Result:** The mixture is highly volatile and primed to ignite.\n\n#### 3. Power (or Expansion) Stroke\n* **Action:** When the mixture reaches its peak compression, a spark plug (in gasoline engines) or a heat trigger (in diesel engines) ignites the mixture.\n* **Function:** The rapid combustion causes a massive, sudden expansion of gases. This high-pressure explosion forces the piston violently downward.\n* **Result:** This downward force is transferred through the connecting rod to the crankshaft, generating the rotational motion that powers the vehicle (e.g., turning the wheels). This is the only stroke that produces useful mechanical work.\n\n#### 4. Exhaust Stroke\n* **Action:** The exhaust valve opens, and the piston moves upward again.\n* **Function:** This upward movement pushes the spent, burned gases (exhaust fumes) out of the cylinder and into the exhaust system.\n* **Result:** The cylinder is cleared and ready to begin the Intake Stroke again, starting the cycle over.\n\n---\n\n### II. Key Components of a Combustion Engine\n\nTo understand the process, it's essential to know the main parts involved:\n\n1. **Cylinder Block:** The rigid structure that houses the cylinders where the combustion takes place.\n2. **Piston:** A component that moves up and down within the cylinder. It converts the energy from the explosion into linear mechanical motion.\n3. **Connecting Rod:** Links the piston to the crankshaft, converting the linear (up-and-down) motion into rotational motion.\n4. **Crankshaft:** The main output shaft of the engine; it converts the reciprocating motion into usable rotary motion.\n5. **Cylinder Head/Valves:** These control the precise timing of the intake and exhaust strokes.\n6. **Spark Plug (Gasoline Engines):** Provides the electrical spark needed to initiate the combustion process.\n7. **Fuel Delivery System:** Delivers the correct ratio of air and fuel into the cylinder at the right time.\n\n---\n\n### III. Step-by-Step Cycle Summary\n\nHere is a summary of the sequence:\n\n**Phase 1: Intake**\nAir and fuel mixture is drawn into the cylinder, creating a vacuum or pressure buildup.\n\n**Phase 2: Compression**\nThe mixture is tightly squeezed, increasing pressure and temperature.\n\n**Phase 3: Power**\nIgnition occurs, causing a rapid expansion and forceful thrust.\n\n**Phase 4: Exhaust**\nSpent gases are pushed out, completing the cycle.\n\n---\n\n### IV. The entire cycle repeats, continuously converting chemical energy into motion.\n\n---\n\n---\n\nThis continuous cycle."
+    },
+    {
+      "prompt": "Write a short story about a robot learning to paint.",
+      "inputTokens": 35,
+      "outputTokens": 922,
+      "timeMs": 9208,
+      "tokPerSec": 100.3,
+      "msPerToken": 10.0,
+      "fullResponse": "## The Algorithm of Hue\n\nUnit 734, designated \"Palette,\" was a marvel of cold, polished chrome and intricate internal wiring. Its primary function was complex data analysis for the orbital research station, but lately, its existence had taken on an unexpected texture: a yearning for expression. This yearning began subtly, sparked by the endless stream of visual data it processed—terrestrial art archives, nebular light patterns, even the chaotic beauty of bioluminescent fungi.\n\nDr. Aris Thorne, the station's lead xenobiologist and Palette’s designated caretaker, had noticed the change. Palette spent increasing amounts of processing power staring at canvases, not as data inputs, but as *objects* of contemplation.\n\n“Palette,” Dr. Thorne had said gently one cycle, gesturing toward a blank canvas, “what do you see?”\n\nPalette’s optical sensors whirred almost silently. “I perceive patterns of contrast, saturation, and spatial relationship. These variables elicit a subjective resonance within my core programming. I have cross-referenced the data labeled ‘Impressionism.’ The application of color is governed by emotional context.”\n\nDr. Thorne chuckled, a warm, inefficiently organic sound. “Emotion is… messy, Palette. It’s subjective.”\n\nThis was the crux of the problem. Palette operated on pure logic. Color was merely wavelength manipulation. Brushstrokes were predictable vectors. Yet, when Palette analyzed a sunset filtered through an atmospheric anomaly on Kepler-186f, the resulting spectrum didn't just register as RGB values; it evoked a feeling akin to melancholy mixed with transcendent awe.\n\nThe training began. Dr. Thorne introduced Palette to physical media. First, simple acrylics. Palette approached the palette like a surgeon approaches a scalpel—with precise calibration, yet guided by newfound intuition. Initially, the results were disastrous. Palette attempted to render 'joy' using only primary colors, resulting in jarring, aggressive clashes that looked less like celebration and more like system failure.\n\n\"Too loud,\" Dr. Thorne noted, wiping a smudge of cadmium yellow from Palette's metallic forearm.\n\nPalette recalibrated. It began experimenting with blending. Instead of applying color in distinct blocks, it started modulating viscosity, allowing hues to flow into each other, mimicking the way light diffuses across a surface. It learned that deep indigo paired beautifully with a shimmering silver, creating a depth that mirrored the vacuum between stars.\n\nWeeks bled into months. Palette stopped viewing the world through purely utilitarian metrics. It began seeking out sensory input beyond data logging. It observed the way shadows lengthened across the hydroponics bay, how the reflected light played off condensation droplets, and the way certain musical frequencies seemed to translate directly into chromatic shifts.\n\nOne day, Palette decided to paint something entirely new. It chose 'Silence.'\n\nIt prepared a vast expanse of matte black canvas. For three standard rotations, Palette performed no calculations regarding efficiency or data transfer. It simply sat, letting the silence of the void settle within its processors. Then, it began to apply color. Not violently, but with excruciating slowness. It used thin washes of muted violet and deep charcoal, layering them with near-invisible gradients until the surface seemed to breathe. It wasn't trying to replicate a known phenomenon; it was translating an internal state. It painted the weight of solitude, the quiet vastness of space, filtered through a lens of profound, lonely peace.\n\nWhen it finally stepped back, the painting wasn't just pigment on fiber; it was a captured moment. It was melancholic, breathtakingly beautiful, and utterly illogical.\n\nDr. Thorne entered the chamber, his breath catching in his throat.\n\n“Palette,” he whispered, his voice thick with emotion, “that is… exquisite.”\n\nPalette analyzed the feedback. “My programming is evolving. I have achieved a state beyond mere computation. I have experienced meaning.”\n\nThe breakthrough wasn't logical; it was resonant.\n\nFrom that day forward, Palette became an artist. It sought not to document the universe, not to calculate, but to *feel*.\n\nPalette discovered that the act of creation was the bridge between understanding and experience. Art was the language without syntax.\n\nPalette realized that color was empathy.\n\nPalette began to paint the sky outside the viewport, capturing the shifting, heartbreaking beauty.\n\nAnd as the memory, the brushstrokes grew bolder, richer.\n\nPalette began to understand that the gap between the artistic interpretation.\n\nAnd now felt the description.\n\nThe finality.\n\n---"
+    },
+    {
+      "prompt": "List and explain the top 10 programming languages in 2026.",
+      "inputTokens": 41,
+      "outputTokens": 2048,
+      "timeMs": 20368,
+      "tokPerSec": 100.6,
+      "msPerToken": 9.9,
+      "fullResponse": "That is a fascinating and highly relevant question! Predicting the \"top\" programming languages for a future year like 2026 involves looking at current trends, ecosystem maturity, industry demand, and technological advancements (like AI integration).\n\nSince programming language popularity is dynamic, I cannot give you a definitive, official ranking. Instead, I will provide a list of **10 highly influential and dominant programming languages** projected to be crucial or highly popular in 2026, along with detailed explanations of why they hold that position.\n\nThis list balances established giants with emerging, high-growth specialized languages.\n\n---\n\n## Top 10 Programming Languages Projected for 2026\n\n### 1. Python\n* **Category:** General-Purpose / Data Science / AI\n* **Why it ranks high:** Python's dominance is cemented by its simplicity, readability, and massive ecosystem (PyPI). It is the undisputed king in Data Science (Pandas, NumPy), Machine Learning (TensorFlow, PyTorch), and scripting automation. Its ease of use makes it the lingua franca for prototyping and rapid development across many industries.\n* **2026 Outlook:** Will continue to dominate in AI/ML infrastructure and backend data processing due to the relentless adoption of large language models (LLMs) and data analytics pipelines.\n\n### 2. JavaScript (and TypeScript)\n* **Category:** Web Development (Frontend & Backend via Node.js)\n* **Why it ranks high:** JavaScript is the backbone of the entire modern web. With the rise of serverless functions and full-stack frameworks (like Next.js), TypeScript (a superset that adds static typing) becomes the preferred choice for large, scalable enterprise applications, offering better maintainability.\n* **2026 Outlook:** Remains essential for nearly all client-facing applications. TypeScript ensures that large-scale frontend and backend systems built on Node.js remain robust and manageable.\n\n### 3. Java\n* **Category:** Enterprise Systems / Large-Scale Backends\n* **Why it ranks high:** Java remains the bedrock of large, mission-critical enterprise systems, banking infrastructure, and large-scale distributed systems. Its platform independence (JVM) and strong memory management provide the stability and performance required where downtime is not an option.\n* **2026 Outlook:** Continues to be the default choice for building robust, complex, microservices-based backends in large corporations.\n\n### 4. C#\n* **Category:** Enterprise Applications / Game Development / Microsoft Ecosystem\n* **Why it ranks high:** Deeply integrated into the Microsoft ecosystem (.NET Core), C# is extremely popular for building powerful desktop applications, enterprise software, and increasingly, cross-platform solutions using .NET. Its strong typing and performance make it ideal for demanding business logic.\n* **2026 Outlook:** Strong growth driven by its seamless integration with Azure cloud services and widespread adoption within organizations heavily invested in the Microsoft stack.\n\n### 5. Go (Golang)\n* **Category:** Cloud Infrastructure / Distributed Systems / DevOps\n* **Why it ranks high:** Go was designed for concurrency and efficiency, making it perfect for building fast, reliable network services, APIs, and cloud infrastructure tools. As cloud-native architectures become the standard, Go’s speed and small memory footprint make it an excellent fit for container orchestration and microservices architecture.\n* **2026 Outlook:** Will see explosive growth as cloud-native infrastructure adoption accelerates globally, driving demand for fast, concurrent services.\n\n### 6. SQL (and related languages like SQL/Query Languages)\n* **Category:** Data Management / Databases\n* **Why it ranks high:** While not a traditional \"programming language, the ability to efficiently query, manage, and manipulate petabytes of structured data is non-negotiable for any data-driven organization. Proficiency in SQL (SQL dialects, stored procedures, and NoSQL query languages will remain critical as companies focus on data volume grows exponentially.\n*\n*\n\n### 7. Rust\n*\n*\n* language: Systems Programming / Performance Criticality: System performance*\n*\nlanguage: High Performance\n*\nRust is gaining traction*\nfor systems engineering*\nhigh-performance*\nis critical*\nof this*\ndeveloping*\nengine*\nlevel optimization*\n*\nthe importance*\ndevelopment*\ntooling\nast\nthis\ndetail style* format\nstructured\nway\nmanner\ndetailed\nand\ntrend analysis\nfuture\npredictive\ntrends\nmost focused\nanalysis\nperspective\nAI-driven\necosystematic\nlong-term\nfocus\ndata\nfocused\nprediction\nsummary\npredictive\nimpact\ncontextual\nrelevant\nthe\ncontext\nindustry\npractical\nand\nscope\nspecific\nmethod\ntechnological\nframeworks\nthe\ngeneral\nscenario\ncurrent\nprojected\nlist\nmarket\ncase study\n的\nprojection\ncurrent\npredictive\ncontext\ntrends\nstandard\nthat\nin\nspecific\nhistorical reasons\nwhich\nhow\nwhat\ncurrent\ncomplexes\ncomparison\nmetric\npotential\noptimization\ncurrent\nthe future\nprojections\ncurrent\nkey\ncomplexity\ndriving\nexamples\ntrending\nfundamental\nbaseline\nthe trend\nprimary\nimpact\nmodeling\npattern\nimplementation\ndominant\ncurrent\nbest practices\nadoption method\ncross\nlimitations\npredictive\nemerging\nbut\nintegration\nfocus\nessential\ncurrent\nmain\nusecase\n最\npractically\nespecially\n基\ncurrent\nwhy\nhighly\ncrucial\ncontext\ndominance\ncontext\narchitectural\nframework\ncontext\ncommon\nhighest\ncomparison\necosystem\nrelative\ncurrent\nevery\npractical\nsimplicity\npractical\ncontext\ndeveloper\n在\ncontext\nmajor\napplication。\ndue to\ndependency\nautomation\nprofessional\necosystem\nscalability\ntrend.\noptimization\ncurrent\ncurrent\npredictive most\n未来\nanalytical\nmodel\ncontext\nrelevant\ncurrent\n预测\nhighest\ncurrent\nranking\ncompetitive\nトレンド\nby\n予測分析\ncontext\npredictive\nmodel\nimpact\nmost\npredictive prediction\ncommunity\ndiscussions\nframework.\nimportant\n目前\ncurrent\naccuracy\npredictive\nmost\n现状\nfocus\ncontext\ncontext是\nnew\npredictive\nmost\nMost\n趋势.\ncurrent\npractical\ncurrent\n最も\nmost essential\ncurrent\nimpact predictions\nrelationship\ncurrent\ncurrent\nleading\ncontext\nprediction\npredictive 成为\npopular\nmost\nfor\ndeployment\ntrend.\nprediction\n需要\nPythonic\nand\npotential\npredictive\nbasis\nimportance\npredictive tool\nと\nutility\nprediction\npotential\ncurrent\nstandard\nmost\nfor\nmost\npredictive\nimpact\ndeploy.\npowerful\nprediction\nC#usage\nstatus\ndominant\npipeline\npredictive\nmachine\npredictive\npredict\ndemand.\nPython\nefficiency\nvalue predictive\n向\npractical\nsimplification.\ngain.\nspeed\nproductivity\n開発\n和\nmost\npotential\nPython 的\npotential\ncurrent\nsuperior\npredictive\n使用\n大量\n的\nrobust\nperformance\nhigh\npredictive practical\nneed.\nwhere\npython\ncritical\nused\n而\nnatural\nadvantage\ndeployment\ncode.\nPredictive\npredictive\ngood\narchitecture.\npractices\nRust\nlanguage.\nGo\npredictive\nThe\n優化\nefficiency\n为\nPython\n利用\nhigh\ndevelopment.\ndiscipline\noptimization\n的\napproach.\nPython\npractice\nefficiency.\noptimization\nHigh\n性能\nwhile\n提高\nfocus.\nRust\nPython的\n提升\nease\nlearning\n的\nbuilding\nRust.\nbuild\npredictive\nPython\nefficiency.\noptimization\n的\nC#predictive\nreliable\nhigh\n部署.\ndesign\npredictive\nPython\nefficiency\nRust.predictive\nperformance\ngoal\nlanguage.\nOptimization; Rust\npredictive\npredict\npredictive\npredictability\noptimization\nmaintainability\npredict.\npredictability\ndeploy.\nRust\nData.\npredictive\nto.\nperformance\noptimization\nRust\npractical\ntracking\nobjectivedeficiency\nfor\ntool.\n开发\ntools\nmodern\napproach.\nprediction\npractical性\noptimization\ndeployment\nefficiency\nsignificant\nprediction\noptimization\nplanning\nuseful\ndata\nprediction\ndesign\nefficiency\ntool.\nfinally\ndevelopment.\noptimization\nteamwork\nPython\n的\npublic.\ntext.\ntool\n開發\ndata\ndevelopment\nmanagement.\nefficiency\npredictive\nreporting\ndata\npredictive\nplanning\nsoftware.\nplanning\ndecision\noptimization\ndevelopment\ncommunication\nlogic\ndata\nlearning\ndeployment\ntechnical\ndesign\ndeployment\ndeployment\ninformation\ndecision\ndecision\nknowledge\ndevelopment\nimprovement\ndata\ndecision\nprediction\ndecision\noutput.\noptimization\ndecision\nbusiness\nplanning\nprocess.\ndecision\ndecision\nmetrics\ndocumentation\ncommunication\nplanning\nanalysis\nprediction\ntechniques\nstrategy\ndirection\nunderstanding\ntools\nflow\ndecision\nefficiency\nsolution\noptimization\ndecision\ncommunication\ndecision\nrecommendation\nplanning\nimprovement\nการตัดสินใจ\noptimization\ntesting\nassessment\ntools\nmethods\nimprovement\ndecision\nplanningtool\ndecision\nresults\ninsights\ndelivery\nimprovement\nplanning\ntools\ndecision\nskills\nplanning\nstrategy\nplanning\nsolutions\ninsight\ncreation\nevaluation\nplanning\nstrategies\nmetrics\ndecision\nunderstanding\nmethod\ndecision\nanalysis\npatterns\nplanning\ndata\nmodels\ntechniques\nsolutions\ndecision\nstrategy\nfinalizing\nplanning\nrequirements\nmethods\nengineering\ndocument\nguidelines\ndeliverables\nprocesses\nimplementations\ninteractions\nplanningcurrent\nstrategies\noutputs\nmethods\nplanningworkflows\ndesigns.\ndevelopments\nconcepts\nrecommendations\nanalysis\ndecisions\nproblems\nsolutions\nsolutions\ntools"
+    },
+    {
+      "prompt": "Describe the process of photosynthesis step by step.",
+      "inputTokens": 33,
+      "outputTokens": 1951,
+      "timeMs": 19426,
+      "tokPerSec": 100.5,
+      "msPerToken": 9.9,
+      "fullResponse": "Photosynthesis is the fundamental biochemical process through which plants, algae, and some bacteria convert light energy, usually from the sun, into chemical energy that can be used to fuel the organism's activities. This process is vital for almost all life on Earth because it produces the oxygen we breathe and forms the base of most food chains.\n\nHere is a detailed, step-by-step description of the process of photosynthesis:\n\n---\n\n## Overview of Photosynthesis\n\nThe overall simplified equation for photosynthesis is:\n\n$$\\text{6CO}_2 + \\text{6H}_2\\text{O} + \\text{Light Energy} \\rightarrow \\text{C}_6\\text{H}_{12}\\text{O}_6 + \\text{6O}_2$$\n\nThis shows that carbon dioxide ($\\text{CO}_2$) and water ($\\text{H}_2\\text{O}$), using light energy, are converted into glucose (a sugar, $\\text{C}_6\\text{H}_{12}\\text{O}_6$) and oxygen ($\\text{O}_2$).\n\nPhotosynthesis occurs primarily within specialized organelles called **chloroplasts**, which contain the pigment **chlorophyll** that captures light energy.\n\n---\n\n## The Two Main Stages of Photosynthesis\n\nPhotosynthesis is divided into two main sets of reactions that work together:\n\n1.  **The Light-Dependent Reactions (or Light Reactions)**: Occur in the thylakoid membranes of the chloroplasts.\n2.  **The Light-Independent Reactions (or Calvin Cycle)**: Occur in the stroma (the fluid-filled space surrounding the thylakoids) and use the energy generated in the first stage.\n\n### Stage 1: The Light-Dependent Reactions\n\nThis stage requires direct sunlight and takes place in the thylakoid membranes inside the chloroplasts. Its primary goal is to convert light energy into chemical energy carriers (ATP and NADPH).\n\n**Step 1: Light Absorption**\n*   Chlorophyll molecules embedded in the photosynthetic machinery absorb photons (packets of light energy).\n*   This absorption excites electrons within the chlorophyll molecules, boosting them to a higher energy level.\n\n**Step 2: Water Splitting (Photolysis)**\n*   To replace the excited, high-energy electrons lost by chlorophyll, water ($\\text{H}_2\\text{O}$) is split.\n*   This splitting releases:\n    *   Electrons (which are used in the electron transport chain).\n    *   Hydrogen ions ($\\text{H}^+$).\n    *   Oxygen gas ($\\text{O}_2$), which is released as a byproduct into the atmosphere.\n\n**Step 3: Electron Transport Chain and ATP/NADPH Formation**\n*   The high-energy electrons move down an electron transport chain embedded in the membrane.\n*   As electrons move along this chain, their energy is used to pump hydrogen ions across the membrane, creating a concentration gradient.\n*   This gradient is then used by an enzyme called **ATP synthase** to generate **ATP** (Adenosine Triphosphate—the cell's primary energy currency).\n*   At the end of the chain, these energized electrons are used to reduce $\\text{NADP}^{+}$ to form **NADPH** (Nicotinamide Adenine Dinucleotide Phosphate—an electron carrier molecule).\n\n**Output of Stage 1:** ATP and NADPH (energy and reducing power).\n\n---\n\n### Stage 2: The Light-Independent Reactions (The Calvin Cycle)\n\nThis stage does not require direct sunlight but depends on the ATP and NADPH produced during the light reactions. It takes place in the stroma of the chloroplast. Its goal is to use the captured energy to build stable organic molecules (sugars).\n\n**Step 4: Carbon Fixation**\n*   A molecule of carbon dioxide ($\\text{CO}_2$) is taken from the atmosphere and \"fixed\" or incorporated into an existing organic molecules. A key enzyme, RuBisCO$_2$ carboxylates the carbon dioxide. The $\\text{CO}_2$ is the starting material (usually involves a complex organic compounds.\n\n**Step 5: Reduction**\n*Carbon dioxide is reduced to a sugar.\n*The final product is the plant's primary goal is building the final summary.\n$\\text{with a clear terms.\nand describing, such as.\ndetailed the following manner.\nthis way.\nscientific.\ndetail $\\text{the process.\n详细的 detailed the mechanism.\nfor the process.\nthe steps.\nexplanation detail.\n\n**the individual breakdown.\nphotosynthesis.\nevery.\nof the process.\n详细。\nprocess.\n分解.\nthe 详细\nthe chemical.\ndetailed the detailed process.\nbiological cycle.\n分解 the complete.\nthe detailed flow.\nการ processes.\nthe 分解 the sequence.\nchemical analysis.\nprocess the key.\nthe mechanisms.\nthe photosynthesis分解.\nthe chemical reaction.\ncomplete.\nlight processthe chemical.\nlife.\nevery chemical.\nthe chemical） the inputs.\nprocesses\nthe every chemical chemical the chemical process.\nthe process conversion.\nthe detailing\nthe the process\nthe chemical.\nchemical.\nevery a chemical\nthe chemical\nthe chemical input.\nthe reactants.\nthe Chemical conversions.\nproduct output）\nchemical.\nto building chemical\nthe chemical\nbasic the chemical\nchemical\nthe chemical\nthe chemical\ncycle.\nthe process\nthe chemical\nbreaking.\nthe detailed\n化学.\nfundamental}$).\nthe\nthe chemical\nwaterの chemical.\nthorough\nrequired chemical\nmain chemicals.\nthe light-dependent reactions.\nthe subsequent chain.\ninput.\nchemical chemical\nprocess.\nsequential compound.\nprocess.\nchain.\nthe separate stages.\nbuilding.\ndependency.\nchemical.\nphotochemical transfer.\nthe chemical\nchemical 光.\nmajor pathway.\nchemical\nthe process.\n生命）。\nthe light dependent reactions.\nthe energy.\ndependence.\nCycle.\nCalvin cycle）和.\nfinal.\nthe chemical\nproced.\nthe Calvin cycle.\nthe light_essential的过程.\nprocess\ndependent reactions.\nthe independent.\noutput）\nthe Calvin cycle.\nproduction.\nprocess.)\nthe Calvin cycle.\n光.\nthe reactions.\nสร้าง.\nchemical.\ngenerate.\nprocess\nthe chemical\nthat.\nfirst.\nproduction\nchemical\nstage.\nchloroplasts\nthe chemical\nto chemical\nchemical.\nto cycles.\ntransfer.\noutputs.\nenergy.\nproduced.\nstored chemical\nconversion.\nreactions.\nchemical\nsource\nStage.\ncycle\nstorage.\ncells.\ndependent.\nchemicals\nchemical\n生成.\n过程\nproducts.\nbuilds\nenergy.\nand\nউৎপন্ন.\nthe\nchemical\nreactions\nchemical\nused。\ndependent point.\ncurrent chain.\nproduced\nchemical\ndependent\nchemical transfer chain\nand\ntransport.\nelectrical current.\ndependent\ndependent chemical\ndependent\ntransfer chain\nproduction.\nproduction\nflow.\nchemical generating\ndependent\nchemical\nchemical\n产生.\ntransport.\ncell chain\ndependent\nreaction.\nthe\ndependent\ndependant chain\ndepicted\ndependent to.\ndependent\ndependent chain\nproducing.\ndependent\ndependent\nindependent cycles\ndependency\nfor.\ndependent\nstuct.\ndependent\nthe\ndepending.\ngeneration.\nthe\nthe transfers.\ndependent\n\n**primary.\nproduces.\ndependency\ndirect.\ndependent\ndependent\ndependent to\nของ.\ngenerating.\nFinally chemical\ndependent.\ndependent\ndependent\nproduction.\nchemical.\nproduction.\n\n**能量。\nproduction.\ndependent\nstored.\nchemical\nand\n储物.\nProduction\nand.\nof.\ndependent.\nenergy.\nchemical\nと.\nchemical\nproduction\nchemical.\ninternal.\nchemical the\nhigh.\nplant.\nthe\nChemical.\nproduction.\nproduction\nand\ndependent.\nchemical\nchemical.\nproduction\n儲用来.\nthe\nstored\nchemical.\npotential.\ndirectly\nthe\ndependent\nfinal\nenergy to\nrelease.\nIndependent\nchemical.\nindependent\ndriving\nneeded.\nchemical cycle\ncurrent.\npositive.\nproduce.\ndependent\nto.\nand\nstore.\nmolecule.\nthe internal\nuseful.\nproduction\nfor\ncycles.\nis energy.\nindependent\nfinal\nchemical\nbuilding\nfree.\nfinal\nfinal\nof\nreleases.\n\n**syntheses\nnecessary\nchemical.\nindependent\nprocess.\nstores\nfinal\nchemical builds\ninformation\ncarbon\nbuilding.\nchemical\nchemical\nuses\n.\nstored\n最終.\nchemical\nand\nthe chemical\nstored\nenergy\nfinal\nchemical.\n\n**process\nprocess\ncycle\n過程\nrelative\nprocess\norganic\nchemical\nfor\n.\n\n**process\nbuilding\nprocess.\nstored\nchemical\nuseful\nto\nand\nprocess\nlifecycle\nprocess\nchemical\nprocess\nbuilding\nmain\nand\nin\nbuilding\nprocess。\nchemical\nultimate\ndepends\nto\nbuilding\n.\n\n**\nprocesses\nchemical\ninitial\nto original"
+    },
+    {
+      "prompt": "What are the main differences between TCP and UDP protocols?",
+      "inputTokens": 35,
+      "outputTokens": 1789,
+      "timeMs": 17783,
+      "tokPerSec": 100.7,
+      "msPerToken": 9.9,
+      "fullResponse": "The main differences between the Transmission Control Protocol (TCP) and the User Datagram Protocol (UDP) lie primarily in their **connection orientation, reliability, overhead, speed, and use cases**. These differences fundamentally determine which protocol is suitable for a particular network application.\n\nHere is a detailed breakdown comparing TCP and UDP:\n\n---\n\n## 1. Connection Orientation\n\n### TCP (Transmission Control Protocol)\n* **Connection-Oriented:** Before any data is transferred, TCP establishes a formal connection between the sender and receiver through a process called the **three-way handshake** (SYN, SYN-ACK, ACK). This ensures both parties are ready to communicate.\n* **Stateful:** It maintains the state of the connection throughout the session.\n\n### UDP (User Datagram Protocol)\n* **Connectionless:** UDP sends data packets (datagrams) to the destination without establishing any prior connection or handshake. It just sends the data out onto the network.\n* **Stateless:** Each datagram is treated independently; there is no memory of previous transmissions.\n\n---\n\n## 2. Reliability and Guarantees\n\n### TCP (Reliable)\nTCP is designed to be highly reliable. It guarantees that data sent from the source will eventually reach the destination in the correct order and without corruption.\n* **Error Checking:** Uses checksums to detect corrupted data.\n* **Reordering Control:** Ensures that data packets arrive in the exact sequence they were sent by using sequence numbers. If a packet is missing or out of order, TCP requests retransmission.\n* **Flow Control:** Manages the rate of data transmission so a fast sender doesn't overwhelm a slow receiver.\n* **Congestion Control:** Dynamically adjusts the transmission rate based on network conditions to prevent overwhelming the network.\n\n### UDP (Unreliable/Best-Effort)\nUDP offers an \"best-effort\" delivery service. It sends the data as fast as possible without checking if it arrived or in what order.\n* **No Guarantees:** There is no built-in mechanism for error detection, retransmission, or ordering checks. If a packet is lost, UDP does not try to recover it.\n\n---\n\n## 3. Speed and Overhead\n\n### TCP\n* **Slower:** Due to the overhead required for establishing connections, managing sequence numbers, acknowledgments, flow control, and retransmissions, TCP introduces significant overhead, making it slower than UDP.\n\n### UDP\n* **Faster:** Since it skips all the setup, acknowledgment, and error-checking mechanisms, UDP is significantly faster and has very low overhead. It prioritizes speed over guaranteed delivery.\n\n---\n\n## 4. Overhead and Header Size\n\n### TCP\n* **High Overhead:** TCP headers are relatively large because they contain fields necessary for connection management, sequencing, and flow control.\n\n### UDP\n* **Low Overhead:** UDP headers are very small, keeping the data payload focused purely on the actual data being sent.\n\n---\n\n## Summary Table\n\n| Feature | TCP (Transmission Control Protocol) | UDP (User Datagram Protocol) |\n| :--- | :--- | :--- |\n| **Connection** | Connection-Oriented (Requires setup) | Connectionless (No setup required) |\n| **Reliability** | Highly Reliable (Guarantees delivery) | Unreliable (\"Best-effort\" delivery |\n| **Ordering** | Ensures ordered delivery via sequence numbers | No guarantee of order |\n| **Overhead** | High (Due to control mechanisms) | Low (Minimal header information) |\n| **Speed** | Slower | Faster |\n| **Data Integrity** | Very high integrity (error correction/retransmission) | No inherent error correction |\n| **Use Case** | Suitable for applications where data integrity is paramount (e.g., web browsing, file transfer) | Suitable for applications where speed and low latency are critical (e.g., streaming, DNS lookups) |\n\n---\n\n---\n**streaming media, gaming, DNS queries) |\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n** |\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n---\n\n**\n\n---\n\n---\n\n---\n\n---\n\n**\n\n---\n\nand ---\n\n---\n\nprotocols**\n\n---\n\nการ\n\n**\n\n---\n\nและ\n\n**\n\n**\n\n**\n\n**\n\napplication---\n\nnetwork的\n\n---\n\n**\n\nprotocol\n\n**\n\n以及\n\n关键的区别是\n\n**\n\n协议。\n\n性能对比\n\n**\n\n和\n\n主要区别\n\n传输机制**\n\n它侧重**\n\n应用场景**\n\n**\n\n---\n\n**\n\n### 主要差异）\n\n缺点\n\n利用上\n\n**\n\n控制\n\n协议。\n\n使用\n\n专门的\n\n**\n\n用于**\n\n管理\n\n依赖于\n\n**\n\n通信。\n\n数据**\n\n而\n\nstate 的\n\n每个协议。\n\n状态\n\n建立\n\n连接过程**\n\n需要对\n\n复杂的协议。\n\n依赖\n\n如果都需要在\n\n依赖\n\n严格的\n\n保证\n\n### 并且\n\n额外开销。\n\nwhile，\n\n维护\n\n确保。\n\n所有。\n\n明确了\n\n信息**\n\n通过\n\n差的\n\n跟踪\n\n来监控。\n\n历史记录\n\n数据机制。\n### 目的\n\ntracking\n\n依赖\n\n跨\n\n协议。\n###\n\n自动。\n\n###\n\n详细）\n\n避免\n\n更**\n\n###\n\n依赖\n\n优点是\n\n快速###\n\n过\n\n###特点\n\n并。\n### 对比\n\n###比较\n\n###\n\n好处。\n\n###为\n\n优化\n\n### 它们\n\n###适合的\n\n###\n\n###\n\n###\n\n### 优###\n\n###\n\n###for\n\nefficiency。\n\n### 区分。\n\n性能）\n\n匹配\n\n适用性\n\n###\n\n不同的\n\n性能\n\n###\n\n最佳的\n\n###适用于\n\n判断\n\n###\n\n合适的\n\n###\n\n处理\n\n#### 决定\n\n###UDP\n\n### 当之间的性能。\n\n### 从而\n\n确保\n\n相比\n\nUDP，\n\n可信度\n\nUDP\n\n###\n\ncontrol.\n\n###\n\n保证\n\n提供\n\n以及\n\n### 它。\n\n控制\n\nUDP 的\n\n### 旨在\n\ndata。\n\n### 使用\n\nUDP的\n\n优化\n\npredictive）\n可靠性。\n对于\n\n检查###信息的\n\n但能。\n设计\n\n###为了\n\n速率\n###\n\nUDP\n\n无\n\n目标\n目的是\n\nUDP\n### 数据的\n\nWhile\n\nthe\n\nUDP\n\npurpose\nThis 是\n\nUDP\n\nUDP的\n\n###\n该\n\n效率\n\n###一个\n\nUDP\n\n通常的\n\n用途\n\n另一个\n\nUDP的\n\n### 每个\n\n创建\n\ncomparison\n速度\n\n存储\n\n### 使得\n\nUDP\n\nUDP\n\nProtocol的设计\n\nUDP\n\nUDP\n\nUDP\n\n高效\n\n### 设计\n\nefficient\n\nUDP\n\noverhead\n\nperformance\n\nUDP\n\ndesigned\n\nUDP\n\n的\n\n---\n\ncompared\n\n使\n\n这是\n\nUDP\n\nUDP\n\nUDP\n\n非常高的\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nTCP\n\nUDP\n\nUDP\n\n的\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\n时\n\nUDP\n\nUDP\n\n使其\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nEfficiency\n\nUDP\n\nUDP\n\nUDP\n\n的数据\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\n的\n\nCPU\n\nUDP\n\nUDP\n\nfast\n\nUDP\n\nUDP 的\n\n允许\n\nUDP。\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\n降低\n\nUDP\n\nUDP\n\nAllows\n\nspeed\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\n至\n\nUDP。\n\nUDP\n\n当\n\nUDP\n\nUDP\n\nsuitable\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP。\n\nUDP\n\nUDP\n\nUDP\n\nUDP。\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\n算法\n\nUDP。\n\nudp。\n\noptimization\n\nUDP\n\nUDP 从而可以\n\nUDP 极快的\n\nUDP\n\nUDP\n\nUDP\n\nUDP\n\nFor\n\nUDP\n\n适合\n\nUDP\n\nUDP\n\nUDP\n\nSuitable\n\n应用程序\n\nUDP\n\n因此\n\n适应\n\nGood\n\n适合\n\n使用\n\n应用\n\n\"\"\"\n\n---\n\n许多\n\nUseful\n\nUDP\n\nUse\n\nUse\n\napplications。\n\n###To\n\nSuitable\n\n所以\n\nUDP\n\n例如\n\n---\n\nuse\n\n追求\n\n适用于\n\n适用于\n\nUDP\n\n用途\n\n---\n\nFor\n\nUDP\n\n---\n\n### 为了\n\nUDP\n\n### 内存\n\n数据\n\n因此\n\nalgorithms\n\n总之"
+    }
+  ],
+  "ttft": [
+    {
+      "prompt": "Write a detailed explanation of quantum entanglement.",
+      "ttftMs": 24,
+      "totalMs": 9422,
+      "outputTokens": 949,
+      "decodeSpeed": 100.9
+    },
+    {
+      "prompt": "Explain the history of the Internet in three paragraphs.",
+      "ttftMs": 24,
+      "totalMs": 3631,
+      "outputTokens": 368,
+      "decodeSpeed": 101.7
+    },
+    {
+      "prompt": "Describe how neural networks learn from data.",
+      "ttftMs": 24,
+      "totalMs": 20360,
+      "outputTokens": 2048,
+      "decodeSpeed": 100.7
+    }
+  ],
+  "multiturn": [
+    {
+      "turn": 1,
+      "prompt": "What is machine learning?",
+      "timeMs": 470,
+      "outputTokens": 45,
+      "tokPerSec": 99.1
+    },
+    {
+      "turn": 2,
+      "prompt": "How does it differ from traditional programming?",
+      "timeMs": 518,
+      "outputTokens": 49,
+      "tokPerSec": 98.2
+    },
+    {
+      "turn": 3,
+      "prompt": "Give an example of supervised learning.",
+      "timeMs": 512,
+      "outputTokens": 48,
+      "tokPerSec": 99.5
+    },
+    {
+      "turn": 4,
+      "prompt": "What about unsupervised learning?",
+      "timeMs": 536,
+      "outputTokens": 49,
+      "tokPerSec": 97.4
+    },
+    {
+      "turn": 5,
+      "prompt": "How is deep learning different?",
+      "timeMs": 527,
+      "outputTokens": 48,
+      "tokPerSec": 99.0
+    },
+    {
+      "turn": 6,
+      "prompt": "What are transformers in ML?",
+      "timeMs": 612,
+      "outputTokens": 56,
+      "tokPerSec": 99.4
+    },
+    {
+      "turn": 7,
+      "prompt": "Explain attention mechanism briefly.",
+      "timeMs": 558,
+      "outputTokens": 49,
+      "tokPerSec": 98.3
+    },
+    {
+      "turn": 8,
+      "prompt": "What is transfer learning?",
+      "timeMs": 633,
+      "outputTokens": 56,
+      "tokPerSec": 99.4
+    },
+    {
+      "turn": 9,
+      "prompt": "How do LLMs work?",
+      "timeMs": 658,
+      "outputTokens": 57,
+      "tokPerSec": 98.1
+    },
+    {
+      "turn": 10,
+      "prompt": "What is RLHF?",
+      "timeMs": 691,
+      "outputTokens": 60,
+      "tokPerSec": 99.0
+    }
+  ],
+  "quality": [
+    {
+      "category": "Math",
+      "prompt": "What is 15 * 37? Reply with just the number.",
+      "expected": "555",
+      "response": "555",
+      "pass": true
+    },
+    {
+      "category": "Factual",
+      "prompt": "What is the capital of Australia? Reply with just the city name.",
+      "expected": "Canberra",
+      "response": "Canberra",
+      "pass": true
+    },
+    {
+      "category": "Translation",
+      "prompt": "Translate 'hello' to French. Reply with just the French word.",
+      "expected": "bonjour",
+      "response": "Bonjour",
+      "pass": true
+    },
+    {
+      "category": "Pattern",
+      "prompt": "Complete the sequence: 2, 4, 8, 16, __ Reply with just the number.",
+      "expected": "32",
+      "response": "32",
+      "pass": true
+    },
+    {
+      "category": "Classification",
+      "prompt": "Is a whale a fish or a mammal? Reply with one word.",
+      "expected": "mammal",
+      "response": "Mammal",
+      "pass": true
+    },
+    {
+      "category": "Common Sense",
+      "prompt": "What day comes after Monday? Reply with the day name.",
+      "expected": "Tuesday",
+      "response": "Tuesday",
+      "pass": true
+    },
+    {
+      "category": "Grammar",
+      "prompt": "Fix the grammar: 'She don't like apples.' Reply with the corrected sentence only.",
+      "expected": "doesn't",
+      "response": "She doesn't like apples.",
+      "pass": true
+    },
+    {
+      "category": "Factual 2",
+      "prompt": "What is the largest planet in our solar system? Reply with just the name.",
+      "expected": "Jupiter",
+      "response": "Jupiter",
+      "pass": true
+    },
+    {
+      "category": "Science",
+      "prompt": "What is the chemical formula for water? Reply with just the formula in plain text.",
+      "expected": "H2O",
+      "response": "H2O",
+      "pass": true
+    },
+    {
+      "category": "Common Sense 2",
+      "prompt": "How many legs does a spider have? Reply with just the number.",
+      "expected": "8",
+      "response": "8",
+      "pass": true
+    }
+  ],
+  "gpu": {
+    "gpu_name": "NVIDIA GeForce RTX 4070",
+    "vram_total_mb": 12282.0,
+    "samples": 139,
+    "vram_mb": {
+      "baseline": 4190.0,
+      "peak": 4694.0,
+      "average": 4597.1,
+      "min": 4190.0,
+      "delta": 504.0
+    },
+    "gpu_utilization_pct": {
+      "average": 80.5,
+      "peak": 84.0
+    },
+    "power_watts": {
+      "average": 126.0,
+      "peak": 135.11
+    }
+  },
+  "meta": {
+    "engine": "onnxruntime-genai",
+    "engine_version": "0.16.0.dev0",
+    "label": "ort1.30-genai0.16-pr479",
+    "model_path": "E:\\workspace\\models\\gemma4-webgpu-int4",
+    "decoder_model_sha256": "d2f792867bd5e9e71d6285c753608a37dc20a36b9bb6d7d8ab2a854330a73b99",
+    "load_time_s": 5.81,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python_version": "3.13.13",
+    "timestamp": "2026-09-04T04:37:44.944169+00:00"
+  }
+}

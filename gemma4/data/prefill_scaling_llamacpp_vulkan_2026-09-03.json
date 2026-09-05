@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "stack": "Q4_K_M GGUF + llama.cpp",
+    "backend": "Vulkan",
+    "mtp": false,
+    "timestamp": "2026-09-03T09:04:37.479236+00:00",
+    "method": "per-length warmup then median TTFT from normal 128-token generations",
+    "requested_output_tokens": 128,
+    "warmups_per_length": 1,
+    "samples_per_length": 3,
+    "timing_boundary": "request submission to first streamed content token",
+    "model_loading_included": false
+  },
+  "prefill_scaling": [
+    {
+      "target_tokens": 128,
+      "input_tokens": 128,
+      "samples_ms": [
+        216.16,
+        215.96,
+        236.81
+      ],
+      "median_ms": 216.16,
+      "min_ms": 215.96,
+      "max_ms": 236.81
+    },
+    {
+      "target_tokens": 512,
+      "input_tokens": 512,
+      "samples_ms": [
+        248.64,
+        257.15,
+        249.61
+      ],
+      "median_ms": 249.61,
+      "min_ms": 248.64,
+      "max_ms": 257.15
+    },
+    {
+      "target_tokens": 1024,
+      "input_tokens": 1024,
+      "samples_ms": [
+        310.54,
+        308.28,
+        308.39
+      ],
+      "median_ms": 308.39,
+      "min_ms": 308.28,
+      "max_ms": 310.54
+    },
+    {
+      "target_tokens": 2048,
+      "input_tokens": 2048,
+      "samples_ms": [
+        429.74,
+        463.88,
+        443.6
+      ],
+      "median_ms": 443.6,
+      "min_ms": 429.74,
+      "max_ms": 463.88
+    },
+    {
+      "target_tokens": 4096,
+      "input_tokens": 4096,
+      "samples_ms": [
+        746.7,
+        689.39,
+        703.69
+      ],
+      "median_ms": 703.69,
+      "min_ms": 689.39,
+      "max_ms": 746.7
+    }
+  ]
+}
