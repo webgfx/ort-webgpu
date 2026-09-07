@@ -1,13 +1,13 @@
 # Gemma 4 E2B Model + Inference Runtime Comparison
 
-> Hardware: NVIDIA RTX 4070 12 GB, driver 591.44, Windows 11. ONNX Runtime uses the WebGPU EP; native LiteRT-LM uses WebGPU over D3D12; llama.cpp uses Vulkan. Measurements collected 2026-09-03 and 2026-09-04.
+> Hardware: NVIDIA RTX 4070 12 GB, driver 591.44, Windows 11. ONNX Runtime uses the WebGPU EP; native LiteRT-LM uses WebGPU over D3D12; llama.cpp uses Vulkan. Measurements collected 2026-09-03 through 2026-09-07.
 
 ## Executive Summary
 
 - llama.cpp Vulkan leads decode throughput at **164.8 tok/s** without MTP.
 - LiteRT MTP raises long-form decode from **94.5 to 110.9 tok/s**.
 - ONNX prefill-prefix pruning reduces length-controlled TTFT by **66.4–80.2%** versus the previous unpruned artifact.
-- All stacks score **10/10** on core capability tests; the ONNX stack retains a long-form coherence limitation.
+- All stacks score **10/10** on core capability tests and produce **5/5 coherent long-form completions** after the ONNX quality fix.
 
 ## What Models and Artifacts Were Tested?
 
@@ -27,7 +27,7 @@ All stacks use Gemma 4 E2B-IT (5.1B total / approximately 2.3B effective paramet
 
 | Model + runtime stack | Format/backend | Long decode | Multi-turn | Core Capability Accuracy | Avg / peak VRAM |
 |---|---|---:|---:|---:|---:|
-| ONNX Runtime GenAI · Prefill Optimization | INT4 ONNX / WebGPU | 100.4 tok/s | 98.7 tok/s | 10/10 | 4597 / 4694 MB |
+| ONNX Runtime GenAI · Prefill Optimization | INT4 ONNX / WebGPU | 98.0 tok/s | 95.6 tok/s | 10/10 | 4852 / 4950 MB |
 | LiteRT-LM Native · MTP off | INT4 LITERTLM / native WebGPU | 94.5 tok/s | 94.3 tok/s | 10/10 | 1958 / 1958 MB |
 | LiteRT-LM Native · MTP on | INT4 LITERTLM / native WebGPU | 110.9 tok/s | 94.9 tok/s | 10/10 | 2031 / 2031 MB |
 | llama.cpp | Q4_K_M GGUF / Vulkan | 164.8 tok/s | 167.4 tok/s | 10/10 | 2782 / 2822 MB |
@@ -53,10 +53,10 @@ Each request allows up to **128 output tokens**; TTFT stops at the first emitted
 | 1,024-token TTFT | 785.9 ms | 155.3 ms | −80.2% |
 | 2,048-token TTFT | 1,677.9 ms | 347.4 ms | −79.3% |
 | 4,096-token TTFT | 4,523.3 ms | 899.2 ms | −80.1% |
-| Long decode | 93.4 tok/s | 100.4 tok/s | +7.6% |
+| Long decode | 93.4 tok/s | 98.0 tok/s | +4.9% |
 | Core Capability Accuracy | 10/10 | 10/10 | Unchanged |
 
-**Current ONNX runtime:** WebGPU 1.30.0 with ONNX Runtime GenAI 0.16.0-dev.
+**Current ONNX runtime:** locally built, quality-fixed ONNX Runtime WebGPU 1.30.0 with ONNX Runtime GenAI 0.16.0-dev.
 
 **Graph proof:** logits changed from `[batch, sequence_len, 262144]` to `[batch, 1, 262144]`; the build manifest records `prune-prefill-prefix`.
 
@@ -64,12 +64,12 @@ Each request allows up to **128 output tokens**; TTFT stops at the first emitted
 
 | Stack | Core Capability Accuracy | Long-form coherence |
 |---|---:|---|
-| ONNX Runtime GenAI · Prefill Optimization | 10/10 | 1/5 clean; four malformed, repetitive, or multilingual tails |
+| ONNX Runtime GenAI · Prefill Optimization | 10/10 | 5/5 coherent completions |
 | LiteRT-LM Native · MTP off | 10/10 | 5/5 coherent completions |
 | LiteRT-LM Native · MTP on | 10/10 | 5/5 coherent completions |
 | llama.cpp | 10/10 | 5/5 coherent completions |
 
-Core capability tests cover arithmetic, factual knowledge, translation, pattern completion, classification, grammar, basic science, and common-sense reasoning under greedy decoding. Long-form generation uses temperature 0.7. Deterministic source-model output/logit comparison is recommended to isolate the ONNX long-form issue.
+Core capability tests cover arithmetic, factual knowledge, translation, pattern completion, classification, grammar, basic science, and common-sense reasoning under greedy decoding. Long-form generation uses temperature 0.7. The fixed ONNX run completed naturally at 919–1,814 output tokens across all five prompts, without the malformed, repetitive, or multilingual tails observed in the previous build after applying the fix [onnxruntime/pull/32462](https://github.com/microsoft/onnxruntime/pull/32462).
 
 ## Model Conversion and Runtime Optimization Analysis
 
