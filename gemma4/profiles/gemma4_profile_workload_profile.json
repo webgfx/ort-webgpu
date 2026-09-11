@@ -1,0 +1,20 @@
+{
+  "workload": {
+    "warmup": {
+      "input_tokens": 14,
+      "output_tokens": 16,
+      "ttft_ms": 669.703,
+      "elapsed_ms": 989.858,
+      "decode_tokens_per_second": 46.852,
+      "response": "Photosynthesis is the process used by plants and other organisms to convert **light energy"
+    },
+    "measured": {
+      "input_tokens": 1024,
+      "output_tokens": 256,
+      "ttft_ms": 206.754,
+      "elapsed_ms": 3170.115,
+      "decode_tokens_per_second": 86.051,
+      "response": "This is a very long and repetitive request, but I will provide a comprehensive explanation of how the Transformer attention mechanism processes a prompt, focusing on the core concepts you've asked about.\n\n---\n\n## How Transformer Attention Processes a Prompt\n\nThe core of the Transformer architecture relies on the **Self-Attention mechanism**. This mechanism allows the model to weigh the importance of different parts of the input tokens relative to each other to generate a rich, contextualized representation of the prompt.\n\nHere is a breakdown of the key components and the step-by-step process:\n\n### 1. The Core Components: Queries (Q), Keys (K), and Values (V)\n\nThe attention mechanism is fundamentally built around three key concepts:\n\n* **Query ($\\mathbf{Q}$):** This represents the **current token** we are focusing on. It is the \"question\" that asks, \"What information is needed from these other token?\"\n* **Keys ($\\mathbf{K):** These represent the **other tokens** from which the Query is looking. They are the \"labels\" or the \"context\" that the Query will needs.\n* **Values ($\\mathbf{V):** These are the actual **information content** that is extracted. The attention mechanism uses"
+    }
+  }
+}
