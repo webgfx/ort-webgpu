@@ -2,3 +2,4 @@
 
 # ONNX Runtime profiling traces can exceed GitHub's 100 MB file limit.
 gemma4/profiles/gemma4_decoder_webgpu*.json
+!gemma4/profiles/gemma4_decoder_webgpu_profile.json
