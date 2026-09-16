@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Source-derived architecture and target design for ONNX Runtime WebGPU and ONNX Runtime GenAI.">
+  <title>ORT WebGPU — Runtime, Generation &amp; Execution Design</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #152029;
+      --muted: #61717d;
+      --paper: #f7f3eb;
+      --panel: #fffdf8;
+      --line: #d8d2c5;
+      --navy: #15394b;
+      --teal: #087f75;
+      --teal-soft: #dff3ef;
+      --amber: #c56a16;
+      --amber-soft: #fff0d7;
+      --red: #a73f3f;
+      --red-soft: #fae7e4;
+      --blue-soft: #e5eff6;
+      --code: #102832;
+      --shadow: 0 12px 36px rgba(20, 40, 48, .08);
+      --radius: 16px;
+      --sans: "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 22px; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 92% 4%, rgba(8,127,117,.09), transparent 26rem),
+        linear-gradient(90deg, rgba(21,57,75,.025) 1px, transparent 1px),
+        linear-gradient(rgba(21,57,75,.025) 1px, transparent 1px),
+        var(--paper);
+      background-size: auto, 32px 32px, 32px 32px, auto;
+      color: var(--ink);
+      font: 16px/1.62 var(--sans);
+    }
+    a { color: #086f73; text-decoration-thickness: .08em; text-underline-offset: .16em; }
+    a:hover { color: var(--amber); }
+    code, kbd { font-family: var(--mono); }
+    code { font-size: .9em; background: #edf1ee; border-radius: 5px; padding: .1em .33em; }
+    pre {
+      margin: 1rem 0;
+      padding: 1.05rem 1.15rem;
+      overflow: auto;
+      color: #e8f5f3;
+      background: var(--code);
+      border: 1px solid #284752;
+      border-radius: 12px;
+      box-shadow: inset 0 1px rgba(255,255,255,.05);
+      font: 13px/1.55 var(--mono);
+    }
+    pre code { padding: 0; color: inherit; background: none; font-size: inherit; }
+    h1, h2, h3, h4 { color: var(--navy); line-height: 1.18; text-wrap: balance; }
+    h1 { margin: .2rem 0 1rem; font-size: clamp(2.45rem, 5vw, 4.8rem); letter-spacing: -.055em; }
+    h2 { margin: 3.7rem 0 1rem; padding-top: .5rem; font-size: clamp(1.8rem, 3vw, 2.55rem); letter-spacing: -.025em; }
+    h3 { margin: 2rem 0 .7rem; font-size: 1.28rem; }
+    h4 { margin: 1.35rem 0 .45rem; font-size: 1rem; text-transform: uppercase; letter-spacing: .055em; }
+    p { margin: .7rem 0 1rem; }
+    ul, ol { padding-left: 1.3rem; }
+    li + li { margin-top: .34rem; }
+    .shell { display: grid; grid-template-columns: 270px minmax(0, 1fr); min-height: 100vh; }
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 26px 21px;
+      overflow-y: auto;
+      color: #d9ebed;
+      background: #102f3d;
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .brand { display: flex; gap: 11px; align-items: center; margin-bottom: 24px; color: white; font-weight: 750; letter-spacing: .02em; }
+    .brand-mark { width: 34px; height: 34px; border: 2px solid #73d1c6; border-radius: 50% 50% 50% 8px; transform: rotate(-8deg); box-shadow: inset 0 0 0 6px rgba(115,209,198,.08); }
+    .toc-label { margin: 18px 0 7px; color: #83a6ad; font-size: .72rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    aside nav a { display: block; margin: 2px 0; padding: 7px 10px; color: #c4dadd; border-radius: 7px; text-decoration: none; font-size: .88rem; line-height: 1.3; }
+    aside nav a:hover, aside nav a.active { color: white; background: rgba(115,209,198,.13); }
+    .nav-note { margin-top: 25px; padding: 12px; color: #9eb9bf; border: 1px solid rgba(255,255,255,.1); border-radius: 10px; font-size: .76rem; }
+    main { min-width: 0; }
+    .content { width: min(1120px, calc(100% - 64px)); margin: 0 auto; padding: 54px 0 100px; }
+    .eyebrow { color: var(--teal); font-size: .78rem; font-weight: 850; letter-spacing: .15em; text-transform: uppercase; }
+    .lede { max-width: 850px; color: #38505d; font-size: clamp(1.08rem, 2vw, 1.35rem); line-height: 1.55; }
+    .meta { display: flex; flex-wrap: wrap; gap: 9px; margin: 24px 0 34px; }
+    .pill { padding: 6px 10px; color: #28505a; background: rgba(255,255,255,.65); border: 1px solid var(--line); border-radius: 999px; font-size: .78rem; font-weight: 650; }
+    .pill strong { color: var(--navy); }
+    .callout, .card, .diagram, .decision, details {
+      background: rgba(255,253,248,.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .callout { margin: 1.3rem 0; padding: 18px 20px; border-left: 5px solid var(--teal); }
+    .callout.warning { background: var(--amber-soft); border-color: #e5c18e; border-left-color: var(--amber); }
+    .callout.danger { background: var(--red-soft); border-color: #dfb1aa; border-left-color: var(--red); }
+    .callout strong:first-child { color: var(--navy); }
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card, .decision { padding: 18px 19px; }
+    .card h3, .decision h3 { margin-top: 0; }
+    .card p:last-child, .decision p:last-child { margin-bottom: 0; }
+    .decision { border-top: 4px solid var(--teal); }
+    .decision .number { float: right; color: #b5c2c4; font: 700 1.5rem var(--mono); }
+    .tag { display: inline-block; margin-bottom: 9px; padding: 3px 7px; color: #20665f; background: var(--teal-soft); border-radius: 4px; font-size: .68rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .tag.current { color: #365b72; background: var(--blue-soft); }
+    .tag.proposed { color: #8a4a10; background: var(--amber-soft); }
+    .diagram { margin: 1.25rem 0; padding: 22px; overflow-x: auto; }
+    .diagram-title { margin-bottom: 15px; color: var(--muted); font-size: .76rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .flow { display: grid; grid-template-columns: repeat(5, minmax(145px, 1fr)); gap: 12px; min-width: 800px; align-items: stretch; }
+    .flow .node { position: relative; padding: 14px; background: #f6faf8; border: 1px solid #bdd6d1; border-radius: 10px; }
+    .flow .node:not(:last-child)::after { content: "→"; position: absolute; z-index: 2; right: -18px; top: 50%; width: 24px; color: var(--amber); font-size: 1.25rem; font-weight: 800; text-align: center; transform: translateY(-50%); }
+    .node b { display: block; color: var(--navy); font-size: .9rem; }
+    .node small { display: block; margin-top: 5px; color: var(--muted); line-height: 1.35; }
+    .concept-map { display: block; width: 100%; min-width: 940px; height: auto; }
+    .concept-map .lane { fill: #f2eee5; }
+    .concept-map .box { fill: #f6faf8; stroke: #9fc9c2; stroke-width: 1.5; }
+    .concept-map .box.execution { fill: var(--blue-soft); stroke: #9dbdce; }
+    .concept-map .box.capture { fill: var(--amber-soft); stroke: #d9a765; }
+    .concept-map .box.shared { fill: #edf3f1; stroke: #86b8af; }
+    .concept-map .decision-shape { fill: #fff8eb; stroke: var(--amber); stroke-width: 1.5; }
+    .concept-map .edge { fill: none; stroke: var(--amber); stroke-width: 2; marker-end: url(#concept-arrow); }
+    .concept-map .edge.shared-edge { stroke: var(--teal); stroke-dasharray: 7 5; marker-end: url(#concept-shared-arrow); }
+    .concept-map .edge-label { fill: #7c531f; font: 700 12px var(--sans); }
+    .concept-map .edge-label.shared-label { fill: #176b64; }
+    .concept-map .node-title { fill: var(--navy); font: 750 15px var(--sans); }
+    .concept-map .node-code { fill: #365966; font: 12px var(--mono); }
+    .concept-map .node-note { fill: var(--muted); font: 12px var(--sans); }
+    .concept-map .lane-label { fill: #6d7c82; font: 800 11px var(--sans); letter-spacing: 1.1px; }
+    .concept-map .legend-text { fill: var(--muted); font: 12px var(--sans); }
+    .concept-map a:focus .box, .concept-map a:hover .box { stroke: var(--amber); stroke-width: 2.5; }
+    .stack { display: grid; gap: 9px; }
+    .stack-row { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: stretch; }
+    .stack-label, .stack-body { padding: 12px 14px; border-radius: 9px; }
+    .stack-label { color: white; background: var(--navy); font-weight: 750; }
+    .stack-body { background: #f6faf8; border: 1px solid #c8dbd6; }
+    .table-wrap { margin: 1rem 0 1.6rem; overflow-x: auto; border: 1px solid var(--line); border-radius: 13px; box-shadow: 0 8px 24px rgba(20,40,48,.05); }
+    table { width: 100%; border-collapse: collapse; background: rgba(255,253,248,.94); font-size: .88rem; }
+    th, td { padding: 11px 13px; border-bottom: 1px solid #e3ded4; text-align: left; vertical-align: top; }
+    th { color: var(--navy); background: #edf3f1; font-size: .76rem; letter-spacing: .04em; text-transform: uppercase; }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { color: var(--navy); font-weight: 700; }
+    .yes { color: #08765e; font-weight: 750; }
+    .partial { color: #9a5a16; font-weight: 750; }
+    .no { color: #9b4545; font-weight: 750; }
+    .sequence { counter-reset: seq; display: grid; gap: 12px; margin: 1rem 0; }
+    .sequence > div { position: relative; padding: 15px 17px 15px 58px; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; }
+    .sequence > div::before { counter-increment: seq; content: counter(seq); position: absolute; left: 16px; top: 13px; display: grid; place-items: center; width: 28px; height: 28px; color: white; background: var(--teal); border-radius: 50%; font: 750 .82rem var(--mono); }
+    .sequence b { color: var(--navy); }
+    .formula { padding: 14px 16px; color: #d9f0ed; background: var(--navy); border-radius: 10px; font: 13px/1.55 var(--mono); }
+    .cite { color: var(--teal); font: 700 .7em var(--mono); vertical-align: super; text-decoration: none; }
+    details { margin: .75rem 0; padding: 0 17px; box-shadow: none; }
+    summary { cursor: pointer; padding: 13px 0; color: var(--navy); font-weight: 750; }
+    details > :not(summary) { margin-left: 3px; margin-right: 3px; }
+    .status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .status.now { color: #236b73; }
+    .status.target { color: #a55913; }
+    .source-list { padding-left: 0; list-style: none; counter-reset: sources; }
+    .source-list li { counter-increment: sources; position: relative; padding: 11px 12px 11px 48px; border-bottom: 1px solid var(--line); }
+    .source-list li::before { content: "S" counter(sources); position: absolute; left: 8px; top: 12px; color: var(--teal); font: 750 .78rem var(--mono); }
+    .source-list small { display: block; color: var(--muted); }
+    .footer { margin-top: 4rem; padding-top: 1.5rem; color: var(--muted); border-top: 1px solid var(--line); font-size: .82rem; }
+    .mobile-nav { display: none; }
+    @media (max-width: 980px) {
+      .shell { display: block; }
+      aside { display: none; }
+      .mobile-nav { position: sticky; z-index: 10; top: 0; display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 18px; color: white; background: rgba(16,47,61,.96); backdrop-filter: blur(10px); }
+      .mobile-nav select { max-width: 70vw; padding: 6px; color: white; background: #234957; border: 1px solid #5e7d85; border-radius: 6px; }
+      .content { width: min(100% - 34px, 900px); padding-top: 38px; }
+      .grid.three, .grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 650px) {
+      .grid.two, .grid.three, .grid.four { grid-template-columns: 1fr; }
+      .stack-row { grid-template-columns: 1fr; gap: 4px; }
+      h2 { margin-top: 3rem; }
+      th, td { padding: 9px 10px; }
+    }
+    @media print {
+      @page { margin: 14mm; }
+      body { background: white; color: black; font-size: 10.5pt; }
+      aside, .mobile-nav { display: none !important; }
+      .shell { display: block; }
+      .content { width: 100%; padding: 0; }
+      h1 { font-size: 34pt; }
+      h2 { break-before: page; margin-top: 0; }
+      h2:first-of-type { break-before: auto; }
+      .card, .decision, .callout, .diagram, details, .table-wrap { box-shadow: none; break-inside: avoid; }
+      a { color: black; text-decoration: none; }
+      a[href^="http"]::after { content: ""; }
+    }
+  </style>
+</head>
+<body>
+<div class="mobile-nav">
+  <strong>ORT WebGPU design</strong>
+  <select aria-label="Jump to section" onchange="if(this.value) location.hash=this.value">
+    <option value="">Jump to…</option>
+    <option value="summary">Summary</option><option value="architecture">Architecture</option>
+    <option value="session">ORT session</option><option value="programming">Programming model</option>
+    <option value="walkthrough">Concrete application</option>
+    <option value="generator">Generator</option><option value="buffers">Buffers</option>
+    <option value="capture">Graph capture</option><option value="threading">Thread safety</option>
+    <option value="limitations">Current limitations</option>
+    <option value="target">Target design</option>
+    <option value="roadmap">Roadmap</option><option value="sources">Sources</option>
+  </select>
+</div>
+<div class="shell">
+  <aside>
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>ORT · WebGPU</span></div>
+    <div class="toc-label">Design</div>
+    <nav id="toc">
+      <a href="#summary">Executive summary</a>
+      <a href="#architecture">System architecture</a>
+      <a href="#session">ORT session</a>
+      <a href="#programming">EP programming model</a>
+      <a href="#walkthrough">Concrete application</a>
+      <a href="#generator">Generator &amp; engine</a>
+      <a href="#buffers">Buffer management</a>
+      <a href="#capture">Graph capture</a>
+      <a href="#threading">Thread safety</a>
+      <a href="#limitations">Current limitations</a>
+      <a href="#target">Target architecture</a>
+      <a href="#api">Proposed API</a>
+      <a href="#roadmap">Roadmap &amp; validation</a>
+      <a href="#questions">Open questions</a>
+      <a href="#sources">Evidence map</a>
+    </nav>
+    <div class="nav-note">Current behavior is marked blue. Proposed design is marked amber. Every material claim is tied to the audited source baseline.</div>
+  </aside>
+
+  <main>
+    <article class="content">
+      <header>
+        <div class="eyebrow">Architecture / source-derived / design baseline</div>
+        <h1>ORT WebGPU:<br>runtime, generation &amp; execution</h1>
+        <p class="lede">A design for a predictable, memory-aware and concurrency-safe WebGPU inference stack—grounded in the current ONNX Runtime and ONNX Runtime GenAI implementations.</p>
+        <div class="meta">
+          <span class="pill"><strong>Status</strong> proposed architecture</span>
+          <span class="pill"><strong>Audited</strong> 2026-08-12</span>
+          <span class="pill"><strong>ORT</strong> dfb403d948</span>
+          <span class="pill"><strong>GenAI</strong> d2606bba5c</span>
+          <span class="pill"><strong>Audience</strong> runtime, EP &amp; GenAI engineers</span>
+        </div>
+      </header>
+
+      <section id="summary">
+        <h2>Executive summary</h2>
+        <p>There are two architectural boundaries to keep distinct. In ORT core, an <code>InferenceSession</code> owns the loaded/optimized graph, its <code>SessionState</code>, provider instances, allocators, kernels and initializer residency. In GenAI, a <code>Model</code> owns one or more ORT sessions while each <code>Generator</code> owns mutable conversation state: search, KV cache, positions, logits, run options and a capture ID. This sharing is efficient, but the underlying WebGPU session is not a cheap, independent execution context.</p>
+
+        <div class="grid four">
+          <div class="decision"><span class="number">01</span><span class="tag current">Observed</span><h3>Session is the executable</h3><p>ORT loads, optimizes, partitions and materializes kernels per session. WebGPU is one EP in that execution plan, with CPU fallback where allowed.</p></div>
+          <div class="decision"><span class="number">02</span><span class="tag current">Observed</span><h3>Generator owns state</h3><p>GenAI generators share the model session but hold independent KV/search state and graph annotation IDs. A generator is stateful and not thread-safe.</p></div>
+          <div class="decision"><span class="number">03</span><span class="tag current">Observed</span><h3>Capture binds addresses</h3><p>WebGPU capture retains pipelines, bind groups and dispatch metadata. Reuse requires stable buffer handles, compatible shapes and explicit graph lifetime.</p></div>
+          <div class="decision"><span class="number">04</span><span class="tag proposed">Decision</span><h3>One device lane</h3><p>All work sharing a <code>WebGpuContext</code> must pass through a context-owned submission lane until every mutable runtime component is made re-entrant.</p></div>
+        </div>
+
+        <div class="callout warning"><strong>The most important gap.</strong> ORT serializes the <em>normal graph-execution branch</em> on one WebGPU session because the EP returns <code>ConcurrentRunSupported() == false</code>. The already-captured replay branch returns through <code>ReplayGraph()</code> before that lock is acquired, and different sessions sharing context ID 0 have no common session lock at all. Both paths can therefore reach the same mutable command encoder, deferred-dispatch window, program map, profiling state and queue concurrently. Capture replay and cross-session parallel execution are not safe boundaries today.<a class="cite" href="#s-thread">S6</a></div>
+
+        <h3>Design position</h3>
+        <p>Preserve ORT’s session contract and broad ONNX compatibility, but introduce explicit internal layers: a device runtime, immutable compiled-model artifacts, cheap execution contexts, per-generator state, and an engine scheduler. Make resource scope visible; make capture a capacity-checked contract; and make concurrency a device-runtime property rather than an accidental consequence of session locks.</p>
+      </section>
+
+      <section id="architecture">
+        <h2>System architecture</h2>
+        <p>The flow below connects the application-facing objects to the execution path. Solid arrows show creation, ownership or calls; dashed arrows show shared runtime use. Cardinalities are intentional: one Model can expose multiple sessions and create multiple Generators. Each Generator owns one generation request's mutable state and drives <code>Session::Run</code>, while sessions configured with the same <code>contextId</code> converge on one shared WebGPU context.</p>
+
+        <div class="diagram">
+          <div class="diagram-title">Major concepts: Model and Generator ownership, run selection and WebGPU execution</div>
+          <svg class="concept-map" viewBox="0 0 1100 690" role="img" aria-labelledby="concept-map-title concept-map-desc">
+            <title id="concept-map-title">ORT WebGPU major-concept flow chart</title>
+            <desc id="concept-map-desc">An application creates a GenAI Model and one or more stateful Generators. The Model owns one or more ORT sessions, each with a WebGPU execution provider. Every Generator owns its tokens, search state, KV cache, logits, and graph ID, and invokes Session Run for each generation step. The run selects eager execution, first capture, or replay. All paths use the WebGPU execution provider and a context shared by context ID before submission to the device queue.</desc>
+            <defs>
+              <marker id="concept-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#c56a16"></path>
+              </marker>
+              <marker id="concept-shared-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#087f75"></path>
+              </marker>
+            </defs>
+
+            <rect class="lane" x="12" y="34" width="1076" height="132" rx="14"></rect>
+            <rect class="lane" x="12" y="184" width="1076" height="314" rx="14"></rect>
+            <rect class="lane" x="12" y="516" width="1076" height="126" rx="14"></rect>
+            <text class="lane-label" x="28" y="57">APPLICATION &amp; OWNERSHIP</text>
+            <text class="lane-label" x="28" y="207">PER-STEP EXECUTION</text>
+            <text class="lane-label" x="28" y="539">SHARED DEVICE RUNTIME</text>
+
+            <a href="#walkthrough" aria-label="Application code walkthrough">
+              <rect class="box" x="55" y="78" width="170" height="64" rx="10"></rect>
+              <text class="node-title" x="140" y="103" text-anchor="middle">Application</text>
+              <text class="node-code" x="140" y="125" text-anchor="middle">main() / request loop</text>
+            </a>
+            <a href="#generator" aria-label="GenAI Model and Generator details">
+              <rect class="box" x="292" y="70" width="176" height="80" rx="10"></rect>
+              <text class="node-title" x="380" y="96" text-anchor="middle">GenAI Model</text>
+              <text class="node-code" x="380" y="118" text-anchor="middle">OgaModel</text>
+              <text class="node-note" x="380" y="137" text-anchor="middle">one loaded model</text>
+            </a>
+            <a href="#session" aria-label="ORT session details">
+              <rect class="box" x="537" y="70" width="176" height="80" rx="10"></rect>
+              <text class="node-title" x="625" y="96" text-anchor="middle">ORT Session(s)</text>
+              <text class="node-code" x="625" y="118" text-anchor="middle">InferenceSession 1..N</text>
+              <text class="node-note" x="625" y="137" text-anchor="middle">prepared executable(s)</text>
+            </a>
+            <a href="#programming" aria-label="WebGPU execution provider details">
+              <rect class="box" x="782" y="70" width="220" height="80" rx="10"></rect>
+              <text class="node-title" x="892" y="96" text-anchor="middle">WebGPU EP per session</text>
+              <text class="node-code" x="892" y="118" text-anchor="middle">WebGpuExecutionProvider</text>
+              <text class="node-note" x="892" y="137" text-anchor="middle">partition + kernels + graph map</text>
+            </a>
+
+            <path class="edge" d="M225 110 H292"></path>
+            <text class="edge-label" x="258" y="101" text-anchor="middle">creates</text>
+            <path class="edge" d="M468 110 H537"></path>
+            <text class="edge-label" x="502" y="101" text-anchor="middle">owns</text>
+            <path class="edge" d="M713 110 H782"></path>
+            <text class="edge-label" x="747" y="101" text-anchor="middle">configures</text>
+
+            <a href="#generator" aria-label="Generator ownership and state">
+              <rect class="box execution" x="60" y="234" width="235" height="108" rx="10"></rect>
+              <text class="node-title" x="177" y="258" text-anchor="middle">Generator(s) 1..N</text>
+              <text class="node-code" x="177" y="280" text-anchor="middle">OgaGenerator / State</text>
+              <text class="node-note" x="177" y="301" text-anchor="middle">owns tokens · search · KV · logits</text>
+              <text class="node-code" x="177" y="324" text-anchor="middle">GenerateNextToken() → Run()</text>
+            </a>
+            <path class="edge" d="M140 142 V214 H177 V234"></path>
+            <text class="edge-label" x="145" y="211">creates</text>
+            <path class="edge shared-edge" d="M380 150 V180 H230 V234"></path>
+            <text class="edge-label shared-label" x="294" y="174">retains shared Model</text>
+
+            <a href="#capture" aria-label="Graph capture modes">
+              <path class="decision-shape" d="M425 230 L535 286 L425 342 L315 286 Z"></path>
+              <text class="node-title" x="425" y="273" text-anchor="middle">Run selector</text>
+              <text class="node-code" x="425" y="294" text-anchor="middle">gpu_graph_id</text>
+              <text class="node-note" x="425" y="313" text-anchor="middle">off / new / captured</text>
+            </a>
+            <path class="edge" d="M295 286 H315"></path>
+            <text class="edge-label" x="305" y="277" text-anchor="middle">step</text>
+            <path class="edge" d="M625 150 V192 H425 V230"></path>
+            <text class="edge-label" x="552" y="185">Run entry</text>
+
+            <a href="#capture" aria-label="Eager execution mode">
+              <rect class="box execution" x="80" y="390" width="220" height="76" rx="10"></rect>
+              <text class="node-title" x="190" y="416" text-anchor="middle">Eager execution</text>
+              <text class="node-code" x="190" y="438" text-anchor="middle">capture off or ID = -1</text>
+              <text class="node-note" x="190" y="457" text-anchor="middle">validate + execute ORT plan</text>
+            </a>
+            <a href="#capture" aria-label="First graph capture mode">
+              <rect class="box capture" x="330" y="390" width="220" height="76" rx="10"></rect>
+              <text class="node-title" x="440" y="416" text-anchor="middle">First capture</text>
+              <text class="node-code" x="440" y="438" text-anchor="middle">enabled + new positive ID</text>
+              <text class="node-note" x="440" y="457" text-anchor="middle">execute + retain dispatches</text>
+            </a>
+            <a href="#capture" aria-label="Captured graph replay mode">
+              <rect class="box capture" x="580" y="390" width="220" height="76" rx="10"></rect>
+              <text class="node-title" x="690" y="416" text-anchor="middle">Captured replay</text>
+              <text class="node-code" x="690" y="438" text-anchor="middle">enabled + known ID</text>
+              <text class="node-note" x="690" y="457" text-anchor="middle">reuse retained bindings</text>
+            </a>
+            <path class="edge" d="M388 323 C340 356 250 354 210 390"></path>
+            <text class="edge-label" x="278" y="353">off / eager</text>
+            <path class="edge" d="M433 340 V390"></path>
+            <text class="edge-label" x="444" y="369">new ID</text>
+            <path class="edge" d="M470 323 C520 356 630 354 670 390"></path>
+            <text class="edge-label" x="585" y="353">known ID</text>
+
+            <rect class="box execution" x="850" y="352" width="205" height="104" rx="10"></rect>
+            <text class="node-title" x="952" y="378" text-anchor="middle">Programs &amp; buffers</text>
+            <text class="node-code" x="952" y="400" text-anchor="middle">WGSL · pipeline · bind group</text>
+            <text class="node-note" x="952" y="422" text-anchor="middle">capture retains concrete</text>
+            <text class="node-note" x="952" y="441" text-anchor="middle">buffer/binding handles</text>
+            <path class="edge" d="M300 428 H316 V480 H824 V404 H850"></path>
+            <path class="edge" d="M550 428 H564 V480 H824"></path>
+            <path class="edge" d="M800 428 H824"></path>
+
+            <a href="#threading" aria-label="Shared WebGPU context and thread-safety details">
+              <rect class="box shared" x="425" y="554" width="250" height="72" rx="10"></rect>
+              <text class="node-title" x="550" y="580" text-anchor="middle">Shared WebGpuContext</text>
+              <text class="node-code" x="550" y="602" text-anchor="middle">one per contextId</text>
+              <text class="node-note" x="550" y="619" text-anchor="middle">encoder · caches · profiler</text>
+            </a>
+            <rect class="box shared" x="800" y="554" width="230" height="72" rx="10"></rect>
+            <text class="node-title" x="915" y="580" text-anchor="middle">WebGPU device / queue</text>
+            <text class="node-code" x="915" y="602" text-anchor="middle">encode → submit → complete</text>
+            <path class="edge" d="M892 150 V320 H1035 V352"></path>
+            <text class="edge-label" x="908" y="312">EP dispatches</text>
+            <path class="edge" d="M952 456 V500 H550 V554"></path>
+            <text class="edge-label" x="755" y="493" text-anchor="middle">context-owned execution lane</text>
+            <path class="edge" d="M675 590 H800"></path>
+            <text class="edge-label" x="738" y="581" text-anchor="middle">submits</text>
+
+            <line x1="38" y1="669" x2="76" y2="669" stroke="#c56a16" stroke-width="2"></line>
+            <text class="legend-text" x="84" y="673">creates / owns / calls</text>
+            <line x1="245" y1="669" x2="283" y2="669" stroke="#087f75" stroke-width="2" stroke-dasharray="7 5"></line>
+            <text class="legend-text" x="291" y="673">shares / converges</text>
+            <text class="legend-text" x="1070" y="673" text-anchor="end">Boxes link to detailed sections</text>
+          </svg>
+        </div>
+
+        <div class="callout"><strong>How to read the flow.</strong> Multiple Generators and sessions are supported object topologies. The final convergence on <code>WebGpuContext</code> is the current safety boundary: object multiplicity does not imply concurrent execution. With capture disabled, every step follows eager execution. With capture enabled, prefill can remain eager, the first eligible one-token decode captures, and later compatible steps replay the same generator-specific graph ID.</div>
+
+        <div class="diagram">
+          <div class="diagram-title">Current ownership and call path</div>
+          <div class="stack">
+            <div class="stack-row"><div class="stack-label">Application</div><div class="stack-body">Tokenization, request lifecycle, streaming, cancellation and policy.</div></div>
+            <div class="stack-row"><div class="stack-label">ORT GenAI</div><div class="stack-body"><b>Model</b> owns config + ORT session(s). <b>Generator</b> owns search, KV cache, positions, logits and graph ID. The continuous-batching <b>Engine</b> adds scheduler + paged cache + decoder.</div></div>
+            <div class="stack-row"><div class="stack-label">ORT session</div><div class="stack-body">Loaded graph → transforms → EP partition → kernels/initializers/memory plan → feeds/fetches execution.</div></div>
+            <div class="stack-row"><div class="stack-label">WebGPU EP</div><div class="stack-body">Per-session provider configuration, kernel registry, allocators, per-graph buffer managers and captured graphs.</div></div>
+            <div class="stack-row"><div class="stack-label">WebGpuContext</div><div class="stack-body">Shared by context ID: Dawn instance/device/queue, command encoding, program cache, general/initializer buffer managers and profiler.</div></div>
+            <div class="stack-row"><div class="stack-label">Dawn / WebGPU</div><div class="stack-body">WGSL compilation, pipelines, bind groups, storage/uniform buffers, command submission and adapter features.</div></div>
+          </div>
+        </div>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>Concept</th><th>Owns</th><th>Mutable?</th><th>Nominal lifetime</th></tr></thead>
+          <tbody>
+            <tr><td>ORT environment</td><td>Runtime-wide logging, telemetry and optional global thread pools</td><td>Mostly shared infrastructure</td><td>Process</td></tr>
+            <tr><td>InferenceSession</td><td>Model, optimized graph, SessionState, EP instances, kernels, initializers</td><td>Run bookkeeping and EP state</td><td>Loaded model instance</td></tr>
+            <tr><td>WebGpuContext</td><td>Device/queue, encoder state, ProgramManager, base buffer managers, profiling</td><td><strong>Yes</strong></td><td>Context ID / ref-counted</td></tr>
+            <tr><td>GenAI Model</td><td>Config, tokenizer metadata, ORT session(s), device selection</td><td>Mostly immutable after load</td><td>Model</td></tr>
+            <tr><td>Generator / State</td><td>Sequence, search, KV, positions, logits, run options, graph ID</td><td><strong>Yes</strong></td><td>Conversation</td></tr>
+            <tr><td>Engine</td><td>Requests, scheduler, shared paged KV pool, decoder, transactions</td><td><strong>Yes</strong></td><td>Serving instance</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Configuration has three scopes</h3>
+        <div class="grid three">
+          <div class="card"><span class="tag current">Device/context</span><h3>Physical runtime</h3><p><code>deviceId</code>, external instance/device, backend, power preference, validation, buffer-cache modes, binding limit and pending-dispatch window. These configure the shared context and must agree for all users of a context ID.</p></div>
+          <div class="card"><span class="tag current">Session/EP</span><h3>Executable policy</h3><p>Preferred layout, graph capture, graph buffer-pool generations, int64, rotary/KV options, forced CPU nodes and PIX. These live on the WebGPU EP instance.</p></div>
+          <div class="card"><span class="tag current">Run/generator</span><h3>Invocation state</h3><p>Feeds/fetches, profiling, cancellation, synchronization and <code>gpu_graph_id</code>. GenAI chooses <code>-1</code> for eager execution or a stable ID for decode replay.</p></div>
+        </div>
+        <p>The implementation already distinguishes context and EP parsing, but the public option surface does not strongly enforce scope. The target design attaches a configuration fingerprint to each context and rejects incompatible re-use with an actionable diagnostic.</p>
+      </section>
+
+      <section id="session">
+        <h2>ORT session</h2>
+        <p>An ORT session is more than a model handle. It is the fully prepared executable. The core lifecycle is deliberately front-loaded so <code>Run()</code> can work from a resolved graph and materialized session state.</p>
+        <div class="flow diagram">
+          <div class="node"><b>1 · Load</b><small>Parse ONNX/ORT model, external data and metadata.</small></div>
+          <div class="node"><b>2 · Transform</b><small>Inline functions, L0/L1 optimizations and layout work.</small></div>
+          <div class="node"><b>3 · Partition</b><small>Query EP capability; assign/fuse nodes; insert copies.</small></div>
+          <div class="node"><b>4 · Finalize</b><small>Create kernels, upload/prepack initializers, plan memory.</small></div>
+          <div class="node"><b>5 · Run</b><small>Validate feeds, prepare copies, execute nodes, flush EPs.</small></div>
+        </div>
+        <p>The actual transform order is explicit: AOT function inlining; required QDQ normalization; level-1 transforms; provider partitioning; higher-level transforms; casts; then copy nodes. WebGPU capability is primarily kernel-registry driven, with special constraints and CPU-preferred-node analysis. Graph capture adds stricter partition validation: no control flow, and only WebGPU compute plus CPU shape work without memcpy nodes.<a class="cite" href="#s-session">S2</a><a class="cite" href="#s-capability">S3</a></p>
+
+        <h3>Run path</h3>
+        <div class="sequence">
+          <div><b>Choose replay or normal execution.</b> ORT reads <code>gpu_graph_id</code>. A captured ID bypasses feed validation, node execution and EP run callbacks, calling <code>ReplayGraph()</code> directly.</div>
+          <div><b>Serialize normal execution when required.</b> If any registered EP rejects concurrent run, ORT holds the session mutex around the normal graph-execution branch. The captured replay fast path currently occurs before this lock.</div>
+          <div><b>Notify providers.</b> <code>OnRunStart</code> establishes validation/profiling/capture state. Kernels run through the executor.</div>
+          <div><b>Flush and finalize.</b> <code>OnRunEnd</code> submits WebGPU work, closes capture, gathers profiling and resets routing.</div>
+          <div><b>Retry capture if necessary.</b> ORT can perform up to eight internal runs until an EP reports that the graph is captured. WebGPU currently captures on the first eligible run.</div>
+        </div>
+
+        <div class="callout"><strong>Fallback is a semantic and performance choice.</strong> In ordinary execution, unsupported nodes may run on CPU and ORT inserts transfers. In capture mode, WebGPU’s <code>ALLOW_CPU_FOR_SHAPES</code> policy only tolerates CPU shape subgraphs when no copy nodes remain. A capture-enabled model should fail at initialization rather than silently become a hybrid graph whose transfers cannot be replayed safely.</div>
+      </section>
+
+      <section id="programming">
+        <h2>WebGPU EP programming model</h2>
+        <p>The programming model has two layers. The application layer decides which session and generator owns a run and whether that run is eager, capture or replay. The kernel layer turns the selected ORT execution plan into WebGPU Programs and dispatches. Keeping these layers distinct is essential: graph capture changes execution and buffer lifetime, while multiple generators and sessions change ownership; neither implies parallel execution.</p>
+
+        <h3>Runtime objects and sharing boundaries</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Object</th><th>Cardinality and owner</th><th>Shared state</th><th>Mutable state</th></tr></thead>
+          <tbody>
+            <tr><td><code>WebGpuContext</code></td><td>One process-wide object per <code>contextId</code>; ID 0 is the default</td><td>Dawn instance/device/queue, ProgramManager and general buffer caches</td><td>Command encoder, deferred dispatch window, capture/replay mode, profiling state and pending counters</td></tr>
+            <tr><td><code>InferenceSession</code> + WebGPU EP</td><td>One executable model/session; each session has its own EP instance</td><td>References the context selected by <code>contextId</code></td><td>Session execution state, captured-graph map, per-graph buffer managers and current graph routing</td></tr>
+            <tr><td>GenAI <code>Model</code></td><td>One loaded generation model</td><td>Owns and shares decoder session(s) across its generators</td><td>Model-level configuration and device interfaces</td></tr>
+            <tr><td>GenAI <code>Generator</code>/<code>State</code></td><td>One per conversation/request; many may reference one Model</td><td>The Model and its decoder session</td><td>Tokens, search, KV/position/logit tensors, RunOptions and—when enabled—a graph ID</td></tr>
+          </tbody>
+        </table></div>
+        <p>Multiple generators are therefore cheap relative to loading another model, but multiple ORT sessions are independent executable instances. Sessions using the same context can share compiled Program artifacts; they do not currently share an optimized model plan or all initializer allocations. A session mutex protects only that session—it does not protect the shared context.<a class="cite" href="#s-session">S2</a><a class="cite" href="#s-capture">S7</a><a class="cite" href="#s-generator">S8</a></p>
+
+        <h3>Execution modes: capture disabled or enabled</h3>
+        <p>WebGPU graph capture is disabled by default and enabled on the EP with <code>enableGraphCapture=1</code>. Enabling it establishes a session capability; each Run still chooses ordinary execution or a graph annotation ID. GenAI inherits that capability into each Generator and makes the per-step choice automatically.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Mode</th><th>Run selection</th><th>What executes</th><th>Buffer/binding rule</th><th>Typical GenAI step</th></tr></thead>
+          <tbody>
+            <tr><td><span class="status now">Capture disabled</span></td><td>No capture ID is used</td><td>Validate feeds/fetches → <code>OnRunStart</code> → execute ORT plan → <code>OnRunEnd</code>/submit</td><td>Bindings are built for this Run; shapes and addresses may vary within the model contract</td><td>Prefill and every decode step use the ordinary path; model inputs are CPU-backed and copied, while KV remains on device</td></tr>
+            <tr><td><span class="status now">Enabled, eager step</span></td><td><code>gpu_graph_id=-1</code></td><td>The same ordinary Run path; no graph is created or replayed</td><td>Capture-enabled GenAI keeps model inputs on WebGPU, but this step may use non-captured allocations</td><td>Multi-token prefill and chunked prefill</td></tr>
+            <tr><td><span class="status now">First eligible capture</span></td><td>A generator-specific positive ID</td><td>Normal execution creates a per-graph buffer manager, records stable dispatches, submits the captured run, seals it, then immediately replays it</td><td>Input/output/KV handles, bind groups, capacities and specialized dispatch metadata become part of the graph contract</td><td>First one-token decode for that generator/shape</td></tr>
+            <tr><td><span class="status now">Captured replay</span></td><td>The same already-captured ID</td><td><code>InferenceSession::Run</code> jumps directly to <code>ReplayGraph()</code>; it does not execute nodes or run normal EP callbacks</td><td>Replay uses retained bind groups. Update data inside the captured buffers; do not substitute new feed/fetch buffers or exceed capacity</td><td>Later compatible one-token decodes</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Multiple generators and multiple sessions</h3>
+        <ul>
+          <li><strong>Many generators, one Model/session:</strong> each generator owns independent mutable generation state and, with capture enabled, an independent graph ID and static buffers. Their steps may be interleaved sequentially. A single Generator must have one logical owner.</li>
+          <li><strong>Parallel calls on generators sharing one session:</strong> ordinary runs are serialized because WebGPU declares <code>ConcurrentRunSupported() == false</code>. Captured replays currently bypass that serialization, so parallel replay is not a supported-safe usage pattern.</li>
+          <li><strong>Many sessions, one context:</strong> each session owns its EP and captured graphs, but sessions with the same <code>contextId</code> share the context’s encoder, dispatch queues, caches and profiling/capture state. Their separate session locks do not provide cross-session exclusion.</li>
+          <li><strong>Practical current contract:</strong> allow many sessions and generators as independently owned logical objects, but funnel every WebGPU operation sharing a context through one application execution lane. This includes eager Run, initial capture, replay, copies, profiling and graph release.</li>
+        </ul>
+
+        <h3>Kernel and Program layer</h3>
+        <p>A WebGPU <em>kernel</em> is the ORT operator boundary; a <em>Program</em> is one GPU dispatch. One kernel may assemble several Programs. <code>ComputeContext</code> exposes ORT inputs/outputs and temporary tensors, while <code>Program&lt;T&gt;</code> declares tensor bindings, metadata dependencies, uniforms/constants, workgroup size, direct or indirect dispatch, and WGSL generation.<a class="cite" href="#s-program">S4</a></p>
+
+        <pre><code>// Representative shape of a kernel implementation (illustrative)
+FooProgram program{"Foo"};
+program.CacheHint(tile_m, tile_n, use_subgroups)
+       .AddInput(ProgramInput{x, ProgramTensorMetadataDependency::TypeAndRank})
+       .AddOutput(ProgramOutput{y, ProgramTensorMetadataDependency::TypeAndShape})
+       .AddUniformVariables({alpha, logical_size})
+       .SetWorkgroupSize(64)
+       .SetDispatchGroupSize(CeilDiv(logical_size, 64));
+return context.RunProgram(program);</code></pre>
+
+        <h3>Compilation and dispatch pipeline</h3>
+        <div class="sequence">
+          <div><b>Describe specialization.</b> The cache key includes program name, explicit cache hint, workgroup/dispatch dimensionality, uniform lengths, buffer segmentation, and only the tensor type/rank/shape dependencies declared by the program.</div>
+          <div><b>Build on a miss.</b> The ProgramManager generates WGSL, a bind-group layout and a compute pipeline. Pipeline creation is asynchronous and duplicate keys in the same deferred window share one pending build.</div>
+          <div><b>Bind now, encode later.</b> Inputs, outputs and a packed uniform buffer form a bind group. The dispatch record is queued in a bounded deferred window.</div>
+          <div><b>Resolve the whole window.</b> Before encoding, all pipeline builds are completed. This prevents a failed shader build from leaving a partially encoded run.</div>
+          <div><b>Encode and submit.</b> Direct or indirect workgroups are recorded in order. A flush finishes one WebGPU command buffer and submits it to the device queue.</div>
+        </div>
+
+        <div class="grid two">
+          <div class="card"><h3>What is shared</h3><p>The ProgramManager is owned by <code>WebGpuContext</code>, so pipeline artifacts can be reused across sessions using the same context when their keys match. This is useful shared compilation infrastructure, not shared model weights.</p></div>
+          <div class="card"><h3>What specializes</h3><p>Programs opt into exactly the metadata affecting generated WGSL. Over-declaring shape dependency explodes the cache; under-declaring it reuses an incompatible pipeline. <code>CacheHint</code> carries algorithm and device decisions not inferable from tensors.</p></div>
+        </div>
+
+        <h3>Hardware-aware paths</h3>
+        <p>The current source includes subgroup FlashAttention, split/reduce decode, subgroup-matrix GEMM/MatMul and N-bit variants, adapter-aware tiling, large-buffer segmentation, f16, optional int64, and 4-bit TurboQuant KV paths. Experimental WebGPU/Dawn features are checked at runtime and must retain portable fallbacks.<a class="cite" href="#s-attention">S12</a></p>
+      </section>
+
+      <section id="walkthrough">
+        <h2>Concrete programming-model walkthrough</h2>
+        <p>This section maps the architectural terms to current code. The first sample is a simplified ORT GenAI C++ application. It is deliberately written in the safe current style: one Model, two independent Generators, and sequentially interleaved generation steps. The second sample removes the GenAI layer and exposes the underlying ORT Session, WebGPU EP, context selection and graph annotation directly.<a class="cite" href="#s-oga-sample">S15</a><a class="cite" href="#s-ort-sample">S16</a></p>
+
+        <h3>Concept-to-code map</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Concept</th><th>Application code</th><th>Concrete runtime object/path</th><th>Lifetime and sharing</th></tr></thead>
+          <tbody>
+            <tr><td>Application</td><td><code>main()</code>, <code>StartConversation()</code>, <code>Step()</code></td><td>Owns configuration, Model, tokenizer and conversations</td><td>Chooses capture policy, context ID and scheduling; does not directly encode GPU commands</td></tr>
+            <tr><td>Configuration</td><td><code>OgaConfig::Create()</code>, <code>AppendProvider()</code>, <code>SetProviderOption()</code></td><td>GenAI <code>Config</code> → decoder session options</td><td>Consumed while the Model and its sessions are created; options should be frozen afterward</td></tr>
+            <tr><td>Model</td><td><code>OgaModel::Create(*config)</code></td><td>GenAI <code>Model</code>, which creates and owns one or more <code>OrtSession</code>s</td><td>Long-lived and shared by many Generators; model/session creation is expensive</td></tr>
+            <tr><td>Session</td><td>Hidden by <code>OgaModel</code>; explicit as <code>Ort::Session</code> in the raw sample</td><td>ORT <code>InferenceSession</code>: optimized, partitioned executable graph</td><td>Shared by Generators belonging to one Model; a separate Model normally creates separate session objects</td></tr>
+            <tr><td>Execution Provider</td><td><code>AppendProvider("WebGPU")</code></td><td>One <code>WebGpuExecutionProvider</code> instance registered in each Session</td><td>Owns session-local captured-graph maps and buffer routing; calls the shared context for GPU work</td></tr>
+            <tr><td>WebGPU context</td><td><code>SetProviderOption("WebGPU", "deviceId", "0")</code></td><td><code>WebGpuContextFactory::CreateContext(0)</code> / default <code>WebGpuContext</code></td><td>Process-wide per context ID; sessions using the same ID share the device, queue, ProgramManager and general caches</td></tr>
+            <tr><td>Generator parameters</td><td><code>OgaGeneratorParams::Create()</code> and search options</td><td>GenAI <code>GeneratorParams</code></td><td>Per conversation configuration; graph-capture enablement is inherited from Model session options</td></tr>
+            <tr><td>Generator</td><td><code>OgaGenerator::Create()</code></td><td>GenAI <code>Generator</code> + model-specific <code>State</code></td><td>Per conversation: owns tokens, search, KV/position/logit tensors, RunOptions and optional graph ID; single-owner mutable object</td></tr>
+            <tr><td>Graph capture off</td><td><code>enableGraphCapture = "0"</code></td><td>Every prefill/decode calls the ordinary <code>InferenceSession::Run</code> path</td><td>Bindings are constructed per Run; model inputs are CPU-backed for GenAI WebGPU and copied as required</td></tr>
+            <tr><td>Graph capture on</td><td><code>enableGraphCapture = "1"</code></td><td>GenAI uses <code>gpu_graph_id=-1</code> for ineligible steps and a per-State positive ID for eligible decode</td><td>Prefill stays eager; the first compatible one-token decode captures; later compatible decodes replay retained bindings and stable buffers</td></tr>
+            <tr><td>Kernel/Program</td><td>Not visible to application code</td><td>ORT WebGPU kernel creates one or more <code>Program</code>s; <code>WebGpuContext::Run</code> resolves pipelines, binds and records dispatches</td><td>Program artifacts may be shared through the context; Run/capture bindings remain execution state</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Simplified whole application using current ORT GenAI C++ API</h3>
+        <p>The model directory contains the GenAI configuration and model files. This example assumes that the WebGPU EP is built in or registered by the host. Change only <code>kCapture</code> to compare capture-off and capture-on behavior.</p>
+        <pre><code>#include "ort_genai.h"
+#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;utility&gt;
+
+// One conversation owns all mutable per-request objects.
+struct Conversation {
+  std::unique_ptr&lt;OgaGeneratorParams&gt; params;
+  std::unique_ptr&lt;OgaGenerator&gt; generator;
+  std::unique_ptr&lt;OgaTokenizerStream&gt; output_stream;
+  std::string name;
+};
+
+Conversation StartConversation(
+    OgaModel&amp; model,
+    OgaTokenizer&amp; tokenizer,
+    const char* name,
+    const char* prompt) {
+  // GENERATOR PARAMS: per-conversation search policy. Capture policy is inherited
+  // from the WebGPU provider option used to construct the Model/session.
+  auto params = OgaGeneratorParams::Create(model);
+  params-&gt;SetSearchOption("max_length", 256);
+  params-&gt;SetSearchOptionBool("do_sample", false);
+
+  // GENERATOR: mutable tokens/search/KV/position/logit/graph state.
+  auto generator = OgaGenerator::Create(model, *params);
+
+  auto prompt_tokens = OgaSequences::Create();
+  tokenizer.Encode(prompt, *prompt_tokens);
+
+  // PREFILL: multi-token input. With capture enabled, GenAI still selects the
+  // eager path (gpu_graph_id = -1) for this Run.
+  generator-&gt;AppendTokenSequences(*prompt_tokens);
+
+  return Conversation{
+      std::move(params),
+      std::move(generator),
+      OgaTokenizerStream::Create(tokenizer),
+      name};
+}
+
+bool Step(Conversation&amp; conversation) {
+  if (conversation.generator-&gt;IsDone()) return false;
+
+  // DECODE:
+  //   capture off -> ordinary ORT Run every time
+  //   capture on  -> first eligible one-token step captures; later steps replay
+  conversation.generator-&gt;GenerateNextToken();
+
+  const auto token = conversation.generator-&gt;GetNextTokens()[0];
+  std::cout &lt;&lt; conversation.name &lt;&lt; ": "
+            &lt;&lt; conversation.output_stream-&gt;Decode(token) &lt;&lt; std::flush;
+  return true;
+}
+
+int main(int argc, char** argv) {
+  const char* model_directory = argc &gt; 1 ? argv[1] : "./model";
+  constexpr bool kCapture = true;  // false = graph capture disabled
+
+  // APPLICATION CONFIGURATION
+  auto config = OgaConfig::Create(model_directory);
+  config-&gt;ClearProviders();
+  config-&gt;AppendProvider("WebGPU");                         // EP
+  config-&gt;SetProviderOption("WebGPU", "deviceId", "0");  // CONTEXT
+  config-&gt;SetProviderOption(
+      "WebGPU", "enableGraphCapture", kCapture ? "1" : "0");
+
+  // MODEL: constructing it creates the internal optimized ORT decoder Session,
+  // registers a WebGPU EP in that Session, and resolves context ID 0.
+  auto model = OgaModel::Create(*config);
+  auto tokenizer = OgaTokenizer::Create(*model);
+
+  // MANY GENERATORS may share one Model and its Session. Each owns independent
+  // conversation state and (when enabled) a distinct captured-graph ID/buffers.
+  auto alice = StartConversation(
+      *model, *tokenizer, "alice", "Explain graph capture briefly.");
+  auto bob = StartConversation(
+      *model, *tokenizer, "bob", "Explain WebGPU buffers briefly.");
+
+  // CURRENT SAFE SCHEDULING MODEL: interleave generators, but do not call them
+  // concurrently. Both eventually call the same decoder Session/context.
+  while (!alice.generator-&gt;IsDone() || !bob.generator-&gt;IsDone()) {
+    Step(alice);
+    Step(bob);
+  }
+
+  std::cout &lt;&lt; '\n';
+  return 0;
+}</code></pre>
+
+        <div class="callout warning"><strong>Why the loop is sequential:</strong> the sample demonstrates multiple Generators, not concurrent Run. Each Generator is single-owner. Ordinary Runs sharing the Session are serialized today; captured replay bypasses that session lock, and sessions sharing context ID 0 still share mutable context state. Use a single application execution lane until the concurrent-run design is implemented.</div>
+
+        <h3>What the whole application expands into</h3>
+        <pre><code>main()
+└─ OgaConfig
+   ├─ provider = "WebGPU"
+   ├─ deviceId = 0                         // selects WebGpuContext
+   └─ enableGraphCapture = 0 or 1          // session/EP capability
+      │
+      └─ OgaModel::Create(config)
+         └─ GenAI Model
+            └─ OrtSession / InferenceSession
+               ├─ optimized + partitioned graph
+               └─ WebGpuExecutionProvider
+                  └─ WebGpuContextFactory::CreateContext(0)
+                     ├─ Dawn device + queue
+                     ├─ ProgramManager
+                     └─ general BufferManager
+
+OgaGenerator::Create(model, params)         // once per conversation
+└─ Generator → model-specific State
+   ├─ search + sequence + KV + positions + logits
+   ├─ capture off: no graph annotation
+   └─ capture on: random positive graph ID
+      │
+      ├─ AppendTokenSequences(prompt)
+      │  └─ State::Run(session, false)      // eager prefill; ID = -1
+      │
+      └─ GenerateNextToken()
+         └─ State::Run(session, true)       // eligible one-token decode
+            └─ InferenceSession::Run
+               ├─ ID not captured → execute kernels → capture → replay
+               └─ ID captured     → ReplayGraph(ID)</code></pre>
+
+        <h3>Raw ORT view: Session, EP, context and capture are explicit</h3>
+        <p>GenAI normally constructs these objects internally. The following condensed fragment mirrors the current ORT WebGPU graph-capture test. EP-device registration and error handling are omitted, but the Session, provider options, stable GPU bindings and per-Run graph annotation are concrete current APIs.</p>
+        <pre><code>// webgpu_ep_device comes from WebGPU plugin-EP registration.
+Ort::SessionOptions session_options;
+std::unordered_map&lt;std::string, std::string&gt; webgpu_options{
+    {"deviceId", "0"},            // WebGpuContext ID; shared by matching sessions
+    {"enableGraphCapture", "1"}  // use "0" to disable capture
+};
+session_options.AppendExecutionProvider_V2(
+    env, {webgpu_ep_device}, webgpu_options);               // WebGPU EP
+
+Ort::Session session(env, ORT_TSTR("decoder.onnx"), session_options);
+
+// Capture requires stable GPU buffer handles. Allocate once and bind once.
+auto gpu_memory_info = webgpu_ep_device.GetMemoryInfo(OrtDeviceMemoryType_DEFAULT);
+auto gpu_allocator = env.GetSharedAllocator(gpu_memory_info);
+std::vector&lt;int64_t&gt; shape{3, 2};
+Ort::Value input = Ort::Value::CreateTensor&lt;float&gt;(
+    gpu_allocator, shape.data(), shape.size());
+Ort::Value output = Ort::Value::CreateTensor&lt;float&gt;(
+    gpu_allocator, shape.data(), shape.size());
+
+Ort::IoBinding binding(session);
+binding.BindInput("X", input);
+binding.BindOutput("Y", output);
+
+Ort::MemoryInfo cpu_memory =
+    Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
+auto upload = [&amp;](std::initializer_list&lt;float&gt; values) {
+  std::vector&lt;float&gt; cpu_values(values);
+  Ort::Value cpu_tensor = Ort::Value::CreateTensor&lt;float&gt;(
+      cpu_memory, cpu_values.data(), cpu_values.size(), shape.data(), shape.size());
+  Ort::ThrowOnError(env.CopyTensor(cpu_tensor, input, nullptr));
+};
+
+Ort::RunOptions run_options;
+run_options.AddConfigEntry("gpu_graph_id", "7"); // graph namespace is this Session
+
+upload({1, 2, 3, 4, 5, 6});                      // CPU → existing GPU buffer
+binding.SynchronizeInputs();
+session.Run(run_options, binding);                // first ID 7 Run: capture
+
+upload({2, 3, 4, 5, 6, 7});                      // same WGPUBuffer handle
+binding.SynchronizeInputs();
+session.Run(run_options, binding);                // same ID: replay retained bindings
+
+// To force ordinary execution in a capture-enabled Session:
+run_options.AddConfigEntry("gpu_graph_id", "-1");
+session.Run(run_options, binding);</code></pre>
+
+        <div class="grid two">
+          <div class="card"><h3>Capture disabled</h3><p>The application may supply new compatible tensor objects on each Run. ORT validates feeds/fetches, executes the plan, builds bind groups for that Run and submits through the EP/context.</p></div>
+          <div class="card"><h3>Capture enabled</h3><p>A graph ID selects a retained binding set. Update the contents of the same allocated buffers. Replacing <code>input</code>/<code>output</code> objects and reusing ID 7 does not retarget the captured bind groups.</p></div>
+        </div>
+      </section>
+
+      <section id="generator">
+        <h2>Generator and serving engine</h2>
+        <h3>Legacy generator object model</h3>
+        <div class="diagram">
+          <div class="diagram-title">One loaded model, many stateful generators</div>
+          <div class="flow" style="grid-template-columns:1.15fr repeat(3,1fr)">
+            <div class="node"><b>GenAI Model</b><small>Config, device interfaces, tokenizer metadata, shared decoder OrtSession.</small></div>
+            <div class="node"><b>GeneratorParams</b><small>Search policy, graph-capture flag, max length, beams, sampling.</small></div>
+            <div class="node"><b>Generator</b><small>Search + decoding strategy + State; mutable API state machine.</small></div>
+            <div class="node"><b>State</b><small>KV cache, positions, input IDs, logits, RunOptions and graph ID.</small></div>
+          </div>
+        </div>
+        <p><code>AppendTokens()</code> performs prefill and produces logits. <code>GenerateNextToken()</code> applies the decoding strategy, samples or accepts tokens, appends them and advances state. Decode runs are capture-eligible only when the model input sequence length is one; chunked prefill explicitly disables capture. The model session is shared, while each generator’s buffers and capture annotation are independent.<a class="cite" href="#s-generator">S8</a><a class="cite" href="#s-state">S9</a></p>
+
+        <div class="flow diagram">
+          <div class="node"><b>Append prompt</b><small>Validate, pad/upload input IDs, initialize per-generator state.</small></div>
+          <div class="node"><b>Prefill Run</b><small>Execute N tokens eagerly; populate KV; obtain last logits.</small></div>
+          <div class="node"><b>Sample</b><small>CPU for WebGPU today; CUDA/TRT-RTX may score on device.</small></div>
+          <div class="node"><b>Decode Run</b><small>One-token input; update KV/position; capture or replay.</small></div>
+          <div class="node"><b>Stop / rewind</b><small>EOS/max length/cancel, or rewind supported state.</small></div>
+        </div>
+
+        <h3>Continuous-batching engine</h3>
+        <p>The new Engine is the better serving boundary. It separates scheduling, cache management and model execution; packs variable-length tokens across requests; and shares a paged KV pool. Dynamic scheduling marks capture eligible only when every selected request contributes exactly one decode token. Graph IDs are derived from batch size and a power-of-two block-table width, reducing the number of captured shapes.<a class="cite" href="#s-engine">S10</a></p>
+
+        <div class="grid three">
+          <div class="card"><h3>Scheduler</h3><p>Admits requests, reaps completed work, selects a capacity-fitting batch, calculates packed offsets and emits a transactional <code>StepPlan</code>.</p></div>
+          <div class="card"><h3>Paged cache</h3><p>Preallocates per-layer block pools, reserves blocks transactionally, emits padded block tables and shares the cache across requests.</p></div>
+          <div class="card"><h3>Model executor</h3><p>Builds varlen decoder IO, selects a capture bucket, runs the shared decoder session, then attaches decoder state for batched sampling.</p></div>
+        </div>
+        <div class="callout warning"><strong>Concurrency vocabulary matters.</strong> “Continuous batching” means multiple logical requests advance in one serialized engine step. It does not mean <code>Engine::Step</code>, <code>AddRequest</code> or a Generator can be called concurrently from arbitrary threads.</div>
+      </section>
+
+      <section id="buffers">
+        <h2>Buffer management</h2>
+        <p>ORT represents a WebGPU allocation as a <code>WGPUBuffer</code> handle carried through the tensor’s data pointer field; it is not CPU-addressable memory. The allocator asks its current BufferManager on every allocation/free, allowing the EP to route ordinary runs to the context manager and captured runs to a per-graph manager.<a class="cite" href="#s-buffer">S5</a></p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>Lifetime</th><th>Current owner</th><th>Examples</th><th>Required rule</th></tr></thead>
+          <tbody>
+            <tr><td>Device/context</td><td>WebGpuContext</td><td>Device/queue, pipeline cache, general cache managers, initializer allocation arena</td><td>Never assume a session lock protects it.</td></tr>
+            <tr><td>Model/session</td><td>InferenceSession / SessionState / WebGPU EP</td><td>Initializer tensors, kernels, prepacked weights, memory plan</td><td>Immutable after initialization except documented EP caches.</td></tr>
+            <tr><td>Generator/graph</td><td>GenAI State + per-graph BufferManager</td><td>Dense KV, input IDs, positions, logits, captured bind groups, uniforms/intermediates</td><td>Stable handle and sufficient capacity for every replay.</td></tr>
+            <tr><td>Engine</td><td>PagedKeyValueCache</td><td>Shared per-layer K/V block pools, persistent block-table buffer</td><td>Reservation commits only after successful model execution.</td></tr>
+            <tr><td>Run/execute</td><td>Execution frame / BufferManager</td><td>Temporary outputs, staging, query resolve, uncaptured uniforms</td><td>Release only after ordered queue submission makes reuse safe.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Current cache modes</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Mode</th><th>Behavior</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td>Disabled</td><td>Normalize size, allocate and release immediately.</td><td>Resources where caching offers no value.</td></tr>
+            <tr><td>LazyRelease</td><td>Hold frees until the next refresh, then release.</td><td>Avoid premature handle release inside a submission interval.</td></tr>
+            <tr><td>Simple</td><td>Exact-size cache; freed buffers become reusable on refresh.</td><td>Uniform/default buffers with predictable sizes.</td></tr>
+            <tr><td>Bucket</td><td>Round to configured buckets with per-bucket retention limits.</td><td>Default storage-buffer reuse across ordinary runs.</td></tr>
+            <tr><td>Graph</td><td>Bucketed, unbounded-for-graph retention; reusable within/across captured runs.</td><td>Captured storage buffers requiring stable residency.</td></tr>
+            <tr><td>GraphSimple</td><td>Exact-size; buffers touched during capture are retained separately and not recycled inside the capture.</td><td>Captured uniform buffers referenced by bind groups.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Captured-graph buffer recycling</h3>
+        <p>Each graph annotation gets an isolated storage/uniform manager. When GenAI destroys the generator, <code>SessionReleaseCapturedGraph</code> releases retained bind groups and donates cached buffers into the EP’s bounded <code>SessionBufferPool</code>. A later generator on the same session can seed its graph manager from the newest pool generation. The pool implementation assumes Run and release are serialized and relies on queue ordering rather than a per-buffer fence. Because captured replay currently bypasses the session Run lock, that assumption is not sufficient under concurrent replay/release and must be fixed before such concurrency is supported.</p>
+
+        <div class="formula">dense KV bytes ≈ 2 × layers × batch_beam × kv_heads × head_dim × capacity_tokens × bytes_per_element
+paged KV bytes = 2 × layers × blocks × block_size × kv_heads × head_dim × bytes_per_element
+capture residency = stable IO + KV + captured intermediates/uniforms + bind groups × shape buckets</div>
+
+        <h3>Target memory policy</h3>
+        <ul>
+          <li>Tag every allocation with <b>device, compiled-model, session, generator, graph, step</b> lifetime and an owner ID.</li>
+          <li>Maintain hard and soft device budgets. Hard-limit admission; soft-limit triggers cache trimming and generator eviction.</li>
+          <li>Evict in order: completed step temporaries → unused pipeline variants → retired graph buffers → idle generator KV → model weights only when unloading the model.</li>
+          <li>Do not count bucket capacity as requested tensor size; expose requested, committed and resident bytes separately.</li>
+          <li>Use persistent buffers with capacity views for capture; shapes may shrink within capacity, handles must not move.</li>
+          <li>Keep readback explicit. A D→H copy flushes, stages, maps and waits; it is a synchronization point, not an innocent memcpy.</li>
+        </ul>
+      </section>
+
+      <section id="capture">
+        <h2>Graph capture and replay</h2>
+        <p>WebGPU “graph capture” is an ORT-managed replay facility. The EP does not retain a finished WebGPU command buffer. It retains replay-ready dispatch records containing the compute pipeline, bind group, direct/indirect workgroup information and optional profiling metadata; replay re-encodes those dispatches into a new command buffer.<a class="cite" href="#s-capture">S7</a></p>
+
+        <div class="diagram">
+          <div class="diagram-title">State machine for one graph annotation ID</div>
+          <div class="flow">
+            <div class="node"><b>Unseen ID</b><small>Create per-graph manager; optionally seed buffers from session pool.</small></div>
+            <div class="node"><b>Capturing</b><small>Normal kernels allocate stable buffers and append dispatch records.</small></div>
+            <div class="node"><b>Seal</b><small>Resolve pipelines, encode/submit capture run, detach record storage.</small></div>
+            <div class="node"><b>Immediate replay</b><small>WebGPU marks captured and replays once before first eligible Run returns.</small></div>
+            <div class="node"><b>Replay / release</b><small>ORT bypasses normal graph; release drops bind groups and donates buffers.</small></div>
+          </div>
+        </div>
+
+        <h3>Capture contract</h3>
+        <div class="grid two">
+          <div class="card"><h3>Must remain invariant</h3><ul><li>All captured buffer handles and bind-group layouts.</li><li>Program specialization and pipeline key.</li><li>Direct dispatch grids, unless indirect dispatch is used.</li><li>Any uniform value baked into the retained uniform buffer.</li><li>Tensor capacities and alias relationships.</li></ul></div>
+          <div class="card"><h3>May change safely</h3><ul><li>Data written into stable input/KV/output buffers.</li><li>Values read by shaders from storage/uniform buffers when those buffers are deliberately updated.</li><li>Indirect workgroup counts stored in the captured indirect buffer.</li><li>Logical views whose byte range stays within the captured capacity.</li></ul></div>
+        </div>
+
+        <p>GenAI supplies a random positive graph ID per legacy generator and releases it in <code>State::~State</code>. Decode tensors use static allocations and shared past/present KV is mandatory, preventing addresses from changing. The Engine instead derives deterministic IDs from batch size and bucketed block-table width, and owns oversized graph buffers for repeated shapes.</p>
+
+        <div class="callout danger"><strong>PagedAttention capture is not complete on WebGPU.</strong> The newly landed v1 path performs a blocking metadata readback per PagedAttention node to derive maximum Q/KV lengths, direct dispatch grids and scratch sizes. Those host-derived values would be frozen during capture. The documented Phase 2 fix is to pass bounded <code>attention_metadata</code>, build sequence metadata on GPU, allocate persistent capacity-sized scratch, and switch all affected Programs to indirect dispatch.<a class="cite" href="#s-paged">S13</a></div>
+
+        <h3>Capture key and validation in the target design</h3>
+        <pre><code>GraphSignature = hash(
+  compiled_model_id,
+  device_feature_fingerprint,
+  batch_bucket,
+  token_bucket,
+  block_table_bucket,
+  dtype_and_quantization,
+  pipeline_specializations,
+  binding_schema,
+  capacity_contract_version
+)</code></pre>
+        <ul>
+          <li>A replay request that exceeds any capacity is routed to eager execution or a larger bucket; never truncate or reuse optimistically.</li>
+          <li>Graph IDs become internal handles mapped from <code>GraphSignature</code>, avoiding random-ID collision and making diagnostics reproducible.</li>
+          <li>Capture metadata records resident bytes, last use, replay count and invalidation reason.</li>
+          <li>Profiling capture and ordinary capture must not share records if profiling changes query/buffer bindings.</li>
+          <li>The first eligible run currently executes once for capture and once for immediate replay; surface this warm-up cost in telemetry and benchmarks.</li>
+        </ul>
+      </section>
+
+      <section id="threading">
+        <h2>Thread safety and concurrency</h2>
+        <p>Thread safety must be stated per object and per phase. A thread-safe ORT call does not make the caller’s Generator state safe, and a per-session mutex does not protect the process-wide default WebGPU context.</p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>Scenario</th><th>Current conclusion</th><th>Reason</th><th>Target contract</th></tr></thead>
+          <tbody>
+            <tr><td>Load/initialize one session</td><td><span class="status now">Serialized</span></td><td><code>session_mutex_</code> guards model/session initialization.</td><td>Initialization remains exclusive.</td></tr>
+            <tr><td>Concurrent normal Run on one WebGPU session</td><td><span class="status now">Safe by serialization</span></td><td>WebGPU returns false for concurrent run; ORT locks normal graph execution.</td><td>Preserve until per-run encoding state exists.</td></tr>
+            <tr><td>Concurrent captured replay on one session</td><td><span class="status now">Unsafe / gap</span></td><td>The replay fast path calls <code>ReplayGraph()</code> before the normal-run session lock is acquired.</td><td>Context lane must cover replay; later add per-run recording state.</td></tr>
+            <tr><td>Release graph vs Run/replay</td><td><span class="status now">Partial</span></td><td>Release shares the mutex with normal Run, but that mutex does not synchronize an in-flight replay.</td><td>Graph ref-count, context-lane retirement and GPU completion token.</td></tr>
+            <tr><td>Concurrent calls on one Generator</td><td><span class="status now">Unsupported</span></td><td>Sequence, search, buffers, flags and RunOptions mutate without a generator mutex.</td><td>Single-owner API; optional executor affinity, not hidden locking.</td></tr>
+            <tr><td>Generators sharing one Model</td><td><span class="status now">Not end-to-end guaranteed</span></td><td>Normal ORT Runs serialize, captured replays do not, and GenAI preparation plus globally shared DeviceInterface scratch can occur outside the session lock.</td><td>Route all device work/preparation through the model/context lane.</td></tr>
+            <tr><td>Different sessions, same context ID</td><td><span class="status now">Unsafe / unproven</span></td><td>They share mutable encoder, deferred window, program map, profiling and queue with no context run lock.</td><td>One submission lane per context; later permit parallel recording with locked caches.</td></tr>
+            <tr><td>Engine API from multiple threads</td><td><span class="status now">Unsupported</span></td><td>Request pools, StepPlan, cache reservations and ready queues mutate directly.</td><td>Thread-safe ingress queue; one engine control loop.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Recommended execution model</h3>
+        <div class="diagram">
+          <div class="diagram-title">Thread-safe without pretending the GPU queue is parallel</div>
+          <div class="flow" style="grid-template-columns:repeat(4,minmax(170px,1fr))">
+            <div class="node"><b>Caller threads</b><small>Submit immutable run/request descriptions; never touch device runtime state.</small></div>
+            <div class="node"><b>Ingress queues</b><small>MPSC queues for generator jobs, engine requests, cancellation and release.</small></div>
+            <div class="node"><b>Context lane</b><small>Orders preparation, allocation routing, encoding, capture mutation and submit.</small></div>
+            <div class="node"><b>WebGPU queue</b><small>Provides GPU timeline ordering; completion tokens retire resources.</small></div>
+          </div>
+        </div>
+        <ol>
+          <li><b>Phase 1:</b> add a context-wide non-recursive execution mutex/lane covering <code>OnRunStart → Run → OnRunEnd</code>, replay, copies and captured-graph release across all sessions.</li>
+          <li><b>Phase 2:</b> split per-run mutable state (<code>CommandEncoder</code>, deferred dispatches, profiling batch) from shared caches. Permit parallel CPU/WGSL preparation; lock ProgramManager insertion and buffer-cache mutation.</li>
+          <li><b>Phase 3:</b> allow multiple recording contexts that submit to the same queue, with explicit resource dependency tokens. Keep graph mutation and eviction serialized.</li>
+        </ol>
+        <p>Lock order is <code>device/context → compiled model → session → generator/graph</code>. Never wait for a GPU completion while holding a higher-level model or generator lock; use a completion token and retire resources on the context lane.</p>
+      </section>
+
+      <section id="limitations">
+        <h2>Current implementation limitations</h2>
+        <p>The current implementation supports eager execution, graph capture, multiple generators and multiple sessions, but those features do not yet compose into unrestricted concurrent execution. The limitations below are part of the programming contract for the pinned source baseline, not merely performance opportunities.</p>
+
+        <div class="table-wrap"><table>
+          <thead><tr><th>Area</th><th>Current limitation</th><th>Consequence</th><th>Required application behavior</th></tr></thead>
+          <tbody>
+            <tr><td>Same-session concurrency</td><td>WebGPU explicitly rejects concurrent normal Run. ORT serializes the normal branch, but the already-captured replay branch calls <code>ReplayGraph()</code> before acquiring that session lock.</td><td>Concurrent eager runs wait; concurrent replays can race each other or race capture/release.</td><td>Serialize every operation on a session, including replay and graph destruction.</td></tr>
+            <tr><td>Cross-session concurrency</td><td>Sessions with the same <code>contextId</code> share mutable <code>WebGpuContext</code> execution state without a context-wide Run lock.</td><td>Two independent session mutexes cannot protect the shared command encoder, deferred dispatches, capture pointer/state, profiling counters or buffer caches.</td><td>Use one execution lane per context, not one lane per session.</td></tr>
+            <tr><td>Generator concurrency</td><td>A Generator mutates search state, sequences, KV, positions, logits, RunOptions and graph lifetime without internal serialization.</td><td>Calling one Generator from multiple threads is unsupported. Different generators are logically independent but still converge on their shared session/context.</td><td>Give each Generator a single owner; schedule different generators through the shared context lane or batch them with Engine.</td></tr>
+            <tr><td>Replay bindings</td><td>Capture retains concrete bind groups and buffer handles. The replay fast path skips feed/fetch validation and does not rebuild bindings from the current Run arguments.</td><td>Passing a different tensor object with the same shape does not redirect replay; the captured buffer is still used. Address or layout changes require recapture.</td><td>Keep captured buffers alive and update their contents in place. Treat the graph ID as a binding contract, not only a control-flow cache key.</td></tr>
+            <tr><td>Dynamic shapes</td><td>Direct dispatch sizes, specialized WGSL metadata, uniform buffers and buffer ranges can be frozen by capture. Indirect dispatch is available but not used by every Program.</td><td>One captured graph is not generally valid for arbitrary batch, sequence or capacity changes.</td><td>Use explicit shape/capacity buckets; fall back to eager execution when a request exceeds the captured signature.</td></tr>
+            <tr><td>Capture coverage</td><td>GenAI legacy capture is aimed at one-token decode. Multi-token and chunked prefill are eager. ORT capture rejects control flow and graphs needing unsupported CPU/GPU copies.</td><td>Enabling graph capture does not make the whole generation lifecycle replayable.</td><td>Plan for eager prefill plus captured decode, and validate model partitioning at session initialization.</td></tr>
+            <tr><td>Capture warm-up</td><td>The first eligible run captures and submits the dispatches, then <code>OnRunEnd</code> immediately replays the sealed graph.</td><td>The first captured step pays pipeline resolution, graph allocation/recording and an additional replay submission.</td><td>Warm up before latency measurement and report first-capture cost separately from steady-state replay.</td></tr>
+            <tr><td>Graph identity/lifetime</td><td>Legacy GenAI chooses a random positive integer per Generator and releases that graph from the State destructor. The session map has no collision-proof typed handle or in-flight graph reference.</td><td>A rare ID collision can alias state, and destruction concurrent with replay is unsafe.</td><td>Keep allocation/use/release ordered; the target design replaces random IDs with session-owned handles derived from validated signatures.</td></tr>
+            <tr><td>PagedAttention</td><td>The current WebGPU v1 path performs host metadata readback and derives scratch sizes and direct dispatch dimensions on the CPU.</td><td>Those values are unsuitable for general dynamic graph replay; Engine capture with paged KV is incomplete.</td><td>Run this path eagerly until GPU metadata generation, persistent capacity-sized scratch and indirect dispatch are complete.</td></tr>
+            <tr><td>Memory scaling</td><td>Each captured graph retains commands, bind groups and stable buffers. Per-session pool generations recycle allocations, but there is no context-wide byte budget, admission control or graph eviction policy.</td><td>Many generators/shape buckets can retain substantial device memory. Multiple sessions also repeat model/session resources even when pipelines are shared.</td><td>Bound active generators and buckets, release graphs promptly and monitor resident memory externally.</td></tr>
+            <tr><td>Synchronization and profiling</td><td>Device-to-host readback flushes and waits. Replay ignores the requested <code>sync</code> choice, and run-level replay profiling remains marked TODO.</td><td>Hidden readbacks can dominate latency, and replay observability differs from ordinary Run.</td><td>Avoid per-token readback except required logits/sampling data; benchmark with explicit synchronization and separate eager/replay telemetry.</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout danger"><strong>Safe baseline today:</strong> multiplicity is supported; parallelism is not generally guaranteed. Create multiple sessions and generators as needed, but serialize all WebGPU work that reaches the same context. Capture only stable one-token decode signatures, keep every captured allocation alive, and release a graph only after its last replay is ordered.<a class="cite" href="#s-thread">S6</a><a class="cite" href="#s-capture">S7</a><a class="cite" href="#s-state">S9</a><a class="cite" href="#s-paged">S13</a></div>
+      </section>
+
+      <section id="target">
+        <h2>Target ORT WebGPU architecture</h2>
+        <p>The target is evolutionary: no new public abstraction is required to make today’s C/C++ session API correct. Internally, however, ownership should become explicit so native, web, legacy Generator and Engine paths can share the same runtime safely.</p>
+
+        <div class="stack diagram">
+          <div class="stack-row"><div class="stack-label">WebGpuDeviceRuntime</div><div class="stack-body"><span class="tag proposed">New boundary</span> Dawn instance/device/queue, context lane, feature fingerprint, ProgramCache, memory budget, completion/retirement queue and profiling clock.</div></div>
+          <div class="stack-row"><div class="stack-label">CompiledModel</div><div class="stack-body"><span class="tag proposed">Shareable</span> Resolved/partitioned plan, immutable initializer set, prepack artifacts, pipeline specialization manifest and model memory account.</div></div>
+          <div class="stack-row"><div class="stack-label">ExecutionSession</div><div class="stack-body"><span class="tag proposed">Cheap</span> Binding namespace, run/capture policy, shape profiles and per-session telemetry. References CompiledModel; does not duplicate weights.</div></div>
+          <div class="stack-row"><div class="stack-label">GeneratorContext</div><div class="stack-body"><span class="tag proposed">Per request</span> Search, dense/paged KV reservation, position/logit buffers, capture signatures, cancellation and conversation memory account.</div></div>
+          <div class="stack-row"><div class="stack-label">BatchEngine</div><div class="stack-body"><span class="tag proposed">Serving</span> Thread-safe ingress, single control loop, scheduler/admission, packed IO, paged cache, capture-bucket selection and transactional commit.</div></div>
+        </div>
+
+        <h3>Normative decisions</h3>
+        <div class="grid two">
+          <div class="decision"><span class="number">D1</span><h3>ORT remains the graph authority</h3><p>Optimization, partitioning, fallback, operator schemas and session ABI stay in ORT. GenAI supplies LLM state and scheduling, not a parallel graph runtime.</p></div>
+          <div class="decision"><span class="number">D2</span><h3>Device runtime owns safety</h3><p>Any two sessions with the same context ID share one scheduling and synchronization domain. No reliance on unrelated session mutexes.</p></div>
+          <div class="decision"><span class="number">D3</span><h3>Immutable artifacts are shareable</h3><p>Pipelines, optimized plans and read-only initializer allocations may be shared by a verified key; mutable intermediates, bind groups and KV never are.</p></div>
+          <div class="decision"><span class="number">D4</span><h3>Generator is single-owner</h3><p>Generation methods are ordered operations on one state machine. Cross-thread use goes through an executor/queue rather than ad hoc internal locks.</p></div>
+          <div class="decision"><span class="number">D5</span><h3>Capture is capacity-based</h3><p>Every capture declares binding schema and maximum capacities. Indirect dispatch carries dynamic counts; exceeding capacity selects another bucket.</p></div>
+          <div class="decision"><span class="number">D6</span><h3>Compilation policy is hybrid</h3><p><code>lazy</code> remains universal; <code>warmup</code> compiles a manifest; <code>eager</code> is allowed only when the specialization set is finite.</p></div>
+          <div class="decision"><span class="number">D7</span><h3>Memory is budgeted</h3><p>Device resident bytes are charged to model, generator, graph and cache owners. Admission and eviction use the same accounting.</p></div>
+          <div class="decision"><span class="number">D8</span><h3>Async is first-class</h3><p>A future/promise run surface prevents browser main-thread stalls and allows CPU preparation to overlap submitted GPU work without weakening ordering.</p></div>
+        </div>
+
+        <h3>Program-cache sharing key</h3>
+        <p>The current shader key is necessary but not sufficient for persistence or cross-model sharing. The target key adds ORT/EP build ID, Dawn/backend version, adapter/vendor/architecture, enabled features/toggles, limit fingerprint, shader generator version and validation/robustness mode. Cache entries with different fingerprints never alias.</p>
+
+        <h3>Observability requirements</h3>
+        <ul>
+          <li>Per Run: queue wait, pipeline-build wait, encode, submit, readback wait, CPU/GPU duration and replay/eager reason.</li>
+          <li>Per cache: hit/miss/build-in-flight, resident bytes, retained-but-free bytes, eviction and key cardinality.</li>
+          <li>Per generator: TTFT, inter-token latency distribution, KV bytes, capture warm-up, capture hits and recaptures.</li>
+          <li>Every forced synchronization has a named reason and call site.</li>
+        </ul>
+      </section>
+
+      <section id="api">
+        <h2>Proposed programming surface</h2>
+        <p>This is an architectural sketch, not an ABI proposal. Existing <code>OrtSession</code> remains valid; the higher-level API makes sharing and state ownership explicit.</p>
+        <pre><code>auto device = WebGpuDeviceRuntime::Create({
+  .backend = Backend::Auto,
+  .memory_budget = 6_GiB,
+  .execution_lane = ExecutionLane::Serialized,
+  .pipeline_cache = "ort-webgpu.cache"
+});
+
+auto model = CompiledModel::Load(device, "model.onnx", {
+  .optimization = OptimizationLevel::All,
+  .compile_policy = CompilePolicy::WarmupManifest,
+  .capture = CapturePolicy::DecodeBuckets
+});
+
+auto session = model->CreateExecutionSession();     // cheap: shares weights + pipelines
+auto generator = session->CreateGenerator({
+  .max_length = 4096,
+  .kv_cache = KvCachePolicy::Dense,
+  .sampling = {.temperature = 0.8f, .top_p = 0.95f}
+});
+
+co_await generator->Prefill(prompt_tokens);
+while (!generator->Done()) {
+  Token token = co_await generator->DecodeOne();
+  stream.Send(token);
+}</code></pre>
+
+        <h3>Compatibility mapping</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Proposed concept</th><th>Maps to current code</th><th>Change</th></tr></thead>
+          <tbody>
+            <tr><td>WebGpuDeviceRuntime</td><td>WebGpuContext + factory</td><td>Add context lane, budget, fingerprint and per-run state split.</td></tr>
+            <tr><td>CompiledModel</td><td>InferenceSession initialization + shared ProgramManager</td><td>Extract shareable immutable artifacts; preserve ORT session facade.</td></tr>
+            <tr><td>ExecutionSession</td><td>InferenceSession + WebGpuExecutionProvider</td><td>Reference shared artifacts; own run/capture namespace.</td></tr>
+            <tr><td>GeneratorContext</td><td>GenAI Generator + State</td><td>Formalize single-owner executor and memory account.</td></tr>
+            <tr><td>BatchEngine</td><td>GenAI Engine</td><td>Add thread-safe ingress and make capture/PagedAttention WebGPU-capable.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="roadmap">
+        <h2>Roadmap and validation</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Phase</th><th>Deliverable</th><th>Exit criteria</th></tr></thead>
+          <tbody>
+            <tr><td>0 · Baseline</td><td>Document ownership/options; add counters for buffer residency, pipeline builds, capture and waits.</td><td>One trace explains first-token and steady-state latency without inference.</td></tr>
+            <tr><td>1 · Safety</td><td>Context-wide execution lane covering sessions, copy, replay and graph release; remove unsynchronized global scratch.</td><td>Stress tests with many sessions/generators are deterministic under sanitizers and validation.</td></tr>
+            <tr><td>2 · Artifacts</td><td>Device fingerprint, persistent pipeline cache, bounded warm-up manifest, immutable model artifact cache.</td><td>Second equivalent model load avoids shader compilation and does not duplicate verified weights.</td></tr>
+            <tr><td>3 · Capture</td><td>GraphSignature, capacity buffers, indirect dispatch, explicit release/retirement; WebGPU PagedAttention Phase 2.</td><td>Dynamic decode buckets replay correctly across lengths with zero per-layer D→H metadata reads.</td></tr>
+            <tr><td>4 · Multi-tenant</td><td>Unified memory budget, admission, idle-generator eviction and capture-cache LRU.</td><td>Memory pressure produces bounded latency or explicit rejection—never device loss/OOM surprise.</td></tr>
+            <tr><td>5 · Async/web</td><td>Future/promise run/generator surface, worker-friendly browser integration and nonblocking profiling export.</td><td>No blocking readback on the browser main thread in steady-state generation.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Required test matrix</h3>
+        <div class="grid three">
+          <div class="card"><h3>Correctness</h3><p>Dynamic shapes, CPU shape nodes, aliasing, zero tokens, dense/paged KV, int4 KV, rewind, cancellation and device loss.</p></div>
+          <div class="card"><h3>Capture</h3><p>Same/different IDs, bucket overflow, static address reuse, release during queued work, profiling, recapture and model teardown.</p></div>
+          <div class="card"><h3>Concurrency</h3><p>Same session, shared model, distinct sessions on context 0, custom context IDs, Engine ingress and simultaneous copies.</p></div>
+          <div class="card"><h3>Memory</h3><p>Requested vs resident bytes, bucket fragmentation, graph-pool generations, eviction ordering and repeated generator churn.</p></div>
+          <div class="card"><h3>Performance</h3><p>Cold/warm TTFT, inter-token latency, pipeline misses, queue occupancy, readback count and capture replay overhead.</p></div>
+          <div class="card"><h3>Portability</h3><p>D3D12/Vulkan/Metal paths through Dawn; Intel/NVIDIA/AMD/Apple/Qualcomm subgroup widths and feature fallbacks.</p></div>
+        </div>
+
+        <h3>Benchmark rules</h3>
+        <p>Report cold load, first prefill, first decode/capture and steady decode separately. Fix model bytes, quantization, prompt/output length, sampling, adapter, power mode, validation, buffer-cache config and synchronization. Measure CPU wall time and calibrated GPU timestamps; never compare a synchronized path with an asynchronously submitted path as if they were the same latency.</p>
+      </section>
+
+      <section id="questions">
+        <h2>Open questions</h2>
+        <details open><summary>Can immutable initializers truly be shared across ORT sessions?</summary><p>The current context-level initializer BufferManager shares allocation infrastructure, not content identity. A compiled-model cache needs content-addressed initializer ownership, model-package lifetime rules, external-data/mmap semantics and safe teardown before claiming weight deduplication.</p></details>
+        <details><summary>Should capture retain bind groups or binding recipes?</summary><p>Bind groups make replay cheap but freeze buffer handles. Binding recipes enable cheap execution contexts and eviction/restore but add per-replay creation or a second cache. The likely answer is both: immutable bind-group templates plus per-generator instantiated sets.</p></details>
+        <details><summary>Where should sampling run for WebGPU?</summary><p>Today GenAI selects CPU scoring for WebGPU, introducing logits readback. A device sampling path can remove bandwidth and synchronization, but must preserve deterministic seeded sampling, constrained decoding integration and efficient streaming of only selected tokens.</p></details>
+        <details><summary>How much parallel recording is useful?</summary><p>A single WebGPU queue already orders submissions. Parallel CPU preparation may help large dynamic graphs or many sessions, but uncontrolled recording can increase pipeline contention and memory pressure. Instrument the serialized lane first, then split only measured bottlenecks.</p></details>
+        <details><summary>Is Engine the long-term generation API?</summary><p>Use Generator for simple single-request compatibility; use Engine as the serving primitive. They should share GeneratorContext, cache implementations and capture policy rather than grow independent memory and execution stacks.</p></details>
+      </section>
+
+      <section id="sources">
+        <h2>Evidence map</h2>
+        <p>All ORT and GenAI links are pinned to the commits audited for this design. Line anchors identify the primary implementation region; surrounding code is part of the conclusion.</p>
+        <ol class="source-list">
+          <li id="s-commits"><a href="https://github.com/microsoft/onnxruntime/commit/dfb403d948d05ad48da00c7ae1ea197065663ba1">ONNX Runtime source baseline</a><small>dfb403d948d05ad48da00c7ae1ea197065663ba1 · 2026-08-11</small></li>
+          <li id="s-session"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/session/inference_session.cc#L1511">InferenceSession transform, partition, initialize and Run</a><small><code>onnxruntime/core/session/inference_session.cc</code> — transform order, provider partition, graph-capture validation, replay branch and session serialization.</small></li>
+          <li id="s-capability"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/providers/webgpu/webgpu_execution_provider.cc#L638">WebGPU EP capability and lifecycle</a><small>Kernel lookup, forced CPU nodes, CPU-preferred nodes, run callbacks, graph maps and buffer-manager routing.</small></li>
+          <li id="s-program"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/providers/webgpu/program.h#L222">WebGPU Program abstraction</a><small>Inputs/outputs, metadata dependency, cache hint, uniforms/constants, direct/indirect dispatch and WGSL generation.</small></li>
+          <li id="s-buffer"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/providers/webgpu/buffer_manager.cc#L29">Buffer managers and cache modes</a><small>Disabled, lazy, simple, bucket, graph and graph-simple behavior; allocation, upload/download and refresh.</small></li>
+          <li id="s-thread"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/session/inference_session.cc#L3263">Run/replay locking path and WebGPU concurrency declaration</a><small>WebGPU <a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/providers/webgpu/webgpu_execution_provider.h#L91">explicitly rejects concurrent Run</a>. The normal execution branch honors that declaration with the InferenceSession mutex; the captured replay branch currently bypasses it.</small></li>
+          <li id="s-capture"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/providers/webgpu/webgpu_context.cc#L317">Deferred dispatch, capture and replay</a><small>Pipeline resolution, retained dispatch records, bind groups, indirect dispatch, command encoding and replay.</small></li>
+          <li id="s-generator"><a href="https://github.com/microsoft/onnxruntime-genai/blob/d2606bba5c0e2019aed57252c7375acb941abffc/src/generators.h#L72">GenAI Generator and GeneratorParams</a><small>Ownership of Model, State, Search, decoding strategy and graph-capture policy.</small></li>
+          <li id="s-state"><a href="https://github.com/microsoft/onnxruntime-genai/blob/d2606bba5c0e2019aed57252c7375acb941abffc/src/models/model.cpp#L63">GenAI State run and graph lifetime</a><small>Per-state graph ID, run-option selection, session Run, release in destructor and WebGPU device selection.</small></li>
+          <li id="s-engine"><a href="https://github.com/microsoft/onnxruntime-genai/blob/d2606bba5c0e2019aed57252c7375acb941abffc/src/engine/engine.h#L53">Continuous-batching Engine</a><small>Scheduler/cache/executor composition, request lifecycle and dynamic batching; see also scheduler, PagedKeyValueCache and SimpleDecoder.</small></li>
+          <li id="s-static"><a href="https://github.com/microsoft/onnxruntime-genai/blob/d2606bba5c0e2019aed57252c7375acb941abffc/src/tensor.cpp#L23">GenAI static tensor capacity</a><small>Stable backing allocation used to preserve graph-captured buffer addresses.</small></li>
+          <li id="s-attention"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/contrib_ops/webgpu/bert/flash_attention.cc#L481">Current FlashAttention and quantized KV path</a><small>Prefill/decode routing, subgroup implementation, indirect dispatch and TurboQuant integration.</small></li>
+          <li id="s-paged"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/docs/design/webgpu_paged_attention.md#L1">WebGPU PagedAttention design</a><small>Current gather-then-flash implementation, host metadata readback limitation and indirect-dispatch capture plan.</small></li>
+          <li id="s-pool"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/core/providers/webgpu/session_buffer_pool.h#L14">Per-session captured-buffer pool</a><small>Graph-manager donation/seeding, generation capacity and current serialization assumption.</small></li>
+          <li id="s-oga-sample"><a href="https://github.com/microsoft/onnxruntime-genai/blob/d2606bba5c0e2019aed57252c7375acb941abffc/src/ort_genai.h#L183">ORT GenAI C++ configuration, Model and Generator API</a><small>Current wrapper methods for provider configuration and object creation; see the pinned <a href="https://github.com/microsoft/onnxruntime-genai/blob/d2606bba5c0e2019aed57252c7375acb941abffc/examples/c/src/model_qa.cpp#L40">model_qa application flow</a> for Model, tokenizer, Generator and decode-loop usage.</small></li>
+          <li id="s-ort-sample"><a href="https://github.com/microsoft/onnxruntime/blob/dfb403d948d05ad48da00c7ae1ea197065663ba1/onnxruntime/test/autoep/test_graph_capture.cc#L30">Raw ORT WebGPU graph-capture application path</a><small>WebGPU EP V2 options, Session creation, shared GPU allocator, stable IO binding, first capture and second replay.</small></li>
+        </ol>
+      </section>
+
+      <footer class="footer">
+        <p><strong>Interpretation rule:</strong> “Current” describes the pinned source baseline, not every released ORT package or browser build. “Target” is this repository’s proposed direction and must be validated through implementation and benchmarks.</p>
+        <p>Prepared from local source checkouts after fast-forwarding ONNX Runtime and ONNX Runtime GenAI to upstream <code>main</code> on 2026-08-12.</p>
+      </footer>
+    </article>
+  </main>
+</div>
+<script>
+  (() => {
+    const links = [...document.querySelectorAll('#toc a')];
+    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + visible.target.id));
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: [0, .15, .5] });
+    sections.forEach(section => observer.observe(section));
+  })();
+</script>
+</body>
+</html>
