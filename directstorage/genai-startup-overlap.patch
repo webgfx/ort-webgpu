@@ -1,0 +1,150 @@
+--- a/src/models/model.cpp
++++ b/src/models/model.cpp
+@@ -6,6 +6,8 @@
+ #include <algorithm>
+ #include <array>
+ #include <climits>
++#include <chrono>
++#include <fstream>
+ #include <functional>
+ #include <random>
+ #include <set>
+@@ -39,10 +41,22 @@
+ #include "../qnn/interface.h"
+ #include "../ryzenai/interface.h"
+ #include "session_options.h"
++#include "env_utils.h"
+ 
+ namespace Generators {
+ 
+ namespace {
++void TraceStartupEvent(const char* event) {
++  const auto path = GetEnv("ORT_GENAI_BENCH_STARTUP_TRACE");
++  if (path.empty()) return;
++  static std::mutex mutex;
++  std::lock_guard lock{mutex};
++  std::ofstream stream(path, std::ios::app);
++  stream << event << " " << std::chrono::duration_cast<std::chrono::microseconds>(
++                               std::chrono::steady_clock::now().time_since_epoch()).count()
++         << "\n";
++}
++
+ 
+ constexpr const char* kOrtSessionOptionsModelExternalInitializersFileFolderPath =
+     "session.model_external_initializers_file_folder_path";
+@@ -582,9 +596,33 @@
+   return type_info->second->GetTensorTypeAndShapeInfo().GetSymbolicDimensions();
+ }
+ 
+-Model::Model(std::unique_ptr<Config> config) : config_{std::move(config)} {
++Model::Model(std::unique_ptr<Config> config, bool allow_startup_overlap) : config_{std::move(config)} {
++  TraceStartupEvent("model-start");
+   CreateSessionOptions();
+-  EnsureDeviceOrtInit(*p_device_, *config_);
++  TraceStartupEvent("session-options-ready");
++
++  if (allow_startup_overlap && p_device_->GetType() == DeviceType::WEBGPU &&
++      GetEnv("ORT_GENAI_BENCH_PRELOAD_TOKENIZER") == "1") {
++    // Resolve package paths on the caller thread and give the worker an independent snapshot.
++    auto snapshot = std::make_shared<Config>(*config_);
++    snapshot->config_path = config_->ResolvePath(config_->model.tokenizer_dir);
++    snapshot->model.tokenizer_dir.clear();
++    snapshot->package_resolver = {};
++    tokenizer_preload_ = std::async(std::launch::async, [snapshot = std::move(snapshot)] {
++      TraceStartupEvent("tokenizer-start");
++      auto tokenizer = std::make_shared<Tokenizer>(*snapshot);
++      TraceStartupEvent("tokenizer-ready");
++      return tokenizer;
++    });
++  }
++
++  device_init_deferred_ = allow_startup_overlap && p_device_->GetType() == DeviceType::WEBGPU &&
++                          GetEnv("ORT_GENAI_BENCH_DEFER_DEVICE_INIT") == "1";
++  if (!device_init_deferred_) {
++    TraceStartupEvent("bootstrap-start");
++    EnsureDeviceOrtInit(*p_device_, *config_);
++    TraceStartupEvent("bootstrap-ready");
++  }
+ 
+   // Only CUDA, TRT-RTX, RyzenAI and DML does every input on the device
+   // For WebGPU, use device memory only if graph capture is enabled, otherwise use CPU
+@@ -605,6 +643,19 @@
+ 
+   // The kvcache is always allocated in device memory
+   p_device_kvcache_ = p_device_;
++  TraceStartupEvent("base-model-ready");
++}
++
++void Model::CompleteDeviceInitialization() {
++  TraceStartupEvent("decoder-ready");
++  if (device_init_deferred_) {
++    // Keep the global allocator-owning session, but let real weights drive Dawn initialization first.
++    TraceStartupEvent("bootstrap-start");
++    EnsureDeviceOrtInit(*p_device_, *config_);
++    device_init_deferred_ = false;
++    TraceStartupEvent("bootstrap-ready");
++  }
++  TraceStartupEvent("model-ready");
+ }
+ 
+ Model::~Model() {
+@@ -806,6 +857,13 @@
+ }
+ 
+ std::shared_ptr<Tokenizer> Model::CreateTokenizer() const {
++  {
++    std::lock_guard lock{tokenizer_preload_mutex_};
++    if (tokenizer_preload_.valid()) {
++      return tokenizer_preload_.get();
++    }
++  }
++  // Each later call retains the existing independent, mutable-tokenizer behavior.
+   return std::make_shared<Tokenizer>(*config_);
+ }
+ 
+--- a/src/models/model.h
++++ b/src/models/model.h
+@@ -9,6 +9,8 @@
+ #include "../generators.h"
+ #include "utils.h"
+ #include <optional>
++#include <future>
++#include <mutex>
+ #include "phi_image_processor.h"
+ #include "whisper_processor.h"
+ #include "parakeet_processor.h"
+@@ -166,7 +168,7 @@
+ };
+ 
+ struct Model : std::enable_shared_from_this<Model>, LeakChecked<Model>, ExternalRefCounted<Model> {
+-  Model(std::unique_ptr<Config> config);
++  Model(std::unique_ptr<Config> config, bool allow_startup_overlap = false);
+   virtual ~Model();
+ 
+   std::shared_ptr<Tokenizer> CreateTokenizer() const;
+@@ -206,8 +208,12 @@
+ 
+  protected:
+   void CreateSessionOptions();
++  void CompleteDeviceInitialization();
+ 
+   std::map<std::string, std::unique_ptr<OrtSessionOptions>> pipeline_session_options_;
++  bool device_init_deferred_{false};
++  mutable std::mutex tokenizer_preload_mutex_;
++  mutable std::future<std::shared_ptr<Tokenizer>> tokenizer_preload_;
+ };
+ 
+ }  // namespace Generators
+--- a/src/models/decoder_only.cpp
++++ b/src/models/decoder_only.cpp
+@@ -3,8 +3,9 @@
+ 
+ namespace Generators {
+ DecoderOnly_Model::DecoderOnly_Model(std::unique_ptr<Config> config, OrtEnv& ort_env)
+-    : Model{std::move(config)} {
++    : Model{std::move(config), true} {
+   session_decoder_ = CreateSession(ort_env, config_->model.decoder.filename, session_options_.get());
++  CompleteDeviceInitialization();
+   session_info_.Add(*session_decoder_);
+ }
+ 

@@ -1,0 +1,231 @@
+--- a/onnxruntime/core/providers/webgpu/webgpu_context.cc
++++ b/onnxruntime/core/providers/webgpu/webgpu_context.cc
+@@ -47,6 +47,10 @@
+ 
+ #include "core/providers/webgpu/compute_context.h"
+ #include "core/providers/webgpu/webgpu_context.h"
++#if !defined(__wasm__) && !defined(USE_EXTERNAL_DAWN)
++#include "core/platform/env_var.h"
++#include "core/providers/webgpu/benchmark_dawn_disk_cache.h"
++#endif
+ #include "core/providers/webgpu/webgpu_profiler.h"
+ #include "core/providers/webgpu/buffer_manager.h"
+ #include "core/providers/webgpu/webgpu_execution_provider.h"
+@@ -70,9 +74,27 @@
+ 
+ class DawnPlatform final : public dawn::platform::Platform {
+  public:
++  DawnPlatform() {
++    const auto directory = onnxruntime::detail::GetEnvironmentVar("ORT_WEBGPU_BENCH_CACHE_DIR");
++    if (!directory.empty()) {
++      cache_ = std::make_unique<BenchmarkDawnDiskCache>(directory);
++    }
++  }
++
++  dawn::platform::CachingInterface* GetCachingInterface() override {
++    return cache_.get();
++  }
++
++  void WriteCacheStatistics() noexcept {
++    if (cache_) cache_->WriteStatistics();
++  }
++
+   std::unique_ptr<dawn::platform::WorkerTaskPool> CreateWorkerTaskPool() override {
+     return dawn::platform::WorkerTaskPool::CreateDawnDefault(GetDawnWorkerThreadCount());
+   }
++
++ private:
++  std::unique_ptr<BenchmarkDawnDiskCache> cache_;
+ };
+ 
+ DawnPlatform& GetDawnPlatform() {
+@@ -90,6 +112,9 @@
+   if (initialize_future_.valid()) {
+     initialize_future_.wait();
+   }
++#if !defined(__wasm__) && !defined(USE_EXTERNAL_DAWN)
++  GetDawnPlatform().WriteCacheStatistics();
++#endif
+ }
+ 
+ void WebGpuContext::StartInitialize(const WebGpuContextConfig& config) {
+--- /dev/null
++++ b/onnxruntime/core/providers/webgpu/benchmark_dawn_disk_cache.h
+@@ -0,0 +1,177 @@
++// Copyright (c) Microsoft Corporation. All rights reserved.
++// Licensed under the MIT License.
++
++// Experimental benchmark cache, enabled only by ORT_WEBGPU_BENCH_CACHE_DIR.
++#pragma once
++
++#include <algorithm>
++#include <array>
++#include <atomic>
++#include <chrono>
++#include <cstddef>
++#include <cstdint>
++#include <filesystem>
++#include <fstream>
++#include <iomanip>
++#include <span>
++#include <sstream>
++#include <string>
++#include <utility>
++
++#include "dawn/platform/DawnPlatform.h"
++
++namespace onnxruntime::webgpu {
++
++class BenchmarkDawnDiskCache final : public dawn::platform::CachingInterface {
++ public:
++  explicit BenchmarkDawnDiskCache(std::filesystem::path directory)
++      : directory_{std::move(directory)} {
++    std::error_code error;
++    std::filesystem::create_directories(directory_, error);
++  }
++
++  size_t FindKey(std::span<const std::byte> key) override {
++    try {
++      std::ifstream stream(Path(key), std::ios::binary);
++      Header header{};
++      if (!ReadHeader(stream, key, header)) {
++        ++misses_;
++        return 0;
++      }
++      return static_cast<size_t>(header.payload_size);
++    } catch (...) {
++      ++misses_;
++      return 0;
++    }
++  }
++
++  size_t LoadData(std::span<const std::byte> key,
++                  std::span<std::byte> destination) override {
++    try {
++      std::ifstream stream(Path(key), std::ios::binary);
++      Header header{};
++      if (!ReadHeader(stream, key, header) || header.payload_size != destination.size()) {
++        ++misses_;
++        return 0;
++      }
++      stream.read(reinterpret_cast<char*>(destination.data()),
++                  static_cast<std::streamsize>(destination.size()));
++      if (!stream || Hash(destination) != header.payload_hash) {
++        ++misses_;
++        return 0;
++      }
++      ++hits_;
++      return destination.size();
++    } catch (...) {
++      ++misses_;
++      return 0;
++    }
++  }
++
++  void StoreData(std::span<const std::byte> key,
++                 std::span<const std::byte> source) override {
++    try {
++      const auto destination = Path(key);
++      std::ostringstream suffix;
++      suffix << "." << std::chrono::steady_clock::now().time_since_epoch().count()
++             << "." << serial_.fetch_add(1) << ".tmp";
++      const std::filesystem::path temporary{destination.string() + suffix.str()};
++      const Header header{kMagic, key.size(), source.size(), Hash(source)};
++      {
++        std::ofstream stream(temporary, std::ios::binary | std::ios::trunc);
++        stream.write(reinterpret_cast<const char*>(&header), sizeof(header));
++        stream.write(reinterpret_cast<const char*>(key.data()),
++                     static_cast<std::streamsize>(key.size()));
++        stream.write(reinterpret_cast<const char*>(source.data()),
++                     static_cast<std::streamsize>(source.size()));
++        stream.close();
++        if (!stream) {
++          std::error_code error;
++          std::filesystem::remove(temporary, error);
++          return;
++        }
++      }
++      std::error_code error;
++      // Benchmark suites serialize processes; parallel shader workers have unique keys.
++      std::filesystem::remove(destination, error);
++      error.clear();
++      std::filesystem::rename(temporary, destination, error);
++      if (error) {
++        std::filesystem::remove(temporary, error);
++        return;
++      }
++      ++stores_;
++    } catch (...) {
++      // Cache failures must preserve the uncached compilation path.
++    }
++  }
++
++  void WriteStatistics() noexcept {
++    try {
++      const auto timestamp = std::chrono::steady_clock::now().time_since_epoch().count();
++      std::ofstream stream(directory_ / ("stats-" + std::to_string(timestamp) + ".json"));
++      stream << "{\"hits\":" << hits_.load() << ",\"misses\":" << misses_.load()
++             << ",\"stores\":" << stores_.load() << "}";
++    } catch (...) {
++    }
++  }
++
++ private:
++  struct Header {
++    uint64_t magic;
++    uint64_t key_size;
++    uint64_t payload_size;
++    uint64_t payload_hash;
++  };
++  static constexpr uint64_t kMagic = 0x5048493443414348;
++  static constexpr uint64_t kMaxEntry = 64ull * 1024 * 1024;
++
++  static uint64_t Hash(std::span<const std::byte> bytes) {
++    uint64_t value = 14695981039346656037ull;
++    for (std::byte byte : bytes) {
++      value = (value ^ std::to_integer<uint8_t>(byte)) * 1099511628211ull;
++    }
++    return value;
++  }
++
++  std::filesystem::path Path(std::span<const std::byte> key) const {
++    std::ostringstream name;
++    name << std::hex << std::setw(16) << std::setfill('0') << Hash(key) << ".bin";
++    return directory_ / name.str();
++  }
++
++  static bool ReadHeader(std::ifstream& stream, std::span<const std::byte> key,
++                         Header& header) {
++    stream.read(reinterpret_cast<char*>(&header), sizeof(header));
++    if (!stream || header.magic != kMagic || header.key_size != key.size() ||
++        header.key_size > kMaxEntry || header.payload_size == 0 || header.payload_size > kMaxEntry) {
++      return false;
++    }
++    // Compare the complete Dawn key (including its version/device data), not just the filename hash.
++    std::array<std::byte, 4096> stored_key{};
++    for (size_t offset = 0; offset < key.size();) {
++      const size_t count = std::min(stored_key.size(), key.size() - offset);
++      stream.read(reinterpret_cast<char*>(stored_key.data()), static_cast<std::streamsize>(count));
++      if (!stream || !std::equal(key.begin() + offset, key.begin() + offset + count,
++                                stored_key.begin())) {
++        return false;
++      }
++      offset += count;
++    }
++    const auto payload_start = stream.tellg();
++    stream.seekg(0, std::ios::end);
++    if (stream.tellg() - payload_start != static_cast<std::streamoff>(header.payload_size)) {
++      return false;
++    }
++    stream.seekg(payload_start);
++    return static_cast<bool>(stream);
++  }
++
++  std::filesystem::path directory_;
++  std::atomic<uint64_t> hits_{0};
++  std::atomic<uint64_t> misses_{0};
++  std::atomic<uint64_t> stores_{0};
++  std::atomic<uint64_t> serial_{0};
++};
++
++}  // namespace onnxruntime::webgpu
