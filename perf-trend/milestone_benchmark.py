@@ -818,7 +818,11 @@ def genai_config_options_table(plan: dict[str, Any]) -> str:
     )
 
 
-def report_index() -> str:
+def device_section_id(device: dict[str, Any]) -> str:
+    return "performance-" + re.sub(r"[^a-z0-9_-]", "-", device["hostname"].lower())
+
+
+def report_index(device_payloads: list[dict[str, Any]] | None = None) -> str:
     links = (
         ("Performance charts", "performance-charts"),
         ("Model-builder options", "model-builder-options"),
@@ -828,6 +832,10 @@ def report_index() -> str:
         ("Scope", "scope"),
         ("Method", "method"),
     )
+    links = links[:1] + tuple(
+        (f"{item['device']['vendor']} performance charts ({item['device']['hostname']})", device_section_id(item['device']))
+        for item in device_payloads or []
+    ) + links[1:]
     items = "".join(
         f"<li><a href='#{anchor}'>{html.escape(label)}</a></li>"
         for label, anchor in links
@@ -1000,6 +1008,7 @@ def render(
     payload: dict[str, Any],
     output_root: Path,
     report_path: Path,
+    device_payloads: list[dict[str, Any]] | None = None,
 ) -> None:
     model_sections = []
     model_names = []
@@ -1028,18 +1037,36 @@ def render(
             + svg_chart(
                 rows_for_chart(plan, payload, model, "prefillTps"),
                 "prefillTps",
-                "Prefill throughput",
+                f"{plan['targetGpu']} · Prefill throughput",
                 False,
                 prefill_note,
             )
             + svg_chart(
                 rows_for_chart(plan, payload, model, "decodeTps"),
                 "decodeTps",
-                "Decode throughput",
+                f"{plan['targetGpu']} · Decode throughput",
                 False,
                 decode_group.get("chartNote"),
             )
             + "</section>"
+        )
+    device_note = ""
+    scope_hardware = "RTX 5080"
+    method_device = f"All measurements run on {html.escape(plan['targetGpu'])}."
+    series_intro = "Prefill and decode are independent, cumulative optimization series. Only measured performance improvements are published as nodes."
+    hardware_kicker = "RTX 5080"
+    if device_payloads:
+        from cross_device_report import render_sections
+        model_sections.append(render_sections(plan, device_payloads))
+        names = ", ".join(f"{item['device']['hostname']} ({item['device']['gpu']})" for item in device_payloads)
+        scope_hardware += ", " + names
+        hardware_kicker += " / " + " / ".join(item["device"]["vendor"] for item in device_payloads)
+        series_intro = "Prefill and decode are independent cumulative series. Additional GPUs are measured at the same historical milestones; benefits and regressions are hardware-dependent."
+        method_device = "Measurements are grouped by device; host, GPU, driver and power scheme are recorded for the additional series."
+        device_note = (
+            f"<p class='muted'>Additional devices: {html.escape(names)}. "
+            "Each device has independent charts and starting measurements. "
+            "The common milestone table's measured-impact column describes the RTX 5080 measurements.</p>"
         )
     milestones = []
     impacts = optimization_impacts(plan)
@@ -1073,11 +1100,11 @@ def render(
     @media (min-width:1500px){{.milestone-table{{min-width:100%;table-layout:fixed}}.builder-options-table,.genai-options-table,.important-genai-options-table{{min-width:100%;table-layout:fixed}}.builder-options-table th:nth-child(1){{width:13%}}.builder-options-table th:nth-child(2){{width:22%}}.builder-options-table th:nth-child(3){{width:13%}}.builder-options-table th:nth-child(4){{width:12%}}.builder-options-table th:nth-child(5){{width:15%}}.builder-options-table th:nth-child(6){{width:25%}}}}
     @media (max-width:900px){{.page-shell{{grid-template-columns:1fr;width:calc(100% - 20px);gap:0}}.report-index{{position:static;max-height:none;margin:12px 0 0}}.report-index ol{{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}}header{{padding-top:30px}}section{{border-radius:14px;margin:12px 0}}.chart{{border-radius:12px}}footer{{padding:24px 12px}}}}
     .benchmark-options-table{{min-width:680px}}.page-shell{{display:block;width:min(2400px,calc(100% - clamp(24px,4vw,80px)));margin:auto}}.report-index{{position:fixed;top:62px;left:clamp(12px,2vw,28px);z-index:30;width:min(380px,calc(100vw - 24px));max-height:calc(100vh - 76px);overflow:auto;padding:20px;margin:0;box-shadow:0 20px 60px rgba(23,32,51,.24)}}.report-index[hidden]{{display:none}}.report-index-heading{{display:flex;justify-content:flex-end;margin-bottom:14px}}.menu-toggle{{border:1px solid #93c5fd;border-radius:9px;background:#eff6ff;color:#1d4ed8;padding:7px 10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}}.menu-toggle:hover,.menu-toggle:focus-visible{{background:#dbeafe}}.menu-show{{display:inline-flex;position:fixed;top:12px;left:clamp(12px,2vw,28px);z-index:30;box-shadow:0 8px 22px rgba(23,32,51,.16)}}.page-shell.menu-open .menu-show{{display:none}}@media (max-width:900px){{.page-shell{{width:calc(100% - 20px)}}.report-index{{position:fixed;top:58px;left:10px;width:calc(100vw - 20px);max-height:calc(100vh - 68px);margin:0}}.report-index ol{{grid-template-columns:1fr}}}}
-    </style></head><body><div class="page-shell">{report_index()}<div class="report-content"><button id="menu-show" class="menu-toggle menu-show" type="button" aria-controls="report-index" aria-expanded="false" aria-haspopup="true">Menu</button><header><div class="wrap"><div class="eyebrow">RTX 5080 · Prompt {plan['promptLength']} · Target max KV cache {plan['maxKvCacheLength']} · Milestone-aligned models</div>
-    <h1>ORT WebGPU Phi-4 Major Performance Improvements</h1><p class="muted">Prefill and decode are independent, cumulative optimization series. Only measured performance improvements are published as nodes.</p></div></header>
+    </style></head><body><div class="page-shell">{report_index(device_payloads)}<div class="report-content"><button id="menu-show" class="menu-toggle menu-show" type="button" aria-controls="report-index" aria-expanded="false" aria-haspopup="true">Menu</button><header><div class="wrap"><div class="eyebrow">{html.escape(hardware_kicker)} · Prompt {plan['promptLength']} · Target max KV cache {plan['maxKvCacheLength']} · Milestone-aligned models</div>
+    <h1>ORT WebGPU Phi-4 Major Performance Improvements</h1><p class="muted">{series_intro}</p>{device_note}</div></header>
     <main class="wrap">{''.join(model_sections)}{builder_options_table(plan)}<section><h2>Milestones</h2><p class="muted">Measured impact uses an archived controlled parent-to-candidate run when available; otherwise it compares with the preceding published point in the same cumulative series and should not be read as isolated attribution. Performance area identifies whether the milestone improves prompt processing (prefill) or token generation (decode). Dates use one YYYY-MM-DD convention, and a milestone date is when its last required PR merged. The ORT and ORT GenAI columns each show the cumulative commit used for the test and that repository's required PRs; those hashes match only when the test runtime is pinned to the exact PR merge commit. Local test artifacts are archive-relative paths.</p><div class="table"><table class="milestone-table"><thead><tr><th>Date</th><th>Milestone / introduction</th><th>Contributors</th><th>Performance area</th><th>Measured impact</th><th>ORT</th><th>ORT GenAI</th><th>Builder / date</th><th>Local test artifacts</th><th>Model/runtime features</th></tr></thead><tbody>{''.join(milestones)}</tbody></table></div></section>
-    <section id="scope"><h2>Scope</h2><p>This report covers the selected Phi-4 text-only prefill and decode milestones on RTX 5080. Other ORT WebGPU work, including Qualcomm-specific prefill and decode optimizations, Whisper, Phi-4 multimodal, GPT-OSS, and additional model or hardware optimizations, is outside this series and is not represented here.</p></section>
-    <section id="method"><h2>Method</h2><p>All measurements run on {html.escape(plan['targetGpu'])}. New and rerun measurements use batch {plan['batchSize']}, prompt {plan['promptLength']}, generation {plan['generationLength']}, max KV cache {plan['maxKvCacheLength']} (<code>-ml {plan['maxKvCacheLength']}</code> in C++ or <code>-m {plan['maxKvCacheLength']}</code> in Python), and {plan['repetitions']} measured repetitions after {plan['warmup']} warmup. Historical C++ runners without <code>-ml</code> cannot request 8K and are explicitly labeled with their effective prompt + generation length. The historical series keeps two pinned accuracy-level 4, graph-ready models (fused or separate RoPE). A model-changing milestone uses an archived matched control/candidate experiment; graph capture remains disabled in stored configs and is enabled only on a temporary copy for its measurement.</p></section></main>
+    <section id="scope"><h2>Scope</h2><p>This report covers the selected Phi-4 text-only prefill and decode milestones on {html.escape(scope_hardware)}. Other ORT WebGPU work, including Qualcomm-specific prefill and decode optimizations, Whisper, Phi-4 multimodal, GPT-OSS, and additional model or hardware optimizations, is outside this series and is not represented here.</p></section>
+    <section id="method"><h2>Method</h2><p>{method_device} New and rerun measurements use batch {plan['batchSize']}, prompt {plan['promptLength']}, generation {plan['generationLength']}, max KV cache {plan['maxKvCacheLength']} (<code>-ml {plan['maxKvCacheLength']}</code> in C++ or <code>-m {plan['maxKvCacheLength']}</code> in Python), and {plan['repetitions']} measured repetitions after {plan['warmup']} warmup. Historical C++ runners without <code>-ml</code> cannot request 8K and are explicitly labeled with their effective prompt + generation length. The historical series keeps two pinned accuracy-level 4, graph-ready models (fused or separate RoPE). A model-changing milestone uses an archived matched control/candidate experiment; graph capture remains disabled in stored configs and is enabled only on a temporary copy for its measurement.</p></section></main>
     <footer>Results updated {html.escape(payload['updatedAt'])} · {html.escape(payload['device']['nvidiaSmi'])}</footer></div></div><script>(()=>{{const shell=document.querySelector('.page-shell');const menu=document.getElementById('report-index');const close=document.getElementById('menu-hide');const show=document.getElementById('menu-show');const setOpen=(open,moveFocus=true)=>{{menu.hidden=!open;shell.classList.toggle('menu-open',open);close.setAttribute('aria-expanded',String(open));show.setAttribute('aria-expanded',String(open));if(moveFocus)(open?close:show).focus();}};show.addEventListener('click',()=>setOpen(true));close.addEventListener('click',()=>setOpen(false));menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>setOpen(false,false)));document.addEventListener('keydown',event=>{{if(event.key==='Escape'&&!menu.hidden){{event.preventDefault();setOpen(false);}}}});document.addEventListener('pointerdown',event=>{{if(!menu.hidden&&!menu.contains(event.target)&&event.target!==show)setOpen(false,false);}});}})();</script></body></html>"""
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(report, encoding="utf-8")
@@ -1418,13 +1445,22 @@ def main() -> int:
     parser.add_argument("--verify-hashes", action="store_true")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--stage", action="append", help="force only selected stage id; repeatable")
+    parser.add_argument("--device-results", type=Path, action="append", help="additional GPU result JSON; defaults to data/devices/*.json")
     args = parser.parse_args()
     plan = read_json(args.plan)
     output_root = resolve_output_root(args.output_root, args.config)
     report_path = resolve_path(args.report)
     results_path = output_root / "milestone-results.json"
+    device_paths = args.device_results if args.device_results is not None else sorted((SKILL_ROOT / "data" / "devices").glob("*.json"))
+    device_payloads = [read_json(path) for path in device_paths]
+    if device_payloads:
+        from cross_device_report import validate
+        for item in device_payloads:
+            validate(item, plan)
     if args.command == "verify":
         verify(plan, read_json(results_path), output_root, report_path, args.verify_hashes)
+        if device_payloads:
+            print(f"verified {len(device_payloads)} additional device datasets against raw outputs and artifact identities")
         return 0
     write_json(output_root / "milestones.json", plan)
     if args.stage:
@@ -1443,7 +1479,7 @@ def main() -> int:
         if args.command == "run"
         else read_json(results_path)
     )
-    render(plan, payload, output_root, report_path)
+    render(plan, payload, output_root, report_path, device_payloads)
     return 0
 
 

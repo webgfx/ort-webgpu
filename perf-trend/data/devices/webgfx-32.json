@@ -1,0 +1,1385 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "gpus": [
+      {
+        "Name": "Intel(R) Arc(TM) B390 GPU",
+        "DriverVersion": "32.0.101.8622",
+        "PNPDeviceID": "PCI\\VEN_8086&DEV_B080&SUBSYS_380417AA&REV_04\\3&11583659&0&10"
+      }
+    ],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) Ultra X7 358H"
+      }
+    ],
+    "memoryBytes": 33873752064,
+    "hostname": "webgfx-32",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "vendor": "Intel",
+    "gpu": "Intel(R) Arc(TM) B390 GPU",
+    "driver": "32.0.101.8622",
+    "adapterId": "PCI\\VEN_8086&DEV_B080&SUBSYS_380417AA&REV_04\\3&11583659&0&10",
+    "selection": "single physical PCI GPU",
+    "acLineStatus": 1
+  },
+  "benchmark": {
+    "batchSize": 1,
+    "promptLength": 1024,
+    "generationLength": 128,
+    "maxKvCacheLength": 8192,
+    "repetitions": 5,
+    "warmup": 1
+  },
+  "manifestSha256": "7ecdd25191a82ae6df9138bc79954f0b50d1348a4544a659e0cc9a387923bc4d",
+  "artifactRoot": "D:\\ort-perf-trend",
+  "artifacts": [
+    {
+      "path": "runtime/2024-12/build-metadata.json",
+      "bytes": 5537,
+      "sha256": "b332bded84142237cbb0009f3a1462b41b4cd4f1553dbaa8b89318029d6f1a7d"
+    },
+    {
+      "path": "runtime/2024-12/dxcompiler.dll",
+      "bytes": 16771584,
+      "sha256": "25ecda605e556062782b192e4d6574c1d9eeb93f1e45d29d1a14224cc38bed54"
+    },
+    {
+      "path": "runtime/2024-12/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime/2024-12/model_benchmark.exe",
+      "bytes": 1283584,
+      "sha256": "30c1bf066bf3e07ac3a575d91b99bb4e96cf335b06e3470a09539090c2c8c770"
+    },
+    {
+      "path": "runtime/2024-12/onnxruntime-genai-static.lib",
+      "bytes": 5781728,
+      "sha256": "27a3f32c0cc0e60c260308500b598543fc6114822110164f50e19924fb50fab9"
+    },
+    {
+      "path": "runtime/2024-12/onnxruntime.dll",
+      "bytes": 18630656,
+      "sha256": "473f47c29abea011137634dff056f9125d42887e1654fef642dcdaf506d19f7f"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/added_tokens.json",
+      "bytes": 261,
+      "sha256": "5377704db90a24463cdd97ea116c79ec1c23d1567964d9a1558a958ee28aa2f6"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/genai_config.json",
+      "bytes": 1723,
+      "sha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/merges.txt",
+      "bytes": 2418348,
+      "sha256": "856ce61180bb689282eed6b3a6838bb1f438399be23aefe9d20eb379791fb4ad"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/model-metadata.json",
+      "bytes": 2603,
+      "sha256": "5694e751e0903184020b00e52fc0629ced4927936b44849388cacd1b9876a7c9"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/model.onnx",
+      "bytes": 321851,
+      "sha256": "f0f2e5c374503ac10ce3824404299933b5a841eefa428d5b78c7ab93803a4176"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/model.onnx.data",
+      "bytes": 3413311488,
+      "sha256": "34f6d3d1fac98d27ebf1c7dba984f600c7c4fa57e778c4b2a1b28241370e03ed"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/special_tokens_map.json",
+      "bytes": 617,
+      "sha256": "2b6bdf7c34657eaa38b07e1f6ba15df99a62a2fae3689338c7d6fbb9cc7cc5a4"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/tokenizer.json",
+      "bytes": 15524095,
+      "sha256": "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/tokenizer_config.json",
+      "bytes": 3074,
+      "sha256": "bd0ccea85a6d3adcb00747a1ffa6b27ea57545b4ea9dddccbd5426b13406729c"
+    },
+    {
+      "path": "model/aligned/standard-unfused-rope/Phi-4-mini-instruct/vocab.json",
+      "bytes": 3910310,
+      "sha256": "6cb65a857824fa6615bb1782d95d882617a8bbce1da0317118586b36f39e98bd"
+    },
+    {
+      "path": "runtime-milestones/02-subgroup-prefill/build-metadata.json",
+      "bytes": 4750,
+      "sha256": "c6ca3e15b5ba644c4d5027e5c3545c8b63d684d70a4d39065711bee9dc308f2f"
+    },
+    {
+      "path": "runtime-milestones/02-subgroup-prefill/dxcompiler.dll",
+      "bytes": 16813056,
+      "sha256": "37075362df0dea2a1543f7d86c3c326de1ad638fc3e94a3ecc89332c1c511bbb"
+    },
+    {
+      "path": "runtime-milestones/02-subgroup-prefill/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/02-subgroup-prefill/model_benchmark.exe",
+      "bytes": 1436672,
+      "sha256": "b8ac915359517eedac717550ab93d9b5476bbedc3debd9d9124e03e34c36ac06"
+    },
+    {
+      "path": "runtime-milestones/02-subgroup-prefill/onnxruntime-genai-static.lib",
+      "bytes": 6210826,
+      "sha256": "05d5b708aa8d5ce9d0da087199c3364d344f934cbbf0b1aa5ffe55f512cc36cd"
+    },
+    {
+      "path": "runtime-milestones/02-subgroup-prefill/onnxruntime.dll",
+      "bytes": 18888704,
+      "sha256": "4bc8616554178192478d420356ec61d085a65f8d3f86afc26155039d89f60b52"
+    },
+    {
+      "path": "runtime-milestones/03-dp4a-prefill/build-metadata.json",
+      "bytes": 4669,
+      "sha256": "37ab7f22fa847843fd4cc90685480fe6e2db90e047b8f31b52d55e9036cb343f"
+    },
+    {
+      "path": "runtime-milestones/03-dp4a-prefill/dxcompiler.dll",
+      "bytes": 16812544,
+      "sha256": "418b9660d155ef9963ed90c0847f6afb5ba664de72f320e9bc7f208c829b50d5"
+    },
+    {
+      "path": "runtime-milestones/03-dp4a-prefill/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/03-dp4a-prefill/model_benchmark.exe",
+      "bytes": 1436672,
+      "sha256": "3e885390c71e78d6c80c6c452f578b8085b04d72ad5050bc7b386263ccccdbe6"
+    },
+    {
+      "path": "runtime-milestones/03-dp4a-prefill/onnxruntime-genai-static.lib",
+      "bytes": 6189200,
+      "sha256": "b8e7de1c46c60d8870cf13344fd1c1afbe3ae661d4d6dda8754518a31946d95f"
+    },
+    {
+      "path": "runtime-milestones/03-dp4a-prefill/onnxruntime.dll",
+      "bytes": 18927104,
+      "sha256": "97306faa79439c45b077625d0bcaa6d873c13218483e4bac7c9583727e5e5cb2"
+    },
+    {
+      "path": "runtime-milestones/gqa-fa-candidate/build-metadata.json",
+      "bytes": 4798,
+      "sha256": "45e69655a8bf745b2f1476e99228fdbee6dc0e158ef8570fa36896cf4dff2254"
+    },
+    {
+      "path": "runtime-milestones/gqa-fa-candidate/dxcompiler.dll",
+      "bytes": 16827392,
+      "sha256": "97fc3a0bd1a0d2ae6f61d19f9d41010e6df959c257440e28999c92e05b40df22"
+    },
+    {
+      "path": "runtime-milestones/gqa-fa-candidate/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/gqa-fa-candidate/model_benchmark.exe",
+      "bytes": 1516032,
+      "sha256": "7f747947f24d9257cc2a648b29b94452bd86824630034bc74261f37a4288aadf"
+    },
+    {
+      "path": "runtime-milestones/gqa-fa-candidate/onnxruntime-genai-static.lib",
+      "bytes": 7481122,
+      "sha256": "272a1537a43e594b6de55a47f8bfedeaae1bc4af3d08ff80597640b169020ace"
+    },
+    {
+      "path": "runtime-milestones/gqa-fa-candidate/onnxruntime.dll",
+      "bytes": 19288064,
+      "sha256": "8d78f4d11393ba1fcbef348ee144e7abb68fdb034845acef9e86df5c5eeeacba"
+    },
+    {
+      "path": "runtime-milestones/04-gqa-flash-decode/build-metadata.json",
+      "bytes": 4739,
+      "sha256": "245b106657dfa7a2cb61fd4d63c59fc77697c1325040fcacbda97eda69788fb5"
+    },
+    {
+      "path": "runtime-milestones/04-gqa-flash-decode/dxcompiler.dll",
+      "bytes": 16865792,
+      "sha256": "5f31805c2be1a3749b3aa5506b00c75db7fb8519f46097d44a132eb049a217ea"
+    },
+    {
+      "path": "runtime-milestones/04-gqa-flash-decode/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/04-gqa-flash-decode/model_benchmark.exe",
+      "bytes": 60416,
+      "sha256": "a3246dcb0530228603d5540e94babe0d44c89b145c163d462528a5d90cbc9cde"
+    },
+    {
+      "path": "runtime-milestones/04-gqa-flash-decode/onnxruntime-genai.dll",
+      "bytes": 1514496,
+      "sha256": "65322c3d445e8b7e31d52d9bc6bb9617b78ff0eedecf7e1a1e556b63376d8f96"
+    },
+    {
+      "path": "runtime-milestones/04-gqa-flash-decode/onnxruntime.dll",
+      "bytes": 20130304,
+      "sha256": "080cbb544d04c7fea27c1b780d725ab03ae4d683ec6d4ebb3e541e9db88ebbbc"
+    },
+    {
+      "path": "runtime-milestones/shm-broadcast-candidate/build-metadata.json",
+      "bytes": 4486,
+      "sha256": "ee527e573443f2ac79c549d548bdd02c67609cbdafc12dff0cff59fab268f5d6"
+    },
+    {
+      "path": "runtime-milestones/shm-broadcast-candidate/dxcompiler.dll",
+      "bytes": 16941568,
+      "sha256": "b2dc7a44518db2fc4e3aff745eeca7661c6077d82b00e161ada4257b4a2150d1"
+    },
+    {
+      "path": "runtime-milestones/shm-broadcast-candidate/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/shm-broadcast-candidate/model_benchmark.exe",
+      "bytes": 65024,
+      "sha256": "f8fd33ddae94a42bd32b023451fb5a62b0dd89a2935755d019cc67070e3f28cb"
+    },
+    {
+      "path": "runtime-milestones/shm-broadcast-candidate/onnxruntime-genai.dll",
+      "bytes": 2024960,
+      "sha256": "fe009376c107e9da7adb418fff8e3a0076bb5aa478276056fd09b060aebf45d6"
+    },
+    {
+      "path": "runtime-milestones/shm-broadcast-candidate/onnxruntime.dll",
+      "bytes": 20491264,
+      "sha256": "6d1971e85fa96cc8fadb9f3ba1bf45be0a7dd39c6e41da163330b5d370012713"
+    },
+    {
+      "path": "runtime-milestones/06-gqa-rope/build-metadata.json",
+      "bytes": 4371,
+      "sha256": "0451f81c769c5919df1ff78b5f539713e4ec08e9703c1e15186b4c6cc062839a"
+    },
+    {
+      "path": "runtime-milestones/06-gqa-rope/dxcompiler.dll",
+      "bytes": 16943104,
+      "sha256": "f851c803de8d4243b75881571d378b05fa5521886c3c6be2e9bd061edd1d660a"
+    },
+    {
+      "path": "runtime-milestones/06-gqa-rope/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/06-gqa-rope/model_benchmark.exe",
+      "bytes": 65024,
+      "sha256": "1630681e590f3722cc37ac9a538bbb8723a700f7582f0eece9b9f6eca410fa39"
+    },
+    {
+      "path": "runtime-milestones/06-gqa-rope/onnxruntime-genai.dll",
+      "bytes": 2107392,
+      "sha256": "c570b242aa478be5aaf3eae1c0a2f60734dfedcd5a9a3a4b2bd1fa2a895922fe"
+    },
+    {
+      "path": "runtime-milestones/06-gqa-rope/onnxruntime.dll",
+      "bytes": 20941312,
+      "sha256": "253e95be0120f2d8d41fa59aa5c9916a0655c98bcfac19f93f64e657ac1e7b90"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/added_tokens.json",
+      "bytes": 261,
+      "sha256": "5377704db90a24463cdd97ea116c79ec1c23d1567964d9a1558a958ee28aa2f6"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/genai_config.json",
+      "bytes": 1674,
+      "sha256": "75fdf4a8412612512907363e4ca85bb0f25818db7d2dcece2d507a815c6eae29"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/merges.txt",
+      "bytes": 2418348,
+      "sha256": "856ce61180bb689282eed6b3a6838bb1f438399be23aefe9d20eb379791fb4ad"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/model-metadata.json",
+      "bytes": 2114,
+      "sha256": "adecfbf277cda7fdd8bbcbeeac65f085d4e8b30e11cc8c87bb26087e9b9ed199"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/model.onnx",
+      "bytes": 238644,
+      "sha256": "894ee5e05d000972293f83085cc9fd0f1b79b62f240b96b6ad92370d961487da"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/model.onnx.data",
+      "bytes": 3413311488,
+      "sha256": "5c66d0ca5b4ba17b6c2d97eb88b81cf062e83b6f0a5f48827a9e476c76f3eac0"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/special_tokens_map.json",
+      "bytes": 617,
+      "sha256": "2b6bdf7c34657eaa38b07e1f6ba15df99a62a2fae3689338c7d6fbb9cc7cc5a4"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/tokenizer.json",
+      "bytes": 15524095,
+      "sha256": "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/tokenizer_config.json",
+      "bytes": 3074,
+      "sha256": "bd0ccea85a6d3adcb00747a1ffa6b27ea57545b4ea9dddccbd5426b13406729c"
+    },
+    {
+      "path": "experiments/pre-prune-fused-rope/Phi-4-mini-instruct/vocab.json",
+      "bytes": 3910310,
+      "sha256": "6cb65a857824fa6615bb1782d95d882617a8bbce1da0317118586b36f39e98bd"
+    },
+    {
+      "path": "runtime-milestones/08-graph-capture/build-metadata.json",
+      "bytes": 4577,
+      "sha256": "e9c5c7c21f6d23b40a6153f3f274a0993ddf10c11f4000aab2afc39185d59555"
+    },
+    {
+      "path": "runtime-milestones/08-graph-capture/dxcompiler.dll",
+      "bytes": 16990208,
+      "sha256": "96c97bb0d62c6eb602b96bef0c1bb036b139e227bf96ed6153d31451895a5248"
+    },
+    {
+      "path": "runtime-milestones/08-graph-capture/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/08-graph-capture/model_benchmark.exe",
+      "bytes": 67584,
+      "sha256": "5d6b85f41299c72d8f1c105f63b3636ee45cf482fc0ab7587e0fc44c48248934"
+    },
+    {
+      "path": "runtime-milestones/08-graph-capture/onnxruntime-genai.dll",
+      "bytes": 2341888,
+      "sha256": "5335e7f5b13880fa24a3b379f0ec95cfb501c3bef23723f5ac70237740f77d88"
+    },
+    {
+      "path": "runtime-milestones/08-graph-capture/onnxruntime.dll",
+      "bytes": 22709248,
+      "sha256": "126470456d4fc02e0f4f98800508d279af708e014ec2a53923871836cf249686"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/added_tokens.json",
+      "bytes": 261,
+      "sha256": "5377704db90a24463cdd97ea116c79ec1c23d1567964d9a1558a958ee28aa2f6"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/genai_config.json",
+      "bytes": 1879,
+      "sha256": "f28efb9645e1621802171f33b517b680d096988272e373e765d3012068e308ee"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/merges.txt",
+      "bytes": 2418348,
+      "sha256": "856ce61180bb689282eed6b3a6838bb1f438399be23aefe9d20eb379791fb4ad"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/model-metadata.json",
+      "bytes": 2636,
+      "sha256": "40a06360a6ea2b42c8861c79be6c8e7924f6970e34afd05ed88ed8b5e58eadcf"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/model.onnx",
+      "bytes": 240526,
+      "sha256": "eb2e6bc8a269ba9d4a757de89e173936d080b1817cff2b936f148ad478f8f773"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/model.onnx.data",
+      "bytes": 2491416576,
+      "sha256": "b952da81d9c04a72394e2557b4f4e5526d6a51c5d788b4906e04a8fe66588e13"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/special_tokens_map.json",
+      "bytes": 617,
+      "sha256": "2b6bdf7c34657eaa38b07e1f6ba15df99a62a2fae3689338c7d6fbb9cc7cc5a4"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/tokenizer.json",
+      "bytes": 15524095,
+      "sha256": "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/tokenizer_config.json",
+      "bytes": 3074,
+      "sha256": "bd0ccea85a6d3adcb00747a1ffa6b27ea57545b4ea9dddccbd5426b13406729c"
+    },
+    {
+      "path": "model/aligned/standard-fused-rope/Phi-4-mini-instruct/vocab.json",
+      "bytes": 3910310,
+      "sha256": "6cb65a857824fa6615bb1782d95d882617a8bbce1da0317118586b36f39e98bd"
+    },
+    {
+      "path": "runtime-milestones/07-prune/build-metadata.json",
+      "bytes": 4264,
+      "sha256": "3d13c6e3ea33ee99ba83c895613263a9a2d9191d02b61734d3eb9372e67dc645"
+    },
+    {
+      "path": "runtime-milestones/07-prune/dxcompiler.dll",
+      "bytes": 16989696,
+      "sha256": "c8814fed1b14e22c7633b5179ca699ba4b932f7108457834b8f00f4a41f68f0a"
+    },
+    {
+      "path": "runtime-milestones/07-prune/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/07-prune/model_benchmark.exe",
+      "bytes": 65536,
+      "sha256": "9d1ea7501361b3547cc34c24de387732497a0f4cda933eb39e28a1373f378713"
+    },
+    {
+      "path": "runtime-milestones/07-prune/onnxruntime-genai.dll",
+      "bytes": 2266624,
+      "sha256": "f51ceb3648d90e0ad8a476790ba4359489cc36bf1ee2940b7ba0063653572aef"
+    },
+    {
+      "path": "runtime-milestones/07-prune/onnxruntime.dll",
+      "bytes": 21985280,
+      "sha256": "0ad958cc2ceb723aba8351517b4116bd71747800a77da6f0fcf27aa7d45e8122"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/added_tokens.json",
+      "bytes": 261,
+      "sha256": "5377704db90a24463cdd97ea116c79ec1c23d1567964d9a1558a958ee28aa2f6"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/genai_config.json",
+      "bytes": 1879,
+      "sha256": "f28efb9645e1621802171f33b517b680d096988272e373e765d3012068e308ee"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/merges.txt",
+      "bytes": 2418348,
+      "sha256": "856ce61180bb689282eed6b3a6838bb1f438399be23aefe9d20eb379791fb4ad"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/model-metadata.json",
+      "bytes": 2125,
+      "sha256": "a7829593b4fc8308625b27bdf198dcfa4655d58460d7121a5c13f4817913a877"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/model.onnx",
+      "bytes": 239081,
+      "sha256": "121a94922bbe797d65c38dae0d4343ff9f6d4c19b97955f6f6307048c5cb4011"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/model.onnx.data",
+      "bytes": 3413311488,
+      "sha256": "5c66d0ca5b4ba17b6c2d97eb88b81cf062e83b6f0a5f48827a9e476c76f3eac0"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/special_tokens_map.json",
+      "bytes": 617,
+      "sha256": "2b6bdf7c34657eaa38b07e1f6ba15df99a62a2fae3689338c7d6fbb9cc7cc5a4"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/tokenizer.json",
+      "bytes": 15524095,
+      "sha256": "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/tokenizer_config.json",
+      "bytes": 3074,
+      "sha256": "bd0ccea85a6d3adcb00747a1ffa6b27ea57545b4ea9dddccbd5426b13406729c"
+    },
+    {
+      "path": "experiments/prune-accuracy4/candidate/Phi-4-mini-instruct/vocab.json",
+      "bytes": 3910310,
+      "sha256": "6cb65a857824fa6615bb1782d95d882617a8bbce1da0317118586b36f39e98bd"
+    },
+    {
+      "path": "runtime-milestones/10-flashattention-max-k-step/build-metadata.json",
+      "bytes": 4735,
+      "sha256": "2796c043a7be2aab1d8bfa415e39d2f4d4fd1da7ea4aef8dea5bb1278ab22890"
+    },
+    {
+      "path": "runtime-milestones/10-flashattention-max-k-step/dxcompiler.dll",
+      "bytes": 16995328,
+      "sha256": "d29be271f2278e36fdcf7932aaa984ca31914c159ba1565ea985bea6f809229c"
+    },
+    {
+      "path": "runtime-milestones/10-flashattention-max-k-step/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/10-flashattention-max-k-step/model_benchmark.exe",
+      "bytes": 67584,
+      "sha256": "54940afc182a02a0730f175f81308f6e47f50005ce74956da2b7f0f17ed87b4d"
+    },
+    {
+      "path": "runtime-milestones/10-flashattention-max-k-step/onnxruntime-genai.dll",
+      "bytes": 2502144,
+      "sha256": "e7c0fd56e84836cae709588b72f35dd929462e914785e1a155462a969368f761"
+    },
+    {
+      "path": "runtime-milestones/10-flashattention-max-k-step/onnxruntime.dll",
+      "bytes": 23270400,
+      "sha256": "175e895c5e7549b673255c841bc19c9ba699577c2ae7e82d6ad5ffd1ac225872"
+    },
+    {
+      "path": "runtime-milestones/09-matmulnbits-mlp/build-metadata.json",
+      "bytes": 4408,
+      "sha256": "a3e77a5bddb9eeb071e34032de5f80dadb2158e4ddedb8f535012203546f87d5"
+    },
+    {
+      "path": "runtime-milestones/09-matmulnbits-mlp/dxcompiler.dll",
+      "bytes": 16992256,
+      "sha256": "36bcdbefb225494f755336d8423529615f6d4618027203a10b3d8a6eb219b231"
+    },
+    {
+      "path": "runtime-milestones/09-matmulnbits-mlp/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/09-matmulnbits-mlp/model_benchmark.exe",
+      "bytes": 69120,
+      "sha256": "6bb4be62a2632c3f7844f3caebf2b0539f1d54c32a9b73fbfa23d794c510139f"
+    },
+    {
+      "path": "runtime-milestones/09-matmulnbits-mlp/onnxruntime-genai.dll",
+      "bytes": 2571264,
+      "sha256": "62fc808e8692b3464f303fa6d5aac1839d5dc297a4a6102c255df998317d0e62"
+    },
+    {
+      "path": "runtime-milestones/09-matmulnbits-mlp/onnxruntime.dll",
+      "bytes": 23687680,
+      "sha256": "965d8993e500ca51a4692828caf69615208bd8c5f4e2109d8f361c6a61297648"
+    },
+    {
+      "path": "runtime-milestones/11-flashattention-decode-tuning/build-metadata.json",
+      "bytes": 4779,
+      "sha256": "d7d9266dcab41977ba2a88387631e5c832fa37e8ddf82840c30c176e4aca0eea"
+    },
+    {
+      "path": "runtime-milestones/11-flashattention-decode-tuning/dxcompiler.dll",
+      "bytes": 16995328,
+      "sha256": "77ee5b65bbce9a0c74e8f2f0eed546befe5c88062e882ee34bf63a32f48ac746"
+    },
+    {
+      "path": "runtime-milestones/11-flashattention-decode-tuning/dxil.dll",
+      "bytes": 1525744,
+      "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+    },
+    {
+      "path": "runtime-milestones/11-flashattention-decode-tuning/model_benchmark.exe",
+      "bytes": 69120,
+      "sha256": "f79979ac1805ea19c46e25aaa6a1d0325133d013c3acf1ea90ca1a33499e3362"
+    },
+    {
+      "path": "runtime-milestones/11-flashattention-decode-tuning/onnxruntime-genai.dll",
+      "bytes": 2585088,
+      "sha256": "2ab6dcb5e9cd1b89508263a0ce9e1967c90198579f1fac711a1103e4a8ec0fb0"
+    },
+    {
+      "path": "runtime-milestones/11-flashattention-decode-tuning/onnxruntime.dll",
+      "bytes": 24290304,
+      "sha256": "b8d7e375193737d9e5f62d63666d9cd9bbb497f233e011351012be98e9571f1b"
+    }
+  ],
+  "updatedAt": "2026-09-15T09:10:22.355452+00:00",
+  "rows": [
+    {
+      "stageId": "reference-2024-12-02",
+      "stage": "December 2, 2024 starting measurement",
+      "date": "2024-12-02",
+      "chartLabel": "Starting point",
+      "isReference": true,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime/2024-12",
+      "ort": {
+        "commit": "8c52fa392434e25ccdf0a0645a4eb6e4865074fa",
+        "commitDate": "2024-12-02T13:57:30-08:00",
+        "subject": "[VSINPU]Split/Pad and some element-wise OPs support (#22916)"
+      },
+      "genai": {
+        "commit": "c5745fd6d91a2ba2d94c6a52f6255652dde02508",
+        "commitDate": "2024-11-25T16:55:30-08:00",
+        "subject": "Debug build fixes missed by pipelines (#1101)"
+      },
+      "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:47:35.636797+00:00",
+      "status": "failed",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\reference-2024-12-02-2026-09-15T08-47-35.636747+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime\\2024-12\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 1,
+      "error": "Benchmark exited with 1",
+      "rawOutput": "WebGPU device lost (1): ID3D12Device::GetDeviceRemovedReason failed with DXGI_ERROR_DEVICE_HUNG (0x887A0006)\n - While handling unexpected error type Internal when allowed errors are (Validation|DeviceLost).\n    at CheckHRESULTImpl (E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime\\build\\Windows\\Release\\_deps\\dawn-src\\src\\dawn\\native\\d3d\\D3DError.cpp:119)\n\nBackend messages:\n * Device removed reason: DXGI_ERROR_DEVICE_HUNG (0x887A0006)\n\u001b[1;31m2026-09-15 16:49:46.0994654 [E:onnxruntime:onnxruntime-genai, sequential_executor.cc:505 onnxruntime::ExecuteKernel] Non-zero status code returned while running GreaterOrEqual node. Name:'/model/pos_ids_reformat/GreaterOrEqual' Status Message: WebGPU validation failed. GPU device disconnected\u001b[m\nException: Non-zero status code returned while running GreaterOrEqual node. Name:'/model/pos_ids_reformat/GreaterOrEqual' Status Message: WebGPU validation failed. GPU device disconnected\n\nERROR: Benchmark exited with 1\n",
+      "rawOutputSha256": "4c850682c4a87c800dc0957a84d740eb0f9a2538f25b6c85aa61fdd247762338",
+      "logSha256": "934ef3704a7b63405fb5cec14b4e5235bd490df583104a43f8a8559d2f98c3e2",
+      "finishedAt": "2026-09-15T08:49:47.667660+00:00"
+    },
+    {
+      "stageId": "02-subgroup-prefill",
+      "stage": "Subgroup MatMulNBits",
+      "date": "2025-01-13",
+      "chartLabel": "Subgroup",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\02-subgroup-prefill",
+      "ort": {
+        "commit": "80d8931f1d835fe29d89cced25f05be6690f81b6",
+        "commitDate": "2025-01-13T08:20:42-08:00",
+        "subject": "[webgpu] Use subgroup for matmulnbits (#23224)"
+      },
+      "genai": {
+        "commit": "874d9b691be81ef45eb2e208ac25415bffe8f1e2",
+        "commitDate": "2025-01-13T10:18:34-08:00",
+        "subject": "Prepare for release and some bug fixes (#1182)"
+      },
+      "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:49:47.672218+00:00",
+      "status": "failed",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\02-subgroup-prefill-2026-09-15T08-49-47.672177+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\02-subgroup-prefill\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 1,
+      "error": "Benchmark exited with 1",
+      "rawOutput": "WebGPU device lost (1): ID3D12Device::GetDeviceRemovedReason failed with DXGI_ERROR_DEVICE_HUNG (0x887A0006)\n - While handling unexpected error type Internal when allowed errors are (Validation|DeviceLost).\n    at CheckHRESULTImpl (E:\\ort-wt\\milestone-runtime\\02-subgroup-prefill\\onnxruntime\\build\\Windows\\Release\\_deps\\dawn-src\\src\\dawn\\native\\d3d\\D3DError.cpp:119)\n\nBackend messages:\n * Device removed reason: DXGI_ERROR_DEVICE_HUNG (0x887A0006)\n\u001b[1;31m2026-09-15 16:51:20.1269495 [E:onnxruntime:onnxruntime-genai, sequential_executor.cc:505 onnxruntime::ExecuteKernel] Non-zero status code returned while running GreaterOrEqual node. Name:'/model/pos_ids_reformat/GreaterOrEqual' Status Message: WebGPU validation failed. GPU device disconnected\u001b[m\nException: Non-zero status code returned while running GreaterOrEqual node. Name:'/model/pos_ids_reformat/GreaterOrEqual' Status Message: WebGPU validation failed. GPU device disconnected\n\nERROR: Benchmark exited with 1\n",
+      "rawOutputSha256": "2358627157ca450ec7d3cf4417277af42f9fd874fcf6a905ee545a64eb8c9da8",
+      "logSha256": "284542bf59d7ab112464fd106fcf34569f32236c70d4f3bab4d0baab5ddb26c4",
+      "finishedAt": "2026-09-15T08:51:21.492795+00:00"
+    },
+    {
+      "stageId": "03-dp4a-prefill",
+      "stage": "DP4A MatMulNBits",
+      "date": "2025-01-21",
+      "chartLabel": "DP4A",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\03-dp4a-prefill",
+      "ort": {
+        "commit": "58c29d34b2f29d2d3836e15c45e05a1bde0c8ad6",
+        "commitDate": "2025-01-21T15:46:51-08:00",
+        "subject": "WIP: Dp4MatMulNBits accuracy level 4 matmul for WebGPU EP (#23365)"
+      },
+      "genai": {
+        "commit": "2ac98d4b1216c9f6a52e23c89b8f6b8334811bf5",
+        "commitDate": "2025-01-21T13:57:36-08:00",
+        "subject": "add webgpu to the continuation supported list (#1196)"
+      },
+      "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:51:21.498179+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\03-dp4a-prefill-2026-09-15T08-51-21.498143+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\03-dp4a-prefill\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 0,
+      "ttftMs": 7135.44,
+      "prefillTps": 143.509,
+      "decodeTps": 19.95,
+      "e2eMs": 13501.5,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       7.13544e+06\n\tavg (tokens/s): 143.509\n\tp50 (us):       7.25622e+06\n\tstddev (us):    328899\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       50125.3\n\tavg (tokens/s): 19.95\n\tp50 (us):       48937.4\n\tstddev (us):    21356.9\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       84.04\n\tavg (tokens/s): 11899.1\n\tp50 (us):       84.1\n\tstddev (us):    7.44198\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       13501.5\n\tp50 (ms):       13649.9\n\tstddev (ms):    376.793\n\tn:              5\nPeak working set size (bytes): 7668736000\n",
+      "rawOutputSha256": "d63a9095cf9bb0e12d87b437122b43f3096d938a55d3218f3314597fa7636796",
+      "logSha256": "1f92ba5589b69901f42f217955a432a7a2a16e8ca5c872c39649fc414e19c23e",
+      "finishedAt": "2026-09-15T08:53:31.298351+00:00"
+    },
+    {
+      "stageId": "03-gqa-flash-prefill",
+      "stage": "Flash Attention",
+      "date": "2025-02-22",
+      "chartLabel": "Flash Attention",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\gqa-fa-candidate",
+      "ort": {
+        "commit": "9799c3fbd26fd5dd5cc161abc2a84bd21ba91a30",
+        "commitDate": "2025-02-22T07:51:05-08:00",
+        "subject": "[webgpu] Enable FlashAttention for GQA (#23761)"
+      },
+      "genai": {
+        "commit": "b247a9370565d9596d442c9f22a552582aecff98",
+        "commitDate": "2025-02-28T09:21:43-08:00",
+        "subject": "Added cancellation to the streaming method of OnnxRuntimeGenAIChatClient. (#1289)"
+      },
+      "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:53:31.303744+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\03-gqa-flash-prefill-2026-09-15T08-53-31.303708+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\gqa-fa-candidate\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 0,
+      "ttftMs": 1399.92,
+      "prefillTps": 731.469,
+      "decodeTps": 25.546,
+      "e2eMs": 6371.45,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.39992e+06\n\tavg (tokens/s): 731.469\n\tp50 (us):       1.51805e+06\n\tstddev (us):    171505\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       39144.8\n\tavg (tokens/s): 25.5462\n\tp50 (us):       39020.9\n\tstddev (us):    15346.9\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       67.8\n\tavg (tokens/s): 14749.3\n\tp50 (us):       68.6\n\tstddev (us):    19.8034\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       6371.45\n\tp50 (ms):       6641.85\n\tstddev (ms):    415.41\n\tn:              5\nPeak working set size (bytes): 8082796544\n",
+      "rawOutputSha256": "ca8b203759beb2468e88996a6550e06677d43e7e5d8a03cd0d4a832c312b2441",
+      "logSha256": "78453a0c5076ada1a826c98680121b957e3c268d493c322d5791d1ef77053a30",
+      "finishedAt": "2026-09-15T08:54:54.147726+00:00"
+    },
+    {
+      "stageId": "04-gqa-flash-decode",
+      "stage": "Flash Decoding",
+      "date": "2025-04-08",
+      "chartLabel": "Flash Decoding",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\04-gqa-flash-decode",
+      "ort": {
+        "commit": "18f91e55e8cdb8ce264fc773e91adfd725851cd6",
+        "commitDate": "2025-04-08T08:27:59-07:00",
+        "subject": "[webgpu] Flash attention for generation (#23808)"
+      },
+      "genai": {
+        "commit": "ab3dd3d84ca64ecfccac52fd520f9f00414cba82",
+        "commitDate": "2025-04-08T14:24:46-07:00",
+        "subject": "Support for gemma3 model (#1374)"
+      },
+      "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:54:54.154682+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\04-gqa-flash-decode-2026-09-15T08-54-54.154648+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\04-gqa-flash-decode\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 0,
+      "ttftMs": 1517.54,
+      "prefillTps": 674.776,
+      "decodeTps": 30.381,
+      "e2eMs": 5697.9,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.51754e+06\n\tavg (tokens/s): 674.776\n\tp50 (us):       1.51956e+06\n\tstddev (us):    10477.5\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       32915.1\n\tavg (tokens/s): 30.3812\n\tp50 (us):       31544.1\n\tstddev (us):    14794.5\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       56.48\n\tavg (tokens/s): 17705.4\n\tp50 (us):       52.6\n\tstddev (us):    11.4703\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       5697.9\n\tp50 (ms):       5693.53\n\tstddev (ms):    34.2052\n\tn:              5\nPeak working set size (bytes): 5996163072\n",
+      "rawOutputSha256": "a0b92b2df5839f8c3d711f8537922ea8233e9b7a37adbcc6992a684636333b6e",
+      "logSha256": "ac2d032d5000d8cb205883524b3dc6ce55c193a2c19106b806a48c8d6f8ca141",
+      "finishedAt": "2026-09-15T08:56:10.020963+00:00"
+    },
+    {
+      "stageId": "06-shared-memory-broadcast",
+      "stage": "Shared-memory broadcasting",
+      "date": "2025-08-26",
+      "chartLabel": "SHM Broadcast",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\shm-broadcast-candidate",
+      "ort": {
+        "commit": "cf05366785adc3d59ff026a58496a5e8864bd024",
+        "commitDate": "2025-08-26T17:00:22+08:00",
+        "subject": "[webgpu ] Optimize flash attention for Nvidia (#25777)"
+      },
+      "genai": {
+        "commit": "4af78a70c79128f75b4535f31afa5632bdc0bb93",
+        "commitDate": "2025-09-02T22:00:51Z",
+        "subject": "Use OnnxRuntime API wrapper for EP device operations (#1719)"
+      },
+      "builderCommit": "a414f699c74303e0eeb943cce13cbf423cd8026f",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:56:10.025833+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\06-shared-memory-broadcast-2026-09-15T08-56-10.025819+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "3cb3d1c00c2c838000c0ae93e374a8f5c1ebf57990e887e2bef1ccb052556b2a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\shm-broadcast-candidate\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 0,
+      "ttftMs": 1448.59,
+      "prefillTps": 706.895,
+      "decodeTps": 30.867,
+      "e2eMs": 5563.09,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.44859e+06\n\tavg (tokens/s): 706.895\n\tp50 (us):       1.43077e+06\n\tstddev (us):    44733.7\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       32397.1\n\tavg (tokens/s): 30.867\n\tp50 (us):       30941.2\n\tstddev (us):    14468.1\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       46.54\n\tavg (tokens/s): 21486.9\n\tp50 (us):       46.4\n\tstddev (us):    3.01877\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       5563.09\n\tp50 (ms):       5551.87\n\tstddev (ms):    107.915\n\tn:              5\nPeak working set size (bytes): 6144495616\n",
+      "rawOutputSha256": "a62960e4c7fda7126d50be74005669734ca3a7b09be160147851058a88ff1a4e",
+      "logSha256": "5d446bc7a65b5b23c1b6e3a776e23bfd9fcee4cdf466cec8e43cdd583abc42d9",
+      "finishedAt": "2026-09-15T08:57:24.673601+00:00"
+    },
+    {
+      "stageId": "06-gqa-rope",
+      "stage": "GQA fused RoPE",
+      "date": "2025-11-21",
+      "chartLabel": "GQA RoPE",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "experiments\\pre-prune-fused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\06-gqa-rope",
+      "ort": {
+        "commit": "96926a073329f45b532ecf7f6595c767d1b071a7",
+        "commitDate": "2025-11-21T08:05:39-08:00",
+        "subject": "[webgpu] Fused CopyKVCache and SplitPackedQKVWithRotaryEmbedding as SplitPackedQKVWithRotaryEmbeddingAndCopyKV (#26563)"
+      },
+      "genai": {
+        "commit": "240fa1b253b6d3daafde143f29a24442a8a63d68",
+        "commitDate": "2025-10-29T23:45:43-07:00",
+        "subject": "Support RotaryEmbedding in GQA for webgpu ep (#1847)"
+      },
+      "builderCommit": "240fa1b253b6d3daafde143f29a24442a8a63d68",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T08:57:24.681140+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\06-gqa-rope-2026-09-15T08-57-24.681102+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {}
+          }
+        ]
+      },
+      "configSha256": "75fdf4a8412612512907363e4ca85bb0f25818db7d2dcece2d507a815c6eae29",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\06-gqa-rope\\model_benchmark.exe -i D:\\ort-perf-trend\\experiments\\pre-prune-fused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 1152,
+        "maxLengthOption": null,
+        "supportsRequestedMaxLength": false
+      },
+      "exitCode": 0,
+      "ttftMs": 1502.43,
+      "prefillTps": 681.564,
+      "decodeTps": 32.069,
+      "e2eMs": 5462.66,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.50243e+06\n\tavg (tokens/s): 681.564\n\tp50 (us):       1.43167e+06\n\tstddev (us):    159370\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       31182.3\n\tavg (tokens/s): 32.0695\n\tp50 (us):       29167.6\n\tstddev (us):    27840.3\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       61.26\n\tavg (tokens/s): 16323.9\n\tp50 (us):       57\n\tstddev (us):    18.5942\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       5462.66\n\tp50 (ms):       5292.13\n\tstddev (ms):    269.54\n\tn:              5\nPeak working set size (bytes): 5711462400\n",
+      "rawOutputSha256": "2ba5fff23cf6fff053e160da95ec6411635daa74dcd2f60be7cdd5e6135e042b",
+      "logSha256": "bc85fc723f74cfe405a67e3c9b2aa92b3dda6611fb7b62c8164e02f01f4be1b2",
+      "finishedAt": "2026-09-15T08:58:43.945507+00:00"
+    },
+    {
+      "stageId": "08-graph-capture",
+      "stage": "WebGPU graph capture",
+      "date": "2026-04-08",
+      "chartLabel": "Graph Capture",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\08-graph-capture",
+      "ort": {
+        "commit": "f7751fed1721d504e5d033ddce321c12fc2c4877",
+        "commitDate": "2026-04-08T12:40:30-07:00",
+        "subject": "webgpu: Fix buffer overflow in BufferManager::Upload causing data corruption (#27948)"
+      },
+      "genai": {
+        "commit": "7054dc56351891da8b1604b4434387f121967aa5",
+        "commitDate": "2026-03-19T07:36:17+08:00",
+        "subject": "[WebGPU] Fix the prefill regression when graph capture is ON (#2021)"
+      },
+      "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": true,
+      "startedAt": "2026-09-15T08:58:43.950654+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\08-graph-capture-2026-09-15T08-58-43.950619+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {
+              "enableGraphCapture": "1",
+              "validationMode": "disabled",
+              "multiRotaryCacheConcatOffset": "4096"
+            }
+          }
+        ]
+      },
+      "configSha256": "07cd224302646e9627fe9bc53dcc22603719e2b89a95d5695650c53a8a998b3a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\08-graph-capture\\model_benchmark.exe -i D:\\ort-perf-trend\\experiments\\temporary-model-configs\\08-graph-capture-q6p5e7ni -b 1 -l 1024 -g 128 -r 5 -w 1 -ml 8192",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 8192,
+        "maxLengthOption": "-ml",
+        "supportsRequestedMaxLength": true
+      },
+      "exitCode": 0,
+      "ttftMs": 1008.71,
+      "prefillTps": 1015.15,
+      "decodeTps": 34.616,
+      "e2eMs": 4677.68,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.00871e+06\n\tavg (tokens/s): 1015.15\n\tp50 (us):       950874\n\tstddev (us):    171457\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       28888.5\n\tavg (tokens/s): 34.6158\n\tp50 (us):       28384.3\n\tstddev (us):    991.091\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       59.78\n\tavg (tokens/s): 16728\n\tp50 (us):       59.7\n\tstddev (us):    0.584808\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       4677.68\n\tp50 (ms):       4523.84\n\tstddev (ms):    280.943\n\tn:              5\nPeak working set size (bytes): 6507847680\n",
+      "rawOutputSha256": "8e3a999d83ad090840b29a85966eb387b697a7f75f8d551cd1188e1f3a8a86dd",
+      "logSha256": "98683362930b13a3d65f8008717df62eba78fad5ea8efc151a117b176cee97ba",
+      "finishedAt": "2026-09-15T08:59:52.863831+00:00"
+    },
+    {
+      "stageId": "10-flashattention-max-k-step",
+      "stage": "Increase max K-step",
+      "date": "2026-05-14",
+      "chartLabel": "Max K-step",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\10-flashattention-max-k-step",
+      "ort": {
+        "commit": "b36d8dbd503ed1b1e56eb8819080b29821e18fe1",
+        "commitDate": "2026-05-14T22:25:55Z",
+        "subject": "enable dynamic max_k_step in FA for nvidia (#28511)"
+      },
+      "genai": {
+        "commit": "85aa0ce4b60f7f048c7c2f86e219a0d237a893e9",
+        "commitDate": "2026-05-14T10:18:45-07:00",
+        "subject": "Update Copilot instructions for reviewing model builder (#2164)"
+      },
+      "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T09:01:02.758639+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\10-flashattention-max-k-step-2026-09-15T09-01-02.758600+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {
+              "enableGraphCapture": "0",
+              "validationMode": "basic",
+              "multiRotaryCacheConcatOffset": "4096"
+            }
+          }
+        ]
+      },
+      "configSha256": "f28efb9645e1621802171f33b517b680d096988272e373e765d3012068e308ee",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\10-flashattention-max-k-step\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct -b 1 -l 1024 -g 128 -r 5 -w 1 -ml 8192",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 8192,
+        "maxLengthOption": "-ml",
+        "supportsRequestedMaxLength": true
+      },
+      "exitCode": 0,
+      "ttftMs": 1209.23,
+      "prefillTps": 846.821,
+      "decodeTps": 30.856,
+      "e2eMs": 5325.26,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.20923e+06\n\tavg (tokens/s): 846.821\n\tp50 (us):       1.20448e+06\n\tstddev (us):    26872.3\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       32408.7\n\tavg (tokens/s): 30.8559\n\tp50 (us):       32309.9\n\tstddev (us):    467.925\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       74.52\n\tavg (tokens/s): 13419.2\n\tp50 (us):       79.5\n\tstddev (us):    15.3187\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       5325.26\n\tp50 (ms):       5332.21\n\tstddev (ms):    28.4424\n\tn:              5\nPeak working set size (bytes): 5661614080\n",
+      "rawOutputSha256": "2aa22d4734d809a72f88a94f15743507c312dd52d6118fe46f3b250dd7ceffa4",
+      "logSha256": "a7cf0f7aeb17e4d645f9df2362c73125ffa560544425c32b530a804b6b9c5e1d",
+      "finishedAt": "2026-09-15T09:02:17.814900+00:00"
+    },
+    {
+      "stageId": "09-matmulnbits-mlp",
+      "stage": "MatMulNBits MLP generation",
+      "date": "2026-05-28",
+      "chartLabel": "MLP Fusion",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\09-matmulnbits-mlp",
+      "ort": {
+        "commit": "88ca23fcd59d62f1f62df100932c581747a6c681",
+        "commitDate": "2026-05-28T10:11:21-07:00",
+        "subject": "[WebGPU] QKV and MLP layer fusions for Qwen3-style models (#28280)"
+      },
+      "genai": {
+        "commit": "6e6a2e83606256601b5ec3fa84ca1eada9c00624",
+        "commitDate": "2026-05-24T00:39:35-07:00",
+        "subject": "Update ort-extensions commit (#2182)"
+      },
+      "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": true,
+      "startedAt": "2026-09-15T09:02:17.821590+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\09-matmulnbits-mlp-2026-09-15T09-02-17.821533+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {
+              "enableGraphCapture": "1",
+              "validationMode": "disabled",
+              "multiRotaryCacheConcatOffset": "4096"
+            }
+          }
+        ]
+      },
+      "configSha256": "07cd224302646e9627fe9bc53dcc22603719e2b89a95d5695650c53a8a998b3a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\09-matmulnbits-mlp\\model_benchmark.exe -i D:\\ort-perf-trend\\experiments\\temporary-model-configs\\09-matmulnbits-mlp-uve7h_73 -b 1 -l 1024 -g 128 -r 5 -w 1 -ml 8192",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 8192,
+        "maxLengthOption": "-ml",
+        "supportsRequestedMaxLength": true
+      },
+      "exitCode": 0,
+      "ttftMs": 875.51,
+      "prefillTps": 1169.6,
+      "decodeTps": 34.329,
+      "e2eMs": 4575.12,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       875510\n\tavg (tokens/s): 1169.6\n\tp50 (us):       853660\n\tstddev (us):    150915\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       29129.8\n\tavg (tokens/s): 34.3292\n\tp50 (us):       28988.9\n\tstddev (us):    4324.11\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       67.72\n\tavg (tokens/s): 14766.7\n\tp50 (us):       59.5\n\tstddev (us):    17.1061\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       4575.12\n\tp50 (ms):       4611.28\n\tstddev (ms):    290.428\n\tn:              5\nPeak working set size (bytes): 10207088640\n",
+      "rawOutputSha256": "b7bb8b86093d313d7ba4fd2d5babca4c3a852932eb884b4f98bdd36d4f7fcf95",
+      "logSha256": "17c213c9a5874d2357f6f8e30721f1f31eb4263e7c69ed8d3dc66c90e6364fea",
+      "finishedAt": "2026-09-15T09:03:28.672633+00:00"
+    },
+    {
+      "stageId": "11-flashattention-decode-tuning",
+      "stage": "FlashAttention decode tuning",
+      "date": "2026-07-09",
+      "chartLabel": "FA Decode Tune",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "model\\aligned\\standard-fused-rope\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\11-flashattention-decode-tuning",
+      "ort": {
+        "commit": "1ad2a1f2ec4d019704dcee269b46ecd984489398",
+        "commitDate": "2026-07-09T13:51:29+08:00",
+        "subject": "webgpu: Bump FlashAttentionDecodeQKV workgroup to 128, tile_size_k_vec to 32 (#29586)"
+      },
+      "genai": {
+        "commit": "645069050ba1d42146a2230571dab6b2d00a6c6e",
+        "commitDate": "2026-06-18T14:26:59-07:00",
+        "subject": "Fix divide by zero error (#2226)"
+      },
+      "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": true,
+      "startedAt": "2026-09-15T09:03:28.680284+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\11-flashattention-decode-tuning-2026-09-15T09-03-28.680225+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {
+              "enableGraphCapture": "1",
+              "validationMode": "disabled",
+              "multiRotaryCacheConcatOffset": "4096"
+            }
+          }
+        ]
+      },
+      "configSha256": "07cd224302646e9627fe9bc53dcc22603719e2b89a95d5695650c53a8a998b3a",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\11-flashattention-decode-tuning\\model_benchmark.exe -i D:\\ort-perf-trend\\experiments\\temporary-model-configs\\11-flashattention-decode-tuning-i1_xaz5a -b 1 -l 1024 -g 128 -r 5 -w 1 -ml 8192",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 8192,
+        "maxLengthOption": "-ml",
+        "supportsRequestedMaxLength": true
+      },
+      "exitCode": 0,
+      "ttftMs": 1124.22,
+      "prefillTps": 910.85,
+      "decodeTps": 33.47,
+      "e2eMs": 4918.8,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.12422e+06\n\tavg (tokens/s): 910.85\n\tp50 (us):       1.16926e+06\n\tstddev (us):    326334\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       29877.8\n\tavg (tokens/s): 33.4697\n\tp50 (us):       29625.3\n\tstddev (us):    3097.29\n\tn:              635 * 1 token(s)\nToken sampling:\n\tavg (us):       52.06\n\tavg (tokens/s): 19208.6\n\tp50 (us):       50.4\n\tstddev (us):    3.18559\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       4918.8\n\tp50 (ms):       4974.72\n\tstddev (ms):    537.576\n\tn:              5\nPeak working set size (bytes): 10192015360\n",
+      "rawOutputSha256": "bba3a57145395b8d2b7830636be7dd48ea93ce58dfe00e5b56c135edd18452fa",
+      "logSha256": "272f0596346eaefb07fbff2c30245082bd9deb326282b774a588c92107bc8883",
+      "finishedAt": "2026-09-15T09:04:39.169605+00:00"
+    },
+    {
+      "stageId": "07-prune",
+      "stage": "Prune LM head",
+      "date": "2026-03-04",
+      "chartLabel": "Prune LM head",
+      "isReference": false,
+      "model": "Phi-4-mini-instruct",
+      "modelPath": "experiments\\prune-accuracy4\\candidate\\Phi-4-mini-instruct",
+      "runtimePath": "runtime-milestones\\07-prune",
+      "ort": {
+        "commit": "bdd672aac93b73448803dccb5132c9213e6c7a67",
+        "commitDate": "2026-03-04T14:53:20-08:00",
+        "subject": "Add/Update telemetry events (#27356)"
+      },
+      "genai": {
+        "commit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+        "commitDate": "2026-03-04T06:03:06Z",
+        "subject": "Add small changes after pruning prefill (#2000)"
+      },
+      "builderCommit": "b2a4ecc6039b2f7bf46276f0fc9e0ca7bef5244e",
+      "sourceRevision": "618e63e60172e9efa181cbfeee9d7012e5b2ad66",
+      "graphCapture": false,
+      "startedAt": "2026-09-15T09:09:12.834952+00:00",
+      "status": "success",
+      "log": "D:\\ort-perf-trend\\collection\\logs\\07-prune-2026-09-15T09-09-12.834904+00-00.log",
+      "sessionOptions": {
+        "log_id": "onnxruntime-genai",
+        "provider_options": [
+          {
+            "webgpu": {
+              "enableGraphCapture": "0",
+              "validationMode": "basic",
+              "multiRotaryCacheConcatOffset": "4096"
+            }
+          }
+        ]
+      },
+      "configSha256": "f28efb9645e1621802171f33b517b680d096988272e373e765d3012068e308ee",
+      "benchmarkInvocation": {
+        "command": "D:\\ort-perf-trend\\runtime-milestones\\07-prune\\model_benchmark.exe -i D:\\ort-perf-trend\\experiments\\prune-accuracy4\\candidate\\Phi-4-mini-instruct -b 1 -l 1023 -g 128 -r 5 -w 1 -ml 8192",
+        "tool": "C++ model_benchmark.exe",
+        "batchSize": 1,
+        "requestedMaxKvCacheLength": 8192,
+        "effectiveMaxLength": 8192,
+        "maxLengthOption": "-ml",
+        "supportsRequestedMaxLength": true,
+        "promptLengthArgument": 1023,
+        "promptLengthAdjustment": "GeneratePrompt adds the one-token A seed with an explicit -ml; use -l 1023 for 1024 measured prompt tokens."
+      },
+      "exitCode": 0,
+      "ttftMs": 1249.7,
+      "prefillTps": 819.396,
+      "decodeTps": 33.565,
+      "e2eMs": 5063.28,
+      "rawOutput": "Batch size: 1, prompt tokens: 1024, tokens to generate: 128\nPrompt processing (time to first token):\n\tavg (us):       1.2497e+06\n\tavg (tokens/s): 819.396\n\tp50 (us):       1.23733e+06\n\tstddev (us):    41197.8\n\tn:              5 * 1024 token(s)\nToken generation:\n\tavg (us):       29792.9\n\tavg (tokens/s): 33.565\n\tp50 (us):       29685.9\n\tstddev (us):    455.301\n\tn:              640 * 1 token(s)\nToken sampling:\n\tavg (us):       52.9\n\tavg (tokens/s): 18903.6\n\tp50 (us):       54.4\n\tstddev (us):    5.49227\n\tn:              5 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       5063.28\n\tp50 (ms):       5057.27\n\tstddev (ms):    45.1724\n\tn:              5\nPeak working set size (bytes): 5923450880\n",
+      "rawOutputSha256": "c713c611313d41af8c663dafa551af840410e48db0f3a7b7b6f61e7a8114b652",
+      "logSha256": "a79e55049213d11263e1ff8c83fc53df99996b5b012404fc7289d82fa9e27dc2",
+      "finishedAt": "2026-09-15T09:10:22.355419+00:00"
+    }
+  ],
+  "runnerPid": 19872,
+  "deviceAfter": {
+    "gpus": [
+      {
+        "Name": "Intel(R) Arc(TM) B390 GPU",
+        "DriverVersion": "32.0.101.8622",
+        "PNPDeviceID": "PCI\\VEN_8086&DEV_B080&SUBSYS_380417AA&REV_04\\3&11583659&0&10"
+      }
+    ],
+    "powerScheme": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) Ultra X7 358H"
+      }
+    ],
+    "memoryBytes": 33873752064,
+    "hostname": "webgfx-32",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "vendor": "Intel",
+    "gpu": "Intel(R) Arc(TM) B390 GPU",
+    "driver": "32.0.101.8622",
+    "adapterId": "PCI\\VEN_8086&DEV_B080&SUBSYS_380417AA&REV_04\\3&11583659&0&10",
+    "selection": "single physical PCI GPU",
+    "acLineStatus": 1
+  },
+  "diagnostics": [
+    {
+      "purpose": "Diagnose historical GPU hang; different workload, excluded from trend",
+      "command": "D:\\ort-perf-trend\\runtime\\2024-12\\model_benchmark.exe -i D:\\ort-perf-trend\\model\\aligned\\standard-unfused-rope\\Phi-4-mini-instruct -b 1 -l 128 -g 16 -r 1 -w 0",
+      "runtime": {
+        "schemaVersion": 1,
+        "snapshot": "2024-12",
+        "anchorDate": "2024-12-02",
+        "ort": {
+          "commit": "8c52fa392434e25ccdf0a0645a4eb6e4865074fa",
+          "commitDate": "2024-12-02T13:57:30-08:00",
+          "subject": "[VSINPU]Split/Pad and some element-wise OPs support (#22916)"
+        },
+        "genai": {
+          "commit": "c5745fd6d91a2ba2d94c6a52f6255652dde02508",
+          "commitDate": "2024-11-25T16:55:30-08:00",
+          "subject": "Debug build fixes missed by pipelines (#1101)"
+        },
+        "buildConfig": "Release",
+        "dawnBackend": "d3d12",
+        "genaiLinkage": "static",
+        "builtAt": "2026-08-30T16:51:18.251227+00:00",
+        "host": {
+          "hostname": "webgfx-100",
+          "platform": "Windows-11-10.0.26200-SP0",
+          "python": "3.13.15 (tags/v3.13.15:4061bc4, Aug  5 2026, 13:05:39) [MSC v.1944 64 bit (AMD64)]",
+          "gpus": [
+            {
+              "Name": "Microsoft Remote Display Adapter",
+              "DriverVersion": "10.0.26100.8737",
+              "PNPDeviceID": "SWD\\REMOTEDISPLAYENUM\\RDPIDD_INDIRECTDISPLAY&SESSIONID_0001"
+            },
+            {
+              "Name": "AMD Radeon(TM) Graphics",
+              "DriverVersion": "32.0.21030.2001",
+              "PNPDeviceID": "PCI\\VEN_1002&DEV_13C0&SUBSYS_7E491462&REV_C1\\4&1079050D&0&0041"
+            },
+            {
+              "Name": "NVIDIA GeForce RTX 5080",
+              "DriverVersion": "32.0.16.1062",
+              "PNPDeviceID": "PCI\\VEN_10DE&DEV_2C02&SUBSYS_41761458&REV_A1\\1AFA3104CC2DB04800"
+            }
+          ]
+        },
+        "commands": [
+          "D:\\workspace\\project\\skills\\gyagp-skills\\.venv\\Scripts\\python.exe E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime\\tools\\ci_build\\build.py --build_dir E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime\\build\\Windows --config Release --update --build --parallel --skip_tests --build_shared_lib --use_webgpu --compile_no_warning_as_error --cmake_generator \"Visual Studio 17 2022\" --cmake_path \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --cmake_extra_defines onnxruntime_ENABLE_DAWN_BACKEND_D3D12=ON onnxruntime_ENABLE_DAWN_BACKEND_VULKAN=OFF CMAKE_POLICY_VERSION_MINIMUM=3.5",
+          "D:\\workspace\\project\\skills\\gyagp-skills\\.venv\\Scripts\\python.exe E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build.py --build_dir E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build\\Windows --config Release --update --skip_tests --skip_wheel --ort_home E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\staging\\2024-12\\ort --cmake_path \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --use_webgpu --cmake_extra_defines CMAKE_POLICY_VERSION_MINIMUM=3.5 \"CMAKE_CXX_FLAGS=/EHsc /wd4834\"",
+          "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --build E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build\\Windows\\Release --config Release --parallel --target model_benchmark"
+        ],
+        "compatibilityAdjustments": [
+          {
+            "file": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build\\Windows\\Release\\_deps\\onnxruntime_extensions-src\\shared\\api\\image_processor.cc",
+            "change": "#if OCOS_ENABLE_VENDOR_IMAGE_CODECS -> #if defined(OCOS_ENABLE_VENDOR_IMAGE_CODECS)",
+            "reason": "current MSVC rejects a valueless macro in #if; semantics are unchanged"
+          },
+          {
+            "file": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build\\Windows\\Release\\_deps\\onnxruntime_extensions-src\\shared\\api\\image_processor.cc",
+            "change": "#if WIN32 -> #if defined(WIN32)",
+            "reason": "current MSVC rejects a valueless macro in #if; semantics are unchanged"
+          }
+        ],
+        "files": {
+          "onnxruntime.dll": {
+            "source": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime\\build\\Windows\\Release\\Release\\onnxruntime.dll",
+            "bytes": 18630656,
+            "sha256": "473f47c29abea011137634dff056f9125d42887e1654fef642dcdaf506d19f7f"
+          },
+          "model_benchmark.exe": {
+            "source": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build\\Windows\\Release\\benchmark\\c\\Release\\model_benchmark.exe",
+            "bytes": 1283584,
+            "sha256": "30c1bf066bf3e07ac3a575d91b99bb4e96cf335b06e3470a09539090c2c8c770"
+          },
+          "onnxruntime-genai-static.lib": {
+            "source": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime-genai\\build\\Windows\\Release\\Release\\onnxruntime-genai-static.lib",
+            "bytes": 5781728,
+            "sha256": "27a3f32c0cc0e60c260308500b598543fc6114822110164f50e19924fb50fab9"
+          },
+          "dxcompiler.dll": {
+            "source": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime\\build\\Windows\\Release\\Release\\dxcompiler.dll",
+            "bytes": 16771584,
+            "sha256": "25ecda605e556062782b192e4d6574c1d9eeb93f1e45d29d1a14224cc38bed54"
+          },
+          "dxil.dll": {
+            "source": "E:\\workspace\\project\\agents\\ort-webgpu-perf-trend\\worktrees\\2024-12\\onnxruntime\\build\\Windows\\Release\\Release\\dxil.dll",
+            "bytes": 1525744,
+            "sha256": "b350b0cc4d8e21d8aea4bb32a39258dac30cd5a2bbda5cf3e4ad8dd89de41896"
+          }
+        }
+      },
+      "promptLength": 128,
+      "generationLength": 16,
+      "repetitions": 1,
+      "warmup": 0,
+      "startedAt": "2026-09-15T09:05:33.712545+00:00",
+      "exitCode": 0,
+      "rawOutput": "Batch size: 1, prompt tokens: 128, tokens to generate: 16\nPrompt processing (time to first token):\n\tavg (us):       1.47329e+06\n\tavg (tokens/s): 86.8805\n\tp50 (us):       1.47329e+06\n\tstddev (us):    0\n\tn:              1 * 128 token(s)\nToken generation:\n\tavg (us):       31108\n\tavg (tokens/s): 32.1461\n\tp50 (us):       30671.4\n\tstddev (us):    1575.98\n\tn:              15 * 1 token(s)\nToken sampling:\n\tavg (us):       41.8\n\tavg (tokens/s): 23923.4\n\tp50 (us):       41.8\n\tstddev (us):    0\n\tn:              1 * 1 token(s)\nE2E generation (entire generation loop):\n\tavg (ms):       1939.95\n\tp50 (ms):       1939.95\n\tstddev (ms):    0\n\tn:              1\nPeak working set size (bytes): 7560159232\nWebGPU device lost (2): Device was destroyed.",
+      "metrics": {
+        "ttftMs": 1473.29,
+        "prefillTps": 86.88,
+        "decodeTps": 32.146,
+        "e2eMs": 1939.95
+      },
+      "finishedAt": "2026-09-15T09:06:03.407002+00:00",
+      "elapsedSeconds": 29.694465999997192
+    }
+  ]
+}

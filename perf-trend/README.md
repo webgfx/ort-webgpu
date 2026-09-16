@@ -177,6 +177,81 @@ with their effective prompt + generation length rather than being mislabeled as
 It prefers archived controlled parent-to-candidate measurements and otherwise
 uses the adjacent cumulative-series transition with that limitation stated.
 
+## Collect on AMD and Intel through WinRM
+
+Additional devices use independent series, reusing the archived runtime and model
+files for all 11 milestones. Both charts start with a measurement collected on
+that device using the December 2, 2024 runtime. NVIDIA reference values and
+controlled comparisons are never copied to another GPU. NVIDIA-specific kernel
+changes may have no benefit on AMD or Intel; failed measurements remain gaps.
+
+Prepare a transfer manifest (validates every source artifact against its archived
+hash and records the exact runtime commits):
+
+```powershell
+python .\cross_device_benchmark.py prepare --archive-root E:\backup\ort\perf-trend --manifest ..\gitignore\perf-trend\remote\transfer-manifest.json
+```
+
+The manifest covers 12 runs: the 11 milestones and one starting measurement. It
+includes both maintained models plus the two model-changing experiment packages
+already used by the NVIDIA series. No new model export is required.
+
+Probe each host, then deploy and start one collector per host. The host requires
+Python 3.11+, enough disk space for the manifest, and working WebGPU/D3D12 drivers.
+Use the reachable fully qualified hostname when short-name DNS is unavailable.
+Credentials can be passed with `-Credential` when the current Windows identity
+does not have WinRM access.
+
+```powershell
+.\remote_benchmark.ps1 -Action Probe -ComputerName webgfx-30
+.\remote_benchmark.ps1 -Action Deploy -ComputerName webgfx-30 -ArchiveRoot E:\backup\ort\perf-trend -Manifest ..\gitignore\perf-trend\remote\transfer-manifest.json
+.\remote_benchmark.ps1 -Action Start -ComputerName webgfx-30 -Vendor AMD
+.\remote_benchmark.ps1 -Action Status -ComputerName webgfx-30
+.\remote_benchmark.ps1 -Action Collect -ComputerName webgfx-30 -LocalResults ..\gitignore\perf-trend\remote\webgfx-30
+```
+
+Repeat with `webgfx-32` and `-Vendor Intel`. The default remote archive is
+`C:\ort-perf-trend`; override it consistently with `-RemoteRoot` if needed.
+Deployment skips files whose sizes and hashes already match and verifies all
+transferred files. Identical artifacts already present on the remote disk are
+copied locally instead of transferred again. For a reachable artifact server,
+`-ArtifactBaseUrl` optionally downloads files under WinRM control and verifies
+their hashes; interrupted downloads resume with HTTP Range and retry from zero
+if the completed file fails verification. The server should expose only the
+manifest-listed files to the intended devices. Start creates a disconnected WinRM session that survives the
+client invocation. Keep its returned session name/ID. Status reports live process
+IDs and saved result rows; inspect both before restarting interrupted work.
+The collector resumes completed stages only when the manifest, host, GPU, driver
+and power scheme match. It refuses ambiguous physical GPU selection.
+
+Each row retains the command, effective max length, actual session options,
+runtime/model identifiers, timestamps, AC power state, and raw output. Unique log filenames
+preserve failed attempts and reruns. The workload remains batch 1, prompt 1024,
+generation 128, one warmup and five measurements; `-ml 8192` is used where the
+historical executable supports it. Graph-capture overrides use a temporary model
+config. Historical binaries that lack `-ml` are explicitly marked.
+The March 4 GenAI benchmark (`b2a4ecc603`) counts an additional one-token seed
+when generating a prompt with an explicit max length. For that exact binary,
+the collector uses `-l 1023` and verifies that the raw output reports 1024 prompt
+tokens. The invocation records this adjustment. A shorter diagnostic for failed
+historical runtimes is retained separately and never substituted in the trend.
+
+After collection, publish the validated dataset and regenerate the shared report:
+
+```powershell
+python .\cross_device_benchmark.py publish --archive-root E:\backup\ort\perf-trend --manifest ..\gitignore\perf-trend\remote\transfer-manifest.json --results ..\gitignore\perf-trend\remote\webgfx-30\results.json --output .\data\devices\webgfx-30.json
+python .\milestone_benchmark.py --config ..\gitignore\perf-trend\config\config.local.json render
+python .\milestone_benchmark.py --config ..\gitignore\perf-trend\config\config.local.json verify
+```
+
+Repeat publication for `webgfx-32`. Files in `data/devices/` are tracked evidence,
+including raw benchmark output and artifact hashes. Large model/binary copies,
+transfer manifests, and working logs remain in the local archives or `gitignore/`.
+Rendering automatically loads those datasets; `--device-results` can explicitly
+select additional datasets. Publication and report verification reject missing
+milestones, wrong commits, changed device/driver/power state, and throughput
+values that differ from the raw output.
+
 ## Rebuild monthly runtimes
 
 Check prerequisites and review the plan before writing it:
