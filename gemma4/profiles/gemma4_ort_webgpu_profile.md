@@ -3,7 +3,7 @@
 - Runtime: **ONNX Runtime WebGPU 1.30.0 + ONNX Runtime GenAI 0.16.0-dev**
 - Hardware: **NVIDIA GeForce RTX 4070 12 GB**, driver **591.44**, Windows 11
 - Model: **Gemma 4 E2B INT4 ONNX**, decoder WebGPU graph capture enabled
-- Trace: `gemma4_decoder_webgpu.json`
+- Trace: `gemma4_decoder_webgpu_profile.json`
 - Input/output tokens: **1024 / 256**
 - TTFT: **206.8 ms**
 - Decode throughput: **86.1 tok/s**
@@ -39,7 +39,3 @@ Durations are accumulated ORT node-event time. They can overlap and include prof
 | Cast | 6.682 ms | 128 | 0.8% |
 | Where | 6.261 ms | 8 | 0.7% |
 | Div | 4.572 ms | 64 | 0.5% |
-
-## Interpretation
-
-This is an instrumented diagnostic run, not a benchmark result. Profiling changes execution overhead. Open the trace in Perfetto or `chrome://tracing` for timeline analysis.
