@@ -1,0 +1,337 @@
+{
+  "success": true,
+  "cases": 15,
+  "timedSamplesIncludingControl": 225,
+  "allFullOutputsMatch": true,
+  "deliveredSourcesAndExecutableMatch": true,
+  "cpuVisibleTimingValidated": true,
+  "actualJspiLoadsVerified": true,
+  "requestSha256": "50299db6ca2b268f07bb8d13363fa739375542b5af8ba619426dd7c990e11620",
+  "nativeBuild": {
+    "sourceFiles": {
+      "gpu.h": "3b05a7dfbad784d37c0127377a0c1d09506090210b50ea26d3c0dacae2714662",
+      "main.cpp": "adf6e9039d344fe0d6a8f8dc78f410014e6256058921bb0a22b41cfd90a12efc",
+      "../web/gpu-greedy.mjs": "ac27c34e080eea5b1b0ea5d21dcf704317609578309cec918302fd504d4032b0",
+      "probe.h": "5b1b07d38819551ff115c0a579a2de36a555768c08a5ce7e348edd4fb8e3317c",
+      "emit-shader.mjs": "c96885c06711fa5e728d6875f155027e68548075e4045a5ca4ab91f5a7aecf19"
+    },
+    "dawnDependency": "dawn;https://github.com/google/dawn/archive/refs/tags/v20260828.013844.zip;83f269a6b0c2a5a085c96a4e360d337950740018",
+    "compiler": "19.51.36257.0",
+    "runtimeSha256": "e9f8a85dba5463eb1cf76177a0c2643d67dafd8fe3006e23d087718755f9c193",
+    "ortSource": "09dfa6ad06ed8072b2fbe57687d4f71c7914b025"
+  },
+  "webBuild": "benchmark-20260920-09dfa6ad",
+  "browser": "Edg/153.0.4234.46",
+  "comparison": [
+    {
+      "model": "aion",
+      "input": 128,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 4496.728278870225,
+        "decodeTps": 278.74333199858444,
+        "decodeMsMin": 455.4771,
+        "decodeMsMax": 455.723
+      },
+      "right": {
+        "ttftThroughput": 3713.4816785735384,
+        "decodeTps": 276.4102363195829,
+        "decodeMsMin": 457.4549999833107,
+        "decodeMsMax": 464.7150000333786
+      },
+      "decodeChangePercent": -0.8370050190163347
+    },
+    {
+      "model": "aion",
+      "input": 512,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 6080.842424707414,
+        "decodeTps": 274.51411002525526,
+        "decodeMsMin": 461.8081,
+        "decodeMsMax": 463.37120000000004
+      },
+      "right": {
+        "ttftThroughput": 5783.611594396174,
+        "decodeTps": 274.8917748917749,
+        "decodeMsMin": 460.8299999833107,
+        "decodeMsMax": 462.9150000214577
+      },
+      "decodeChangePercent": 0.13757575757578078
+    },
+    {
+      "model": "aion",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 6458.75122315755,
+        "decodeTps": 272.9166499227646,
+        "decodeMsMin": 463.90689999999995,
+        "decodeMsMax": 467.6098
+      },
+      "right": {
+        "ttftThroughput": 6270.70588303676,
+        "decodeTps": 272.3866431879537,
+        "decodeMsMin": 465.4050000309944,
+        "decodeMsMax": 467.28500002622604
+      },
+      "decodeChangePercent": -0.19420095291395878
+    },
+    {
+      "model": "Phi-4-mini-instruct",
+      "input": 128,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 3393.707747675708,
+        "decodeTps": 228.3047891225963,
+        "decodeMsMin": 556.0292,
+        "decodeMsMax": 556.4393
+      },
+      "right": {
+        "ttftThroughput": 2985.910236438876,
+        "decodeTps": 226.74239029115986,
+        "decodeMsMin": 558.7350000143051,
+        "decodeMsMax": 562.8100000023842
+      },
+      "decodeChangePercent": -0.6843478130445391
+    },
+    {
+      "model": "Phi-4-mini-instruct",
+      "input": 512,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 4489.8551197414545,
+        "decodeTps": 224.70723654969717,
+        "decodeMsMin": 564.3661,
+        "decodeMsMax": 565.7953
+      },
+      "right": {
+        "ttftThroughput": 4353.297282572562,
+        "decodeTps": 223.52897692709004,
+        "decodeMsMin": 566.5749999880791,
+        "decodeMsMax": 570.1899999976158
+      },
+      "decodeChangePercent": -0.5243532165224885
+    },
+    {
+      "model": "Phi-4-mini-instruct",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 4621.184284976882,
+        "decodeTps": 222.99707364627608,
+        "decodeMsMin": 567.8169,
+        "decodeMsMax": 570.5847
+      },
+      "right": {
+        "ttftThroughput": 4523.687511938932,
+        "decodeTps": 221.45420431476214,
+        "decodeMsMin": 572.8500000238419,
+        "decodeMsMax": 574.3050000071526
+      },
+      "decodeChangePercent": -0.6918787346784971
+    },
+    {
+      "model": "Qwen3.5-2B",
+      "input": 128,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 4410.845441908132,
+        "decodeTps": 259.3990276008736,
+        "decodeMsMin": 489.47049999999996,
+        "decodeMsMax": 489.704
+      },
+      "right": {
+        "ttftThroughput": 3544.626291017401,
+        "decodeTps": 258.5252255469883,
+        "decodeMsMin": 490.8600000143051,
+        "decodeMsMax": 491.6650000214577
+      },
+      "decodeChangePercent": -0.33685633364430867
+    },
+    {
+      "model": "Qwen3.5-2B",
+      "input": 512,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 5918.255483229027,
+        "decodeTps": 257.75412699874624,
+        "decodeMsMin": 491.55109999999996,
+        "decodeMsMax": 493.33750000000003
+      },
+      "right": {
+        "ttftThroughput": 5696.547580122414,
+        "decodeTps": 256.96226095581636,
+        "decodeMsMin": 490.7999999523163,
+        "decodeMsMax": 504.2099999785423
+      },
+      "decodeChangePercent": -0.30721760002458964
+    },
+    {
+      "model": "Qwen3.5-2B",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 6463.081289152451,
+        "decodeTps": 257.0825326831858,
+        "decodeMsMin": 491.45490000000007,
+        "decodeMsMax": 495.45009999999996
+      },
+      "right": {
+        "ttftThroughput": 6340.6750593351335,
+        "decodeTps": 256.5076184779963,
+        "decodeMsMin": 492.75,
+        "decodeMsMax": 500.414999961853
+      },
+      "decodeChangePercent": -0.2236302090185105
+    },
+    {
+      "model": "Qwen3.5-4B",
+      "input": 128,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 2474.3211854472797,
+        "decodeTps": 156.16962106388303,
+        "decodeMsMin": 812.9826,
+        "decodeMsMax": 813.4363000000001
+      },
+      "right": {
+        "ttftThroughput": 2221.9521935673292,
+        "decodeTps": 155.6986948263768,
+        "decodeMsMin": 812.7150000333786,
+        "decodeMsMax": 825.4549999833107
+      },
+      "decodeChangePercent": -0.3015479158482437
+    },
+    {
+      "model": "Qwen3.5-4B",
+      "input": 512,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 3271.729813395101,
+        "decodeTps": 155.38705888611605,
+        "decodeMsMin": 816.8366000000001,
+        "decodeMsMax": 817.5256
+      },
+      "right": {
+        "ttftThroughput": 3197.521920730609,
+        "decodeTps": 155.37182802799012,
+        "decodeMsMin": 814.9300000071526,
+        "decodeMsMax": 827.0149999856949
+      },
+      "decodeChangePercent": -0.009801883268212297
+    },
+    {
+      "model": "Qwen3.5-4B",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 3412.572102249725,
+        "decodeTps": 155.12806603599006,
+        "decodeMsMin": 815.5951,
+        "decodeMsMax": 820.1508999999999
+      },
+      "right": {
+        "ttftThroughput": 3386.3553687876756,
+        "decodeTps": 155.27798427630208,
+        "decodeMsMin": 815.2849999666214,
+        "decodeMsMax": 826.2249999642372
+      },
+      "decodeChangePercent": 0.0966415969352985
+    },
+    {
+      "model": "gemma-4-e2b-it",
+      "input": 128,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 2063.1730699177115,
+        "decodeTps": 136.90057275750178,
+        "decodeMsMin": 925.5046,
+        "decodeMsMax": 933.7918
+      },
+      "right": {
+        "ttftThroughput": 1737.5015275283117,
+        "decodeTps": 70.92986823150423,
+        "decodeMsMin": 1765.9750000238419,
+        "decodeMsMax": 1821.8400000333786
+      },
+      "decodeChangePercent": -48.188771746670824
+    },
+    {
+      "model": "gemma-4-e2b-it",
+      "input": 512,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 3430.0780597334697,
+        "decodeTps": 136.2757477734635,
+        "decodeMsMin": 930.0753000000001,
+        "decodeMsMax": 933.7202000000001
+      },
+      "right": {
+        "ttftThroughput": 3071.7174021220403,
+        "decodeTps": 69.86797703008672,
+        "decodeMsMin": 1779.8650000095367,
+        "decodeMsMax": 1864.6800000071526
+      },
+      "decodeChangePercent": -48.73043944236433
+    },
+    {
+      "model": "gemma-4-e2b-it",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 3836.398005912249,
+        "decodeTps": 131.74585730338555,
+        "decodeMsMin": 932.0559,
+        "decodeMsMax": 990.75
+      },
+      "right": {
+        "ttftThroughput": 3669.1725013597948,
+        "decodeTps": 70.92879865520777,
+        "decodeMsMin": 1774.7700000405312,
+        "decodeMsMax": 1803.6500000357628
+      },
+      "decodeChangePercent": -46.16240684375199
+    }
+  ],
+  "inputArtifacts": {
+    "results\\webgfx104-20260920\\full-final\\native-gpu.json": {
+      "size": 1236493,
+      "sha256": "ab2584b0cd37142dcdbe4c89c1b549b867b5846d558636ca25bccca1349146fd"
+    },
+    "results\\webgfx104-20260920\\full-final\\native-cpu.json": {
+      "size": 1236234,
+      "sha256": "cb73e2b02c9036bc43dd5dd56d4934ee7848197432605316d4e0bfca09693d4b"
+    },
+    "results\\webgfx104-20260920\\full-01\\web.json": {
+      "size": 1353009,
+      "sha256": "e3f7f463bea560cb9390ba1a8808ca271a324f6885c593bd293c1a49672f3dc8"
+    },
+    "results\\webgfx104-20260920\\full-request.json": {
+      "size": 427241,
+      "sha256": "50299db6ca2b268f07bb8d13363fa739375542b5af8ba619426dd7c990e11620"
+    }
+  },
+  "nativeExecutableSha256": "8e0a2f598b74abb4222df67330de905fe4c063bfed25f959fc3b660c5323e212",
+  "actualWebModelReplay": {
+    "models": 5,
+    "decodeCallsPerModel": 14,
+    "replayMessagesPerModel": 13,
+    "allPassed": true
+  }
+}

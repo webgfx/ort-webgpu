@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORT WebGPU · Browser benchmark</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234f46e5'/%3E%3Cpath d='M32 11 51 22 32 33 13 22Z' fill='white'/%3E%3Cpath d='M13 26 30 36v19L13 45Z' fill='%23c7d2fe'/%3E%3Cpath d='m34 36 17-10v19L34 55Z' fill='%2367e8f9'/%3E%3C/svg%3E">
+  <style>
+    :root{color-scheme:light;--ink:#172033;--muted:#607087;--accent:#4f46e5;--border:#e1e7f0}
+    *{box-sizing:border-box}body{margin:0;background:#f7f9fc;color:var(--ink);font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+    header{background:#fff;border-bottom:1px solid var(--border)}.header-inner{max-width:1280px;margin:auto;padding:22px 32px;display:flex;align-items:center;gap:14px}
+    .mark{display:grid;place-items:center;background:var(--accent);color:#fff;width:42px;height:42px;border-radius:12px;font-size:24px}.wordmark{font-weight:750;letter-spacing:-.4px;font-size:18px}.subbrand{color:var(--muted);font-size:12px}.local-tag{margin-left:auto;color:#18765e;background:#eaf8f2;border:1px solid #cbe9dd;border-radius:24px;padding:5px 12px;font-size:12px;font-weight:650}
+    main{max-width:1280px;margin:auto;padding:32px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;font-size:11px;font-weight:750}h1{font-size:32px;line-height:1.2;letter-spacing:-1px;margin:8px 0 12px}p{margin:0 0 14px;color:var(--muted)}.intro{max-width:830px}.environment{color:#36506d;font-size:12px;margin:18px 0 24px;display:flex;align-items:center;gap:8px}.environment:before{content:"";width:7px;height:7px;border-radius:50%;background:#4f46e5;flex:none}
+    .layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:24px;align-items:start}.panel{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px #24345b03}.panel-title{padding:20px 24px 0;font-size:15px;font-weight:700}.panel-content{padding:20px 24px 24px}fieldset{border:0;padding:0;margin:0;min-width:0}legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    .step{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;margin-bottom:10px}.number{width:22px;height:22px;display:grid;place-items:center;border-radius:7px;color:var(--accent);background:#eeedff;font-size:11px}.help{color:var(--muted);font-size:12px;line-height:1.6;margin:9px 0 20px;overflow-wrap:anywhere}input[type=file]{font-size:12px;width:100%;color:var(--muted)}input[type=file]::file-selector-button{font:600 12px system-ui;border:1px solid var(--border);border-radius:7px;background:#f7f9fc;color:var(--ink);padding:8px 11px;cursor:pointer;margin-right:8px}
+    .model-choice{display:flex;gap:8px;align-items:center;margin:7px 0;font-size:12px;overflow-wrap:anywhere}input[type=checkbox]{accent-color:var(--accent)}.divider{height:1px;background:var(--border);margin:20px 0}.field{display:block;font-size:12px;font-weight:650;margin:14px 0 5px}.input{width:100%;border:1px solid #d7dfeb;border-radius:8px;background:#fff;padding:9px 10px;font:14px system-ui;color:var(--ink)}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.check{display:flex;gap:8px;font-size:12px;margin-top:12px;align-items:center}details{margin-top:18px}summary{font-size:12px;cursor:pointer;color:var(--muted)}.fixed{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.fixed span{font-size:11px;background:#f2f5fa;border:1px solid #e6eaf2;padding:3px 7px;border-radius:5px;color:#607087}
+    .actions{display:flex;gap:8px;margin-top:22px}button{border:1px solid var(--border);border-radius:8px;padding:10px 14px;font:600 13px system-ui;background:#fff;color:var(--ink);cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--accent);color:#fff;border-color:var(--accent);flex:1}.danger{color:#ad3640}button:hover:not(:disabled){filter:brightness(.96)}:focus-visible{outline:3px solid #a5b4fc;outline-offset:3px}
+    .content{display:grid;gap:22px}.result-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;gap:12px}.result-header h2{font-size:15px;margin:0}.downloads{display:flex;gap:6px}.downloads button{font-size:11px;padding:6px 10px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px;text-align:right;white-space:nowrap}th{font-size:10px;letter-spacing:.3px;text-transform:uppercase;color:#657187;background:#f8faff;font-weight:650;border-block:1px solid var(--border);padding:12px 14px}td{padding:12px 14px;border-bottom:1px solid #f0f3f7;font-variant-numeric:tabular-nums}th:first-child,td:first-child{text-align:left}td:last-child{color:#18765e}#empty{padding:60px 26px;text-align:center;color:var(--muted);font-size:13px}#empty strong{display:block;color:#41516a;font-size:15px;margin-bottom:8px}.empty-icon{display:block;color:#adb8d0;font-size:32px;margin-bottom:16px}.table-note{font-size:11px;padding:15px 24px;color:var(--muted);border-top:1px solid var(--border)}
+    .status-heading{font-size:12px;font-weight:650;padding:14px 24px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}#log{font:11px/1.8 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow:auto;overflow-wrap:anywhere;height:190px;padding:16px 24px;color:#66768d;background:#fcfdff}#log:empty:before{content:"Select your files, then click Run benchmark.";color:#97a3b7}.method{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 24px}.method h3{font-size:12px;margin:0 0 6px}.method p{font-size:12px;margin:0}.note{font-size:12px;color:var(--muted);margin-top:24px}code{font:12px ui-monospace,Consolas,monospace;background:#eef1f7;padding:2px 5px;border-radius:4px}footer{font-size:11px;color:#8190a6;margin-top:28px}a{color:var(--accent)}
+    @media(max-width:900px){main{padding:24px 18px}.header-inner{padding:18px}.layout{grid-template-columns:1fr}.method{grid-template-columns:1fr}.local-tag{font-size:10px}h1{font-size:27px}.panel-content{padding:20px}}
+  </style>
+</head>
+<body>
+  <header><div class="header-inner"><div class="mark" aria-hidden="true">◇</div><div><div class="wordmark">ORT WebGPU</div><div class="subbrand">Browser performance benchmark</div></div><span class="local-tag">Local files · Local inference</span></div></header>
+  <main>
+    <div class="intro"><div class="eyebrow">Benchmark workspace</div><h1>Your models. Your GPU. Your browser.</h1><p>Measure time-to-first-token throughput and decode speed using the optimized WebGPU runner. Open this page, select your runtime and models, and run. No Python, Node.js, or local server is needed.</p></div>
+    <div class="environment" id="environment">Checking browser capabilities…</div>
+    <div class="layout">
+      <section class="panel" aria-label="Benchmark configuration"><div class="panel-title">Configure a run</div><div class="panel-content">
+        <fieldset id="configuration"><legend>Files and benchmark settings</legend>
+          <label class="step" for="runtime-files"><span class="number">1</span> ORT Web runtime folder</label>
+          <input id="runtime-files" type="file" webkitdirectory multiple aria-describedby="runtime-info">
+          <div class="help" id="runtime-info">Select a trusted build containing build-metadata.json, ort.all.min.js, and the JSPI .mjs / .wasm files. This executes code from the selected runtime.</div>
+          <label class="step" for="model-files"><span class="number">2</span> Model folder</label>
+          <input id="model-files" type="file" webkitdirectory multiple aria-describedby="model-info">
+          <div class="help" id="model-info">Select the model's onnx-webgpu folder, or a parent folder containing multiple models. Includes genai_config.json, .onnx graphs and external weights.</div>
+          <div id="models"></div><div class="divider"></div>
+          <div class="step"><span class="number">3</span> Workload</div>
+          <label class="field" for="lengths">Input tokens (comma-separated)</label><input class="input" id="lengths" value="128,512,1024" inputmode="numeric">
+          <div class="field-row"><div><label class="field" for="tokens">Output tokens</label><input class="input" id="tokens" type="number" min="2" max="8191" value="128"></div><div><label class="field" for="repetitions">Timed repetitions</label><input class="input" id="repetitions" type="number" min="1" max="100" value="5"></div></div>
+          <label class="field" for="sampling">Token selection</label><select class="input" id="sampling"><option value="auto">Auto — GPU when supported</option><option value="cpu">CPU — comparison control</option><option value="gpu">GPU — require compatible model</option></select>
+          <label class="check"><input type="checkbox" id="capture" checked> Capture the decoder graph</label>
+          <div class="fixed"><span>8K KV cache</span><span>Full-prompt prefill</span><span>GPU I/O</span><span>Batch 1</span><span>Full output validation</span></div>
+          <details><summary>Diagnostics &amp; native comparison</summary><label class="check"><input type="checkbox" id="diagnostics"> Log and verify actual graph replay</label><p class="help">Verbose diagnostics affect timing. Keep off for normal performance runs.</p><label class="field" for="request-file">Saved native benchmark request (optional)</label><input type="file" accept=".json,application/json" id="request-file"><div class="help" id="request-info">Optional: reuse exact prompts from a native benchmark request.</div></details>
+        </fieldset>
+        <div class="actions"><button type="button" class="primary" id="run" disabled>Run benchmark</button><button type="button" class="danger" id="stop" disabled>Stop</button></div>
+      </div></section>
+      <div class="content">
+        <section class="panel" aria-label="Performance results"><div class="result-header"><h2>Performance results</h2><div class="downloads"><button id="json" disabled>Download JSON</button><button id="csv" disabled>Export CSV</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>TTFT tok/s</th><th>Decode tok/s</th><th>Validation</th></tr></thead><tbody id="rows"></tbody></table></div>
+          <div id="empty"><span class="empty-icon" aria-hidden="true">▥</span><strong>Ready when you are</strong>Validated measurements will appear here, one input length at a time.</div>
+          <div class="table-note">One warm-up before timed repetitions. Rates use mean elapsed time. JSON includes each sample, generated token IDs, settings and artifact hashes.</div>
+        </section>
+        <section class="panel" aria-label="Run progress"><div class="status-heading" id="status" role="status" aria-live="polite">Waiting for files</div><div id="log" aria-label="Detailed benchmark log"></div></section>
+        <section class="panel method" aria-label="Measurement definitions"><div><h3>TTFT throughput</h3><p>Input tokens divided by time to the first CPU-readable generated token. Includes full prefill and first-token selection.</p></div><div><h3>Decode throughput</h3><p>Remaining generated tokens divided by decode time. Timing ends only after every token is readable on CPU.</p></div></section>
+      </div>
+    </div>
+    <div class="note">Keep this tab visible and avoid other GPU workloads. Hashing large weights can take a little time; it is outside the measurement. Greedy decoding suppresses EOS for a fixed-length run. Gemma's auxiliary embedding path uses CPU selection. Stop cancels the isolated runtime; partial output is marked incomplete.</div>
+    <footer>Standalone browser runner · No model upload, external CDN, telemetry, or benchmark server. Browser-reported GPU details may be limited by privacy settings.</footer>
+  </main>
+  <!-- BENCHMARK_SCRIPT -->
+</body>
+</html>

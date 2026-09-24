@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORT WebGPU · Browser benchmark</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234f46e5'/%3E%3Cpath d='M32 11 51 22 32 33 13 22Z' fill='white'/%3E%3Cpath d='M13 26 30 36v19L13 45Z' fill='%23c7d2fe'/%3E%3Cpath d='m34 36 17-10v19L34 55Z' fill='%2367e8f9'/%3E%3C/svg%3E">
+  <style>
+    :root{color-scheme:light;--ink:#172033;--muted:#607087;--accent:#4f46e5;--border:#e1e7f0}
+    *{box-sizing:border-box}body{margin:0;background:#f7f9fc;color:var(--ink);font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+    header{background:#fff;border-bottom:1px solid var(--border)}.header-inner{max-width:1280px;margin:auto;padding:22px 32px;display:flex;align-items:center;gap:14px}
+    .mark{display:grid;place-items:center;background:var(--accent);color:#fff;width:42px;height:42px;border-radius:12px;font-size:24px}.wordmark{font-weight:750;letter-spacing:-.4px;font-size:18px}.subbrand{color:var(--muted);font-size:12px}.local-tag{margin-left:auto;color:#18765e;background:#eaf8f2;border:1px solid #cbe9dd;border-radius:24px;padding:5px 12px;font-size:12px;font-weight:650}
+    main{max-width:1280px;margin:auto;padding:32px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;font-size:11px;font-weight:750}h1{font-size:32px;line-height:1.2;letter-spacing:-1px;margin:8px 0 12px}p{margin:0 0 14px;color:var(--muted)}.intro{max-width:830px}.environment{color:#36506d;font-size:12px;margin:18px 0 24px;display:flex;align-items:center;gap:8px}.environment:before{content:"";width:7px;height:7px;border-radius:50%;background:#4f46e5;flex:none}
+    .layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:24px;align-items:start}.panel{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px #24345b03}.panel-title{padding:20px 24px 0;font-size:15px;font-weight:700}.panel-content{padding:20px 24px 24px}fieldset{border:0;padding:0;margin:0;min-width:0}legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    .step{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;margin-bottom:10px}.number{width:22px;height:22px;display:grid;place-items:center;border-radius:7px;color:var(--accent);background:#eeedff;font-size:11px}.help{color:var(--muted);font-size:12px;line-height:1.6;margin:9px 0 20px;overflow-wrap:anywhere}input[type=file]{font-size:12px;width:100%;color:var(--muted)}input[type=file]::file-selector-button{font:600 12px system-ui;border:1px solid var(--border);border-radius:7px;background:#f7f9fc;color:var(--ink);padding:8px 11px;cursor:pointer;margin-right:8px}
+    .model-choice{display:flex;gap:8px;align-items:center;margin:7px 0;font-size:12px;overflow-wrap:anywhere}input[type=checkbox]{accent-color:var(--accent)}.divider{height:1px;background:var(--border);margin:20px 0}.field{display:block;font-size:12px;font-weight:650;margin:14px 0 5px}.input{width:100%;border:1px solid #d7dfeb;border-radius:8px;background:#fff;padding:9px 10px;font:14px system-ui;color:var(--ink)}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.check{display:flex;gap:8px;font-size:12px;margin-top:12px;align-items:center}details{margin-top:18px}summary{font-size:12px;cursor:pointer;color:var(--muted)}.fixed{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.fixed span{font-size:11px;background:#f2f5fa;border:1px solid #e6eaf2;padding:3px 7px;border-radius:5px;color:#607087}
+    .actions{display:flex;gap:8px;margin-top:22px}button{border:1px solid var(--border);border-radius:8px;padding:10px 14px;font:600 13px system-ui;background:#fff;color:var(--ink);cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--accent);color:#fff;border-color:var(--accent);flex:1}.danger{color:#ad3640}button:hover:not(:disabled){filter:brightness(.96)}:focus-visible{outline:3px solid #a5b4fc;outline-offset:3px}
+    .content{display:grid;gap:22px}.result-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;gap:12px}.result-header h2{font-size:15px;margin:0}.downloads{display:flex;gap:6px}.downloads button{font-size:11px;padding:6px 10px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px;text-align:right;white-space:nowrap}th{font-size:10px;letter-spacing:.3px;text-transform:uppercase;color:#657187;background:#f8faff;font-weight:650;border-block:1px solid var(--border);padding:12px 14px}td{padding:12px 14px;border-bottom:1px solid #f0f3f7;font-variant-numeric:tabular-nums}th:first-child,td:first-child{text-align:left}td:last-child{color:#18765e}#empty{padding:60px 26px;text-align:center;color:var(--muted);font-size:13px}#empty strong{display:block;color:#41516a;font-size:15px;margin-bottom:8px}.empty-icon{display:block;color:#adb8d0;font-size:32px;margin-bottom:16px}.table-note{font-size:11px;padding:15px 24px;color:var(--muted);border-top:1px solid var(--border)}
+    .status-heading{font-size:12px;font-weight:650;padding:14px 24px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}#log{font:11px/1.8 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow:auto;overflow-wrap:anywhere;height:190px;padding:16px 24px;color:#66768d;background:#fcfdff}#log:empty:before{content:"Select your files, then click Run benchmark.";color:#97a3b7}.method{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 24px}.method h3{font-size:12px;margin:0 0 6px}.method p{font-size:12px;margin:0}.note{font-size:12px;color:var(--muted);margin-top:24px}code{font:12px ui-monospace,Consolas,monospace;background:#eef1f7;padding:2px 5px;border-radius:4px}footer{font-size:11px;color:#8190a6;margin-top:28px}a{color:var(--accent)}
+    @media(max-width:900px){main{padding:24px 18px}.header-inner{padding:18px}.layout{grid-template-columns:1fr}.method{grid-template-columns:1fr}.local-tag{font-size:10px}h1{font-size:27px}.panel-content{padding:20px}}
+  </style>
+</head>
+<body>
+  <header><div class="header-inner"><div class="mark" aria-hidden="true">◇</div><div><div class="wordmark">ORT WebGPU</div><div class="subbrand">Browser performance benchmark</div></div><span class="local-tag">Local files · Local inference</span></div></header>
+  <main>
+    <div class="intro"><div class="eyebrow">Benchmark workspace</div><h1>Your models. Your GPU. Your browser.</h1><p>Measure time-to-first-token throughput and decode speed using the optimized WebGPU runner. Open this page, select your runtime and models, and run. No Python, Node.js, or local server is needed.</p></div>
+    <div class="environment" id="environment">Checking browser capabilities…</div>
+    <div class="layout">
+      <section class="panel" aria-label="Benchmark configuration"><div class="panel-title">Configure a run</div><div class="panel-content">
+        <fieldset id="configuration"><legend>Files and benchmark settings</legend>
+          <label class="step" for="runtime-files"><span class="number">1</span> ORT Web runtime folder</label>
+          <input id="runtime-files" type="file" webkitdirectory multiple aria-describedby="runtime-info">
+          <div class="help" id="runtime-info">Select a trusted build containing build-metadata.json, ort.all.min.js, and the JSPI .mjs / .wasm files. This executes code from the selected runtime.</div>
+          <label class="step" for="model-files"><span class="number">2</span> Model folder</label>
+          <input id="model-files" type="file" webkitdirectory multiple aria-describedby="model-info">
+          <div class="help" id="model-info">Select the model's onnx-webgpu folder, or a parent folder containing multiple models. Includes genai_config.json, .onnx graphs and external weights.</div>
+          <div id="models"></div><div class="divider"></div>
+          <div class="step"><span class="number">3</span> Workload</div>
+          <label class="field" for="lengths">Input tokens (comma-separated)</label><input class="input" id="lengths" value="128,512,1024" inputmode="numeric">
+          <div class="field-row"><div><label class="field" for="tokens">Output tokens</label><input class="input" id="tokens" type="number" min="2" max="8191" value="128"></div><div><label class="field" for="repetitions">Timed repetitions</label><input class="input" id="repetitions" type="number" min="1" max="100" value="5"></div></div>
+          <label class="field" for="sampling">Token selection</label><select class="input" id="sampling"><option value="auto">Auto — GPU when supported</option><option value="cpu">CPU — comparison control</option><option value="gpu">GPU — require compatible model</option></select>
+          <label class="check"><input type="checkbox" id="capture" checked> Capture the decoder graph</label>
+          <div class="fixed"><span>8K KV cache</span><span>Full-prompt prefill</span><span>GPU I/O</span><span>Batch 1</span><span>Full output validation</span></div>
+          <details><summary>Diagnostics &amp; native comparison</summary><label class="check"><input type="checkbox" id="diagnostics"> Log and verify actual graph replay</label><p class="help">Verbose diagnostics affect timing. Keep off for normal performance runs.</p><label class="field" for="request-file">Saved native benchmark request (optional)</label><input type="file" accept=".json,application/json" id="request-file"><div class="help" id="request-info">Optional: reuse exact prompts from a native benchmark request.</div></details>
+        </fieldset>
+        <div class="actions"><button type="button" class="primary" id="run" disabled>Run benchmark</button><button type="button" class="danger" id="stop" disabled>Stop</button></div>
+      </div></section>
+      <div class="content">
+        <section class="panel" aria-label="Performance results"><div class="result-header"><h2>Performance results</h2><div class="downloads"><button id="json" disabled>Download JSON</button><button id="csv" disabled>Export CSV</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>TTFT tok/s</th><th>Decode tok/s</th><th>Validation</th></tr></thead><tbody id="rows"></tbody></table></div>
+          <div id="empty"><span class="empty-icon" aria-hidden="true">▥</span><strong>Ready when you are</strong>Validated measurements will appear here, one input length at a time.</div>
+          <div class="table-note">One warm-up before timed repetitions. Rates use mean elapsed time. JSON includes each sample, generated token IDs, settings and artifact hashes.</div>
+        </section>
+        <section class="panel" aria-label="Run progress"><div class="status-heading" id="status" role="status" aria-live="polite">Waiting for files</div><div id="log" aria-label="Detailed benchmark log"></div></section>
+        <section class="panel method" aria-label="Measurement definitions"><div><h3>TTFT throughput</h3><p>Input tokens divided by time to the first CPU-readable generated token. Includes full prefill and first-token selection.</p></div><div><h3>Decode throughput</h3><p>Remaining generated tokens divided by decode time. Timing ends only after every token is readable on CPU.</p></div></section>
+      </div>
+    </div>
+    <div class="note">Keep this tab visible and avoid other GPU workloads. Hashing large weights can take a little time; it is outside the measurement. Greedy decoding suppresses EOS for a fixed-length run. Gemma's auxiliary embedding path uses CPU selection. Stop cancels the isolated runtime; partial output is marked incomplete.</div>
+    <footer>Standalone browser runner · No model upload, external CDN, telemetry, or benchmark server. Browser-reported GPU details may be limited by privacy settings.</footer>
+  </main>
+  <!--
+@noble/hashes 1.8.0 (incremental local-file SHA-256)
+
+The MIT License (MIT)
+
+Copyright (c) 2022 Paul Miller (https://paulmillr.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the â€œSoftwareâ€), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED â€œAS ISâ€, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-->
+<script>
+(() => {
+  // node_modules/@noble/hashes/esm/utils.js
+  function isBytes(a) {
+    return a instanceof Uint8Array || ArrayBuffer.isView(a) && a.constructor.name === "Uint8Array";
+  }
+  function abytes(b, ...lengths) {
+    if (!isBytes(b))
+      throw new Error("Uint8Array expected");
+    if (lengths.length > 0 && !lengths.includes(b.length))
+      throw new Error("Uint8Array expected of length " + lengths + ", got length=" + b.length);
+  }
+  function aexists(instance, checkFinished = true) {
+    if (instance.destroyed)
+      throw new Error("Hash instance has been destroyed");
+    if (checkFinished && instance.finished)
+      throw new Error("Hash#digest() has already been called");
+  }
+  function aoutput(out, instance) {
+    abytes(out);
+    const min = instance.outputLen;
+    if (out.length < min) {
+      throw new Error("digestInto() expects output buffer of length at least " + min);
+    }
+  }
+  function clean(...arrays) {
+    for (let i = 0; i < arrays.length; i++) {
+      arrays[i].fill(0);
+    }
+  }
+  function createView(arr) {
+    return new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
+  }
+  function rotr(word, shift) {
+    return word << 32 - shift | word >>> shift;
+  }
+  var hasHexBuiltin = /* @__PURE__ */ (() => (
+    // @ts-ignore
+    typeof Uint8Array.from([]).toHex === "function" && typeof Uint8Array.fromHex === "function"
+  ))();
+  var hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, "0"));
+  function bytesToHex(bytes) {
+    abytes(bytes);
+    if (hasHexBuiltin)
+      return bytes.toHex();
+    let hex = "";
+    for (let i = 0; i < bytes.length; i++) {
+      hex += hexes[bytes[i]];
+    }
+    return hex;
+  }
+  function utf8ToBytes(str) {
+    if (typeof str !== "string")
+      throw new Error("string expected");
+    return new Uint8Array(new TextEncoder().encode(str));
+  }
+  function toBytes(data) {
+    if (typeof data === "string")
+      data = utf8ToBytes(data);
+    abytes(data);
+    return data;
+  }
+  var Hash = class {
+  };
+  function createHasher(hashCons) {
+    const hashC = (msg) => hashCons().update(toBytes(msg)).digest();
+    const tmp = hashCons();
+    hashC.outputLen = tmp.outputLen;
+    hashC.blockLen = tmp.blockLen;
+    hashC.create = () => hashCons();
+    return hashC;
+  }
+
+  // node_modules/@noble/hashes/esm/_md.js
+  function setBigUint64(view, byteOffset, value, isLE) {
+    if (typeof view.setBigUint64 === "function")
+      return view.setBigUint64(byteOffset, value, isLE);
+    const _32n = BigInt(32);
+    const _u32_max = BigInt(4294967295);
+    const wh = Number(value >> _32n & _u32_max);
+    const wl = Number(value & _u32_max);
+    const h = isLE ? 4 : 0;
+    const l = isLE ? 0 : 4;
+    view.setUint32(byteOffset + h, wh, isLE);
+    view.setUint32(byteOffset + l, wl, isLE);
+  }
+  function Chi(a, b, c) {
+    return a & b ^ ~a & c;
+  }
+  function Maj(a, b, c) {
+    return a & b ^ a & c ^ b & c;
+  }
+  var HashMD = class extends Hash {
+    constructor(blockLen, outputLen, padOffset, isLE) {
+      super();
+      this.finished = false;
+      this.length = 0;
+      this.pos = 0;
+      this.destroyed = false;
+      this.blockLen = blockLen;
+      this.outputLen = outputLen;
+      this.padOffset = padOffset;
+      this.isLE = isLE;
+      this.buffer = new Uint8Array(blockLen);
+      this.view = createView(this.buffer);
+    }
+    update(data) {
+      aexists(this);
+      data = toBytes(data);
+      abytes(data);
+      const { view, buffer, blockLen } = this;
+      const len = data.length;
+      for (let pos = 0; pos < len; ) {
+        const take = Math.min(blockLen - this.pos, len - pos);
+        if (take === blockLen) {
+          const dataView = createView(data);
+          for (; blockLen <= len - pos; pos += blockLen)
+            this.process(dataView, pos);
+          continue;
+        }
+        buffer.set(data.subarray(pos, pos + take), this.pos);
+        this.pos += take;
+        pos += take;
+        if (this.pos === blockLen) {
+          this.process(view, 0);
+          this.pos = 0;
+        }
+      }
+      this.length += data.length;
+      this.roundClean();
+      return this;
+    }
+    digestInto(out) {
+      aexists(this);
+      aoutput(out, this);
+      this.finished = true;
+      const { buffer, view, blockLen, isLE } = this;
+      let { pos } = this;
+      buffer[pos++] = 128;
+      clean(this.buffer.subarray(pos));
+      if (this.padOffset > blockLen - pos) {
+        this.process(view, 0);
+        pos = 0;
+      }
+      for (let i = pos; i < blockLen; i++)
+        buffer[i] = 0;
+      setBigUint64(view, blockLen - 8, BigInt(this.length * 8), isLE);
+      this.process(view, 0);
+      const oview = createView(out);
+      const len = this.outputLen;
+      if (len % 4)
+        throw new Error("_sha2: outputLen should be aligned to 32bit");
+      const outLen = len / 4;
+      const state = this.get();
+      if (outLen > state.length)
+        throw new Error("_sha2: outputLen bigger than state");
+      for (let i = 0; i < outLen; i++)
+        oview.setUint32(4 * i, state[i], isLE);
+    }
+    digest() {
+      const { buffer, outputLen } = this;
+      this.digestInto(buffer);
+      const res = buffer.slice(0, outputLen);
+      this.destroy();
+      return res;
+    }
+    _cloneInto(to) {
+      to || (to = new this.constructor());
+      to.set(...this.get());
+      const { blockLen, buffer, length, finished, destroyed, pos } = this;
+      to.destroyed = destroyed;
+      to.finished = finished;
+      to.length = length;
+      to.pos = pos;
+      if (length % blockLen)
+        to.buffer.set(buffer);
+      return to;
+    }
+    clone() {
+      return this._cloneInto();
+    }
+  };
+  var SHA256_IV = /* @__PURE__ */ Uint32Array.from([
+    1779033703,
+    3144134277,
+    1013904242,
+    2773480762,
+    1359893119,
+    2600822924,
+    528734635,
+    1541459225
+  ]);
+
+  // node_modules/@noble/hashes/esm/sha2.js
+  var SHA256_K = /* @__PURE__ */ Uint32Array.from([
+    1116352408,
+    1899447441,
+    3049323471,
+    3921009573,
+    961987163,
+    1508970993,
+    2453635748,
+    2870763221,
+    3624381080,
+    310598401,
+    607225278,
+    1426881987,
+    1925078388,
+    2162078206,
+    2614888103,
+    3248222580,
+    3835390401,
+    4022224774,
+    264347078,
+    604807628,
+    770255983,
+    1249150122,
+    1555081692,
+    1996064986,
+    2554220882,
+    2821834349,
+    2952996808,
+    3210313671,
+    3336571891,
+    3584528711,
+    113926993,
+    338241895,
+    666307205,
+    773529912,
+    1294757372,
+    1396182291,
+    1695183700,
+    1986661051,
+    2177026350,
+    2456956037,
+    2730485921,
+    2820302411,
+    3259730800,
+    3345764771,
+    3516065817,
+    3600352804,
+    4094571909,
+    275423344,
+    430227734,
+    506948616,
+    659060556,
+    883997877,
+    958139571,
+    1322822218,
+    1537002063,
+    1747873779,
+    1955562222,
+    2024104815,
+    2227730452,
+    2361852424,
+    2428436474,
+    2756734187,
+    3204031479,
+    3329325298
+  ]);
+  var SHA256_W = /* @__PURE__ */ new Uint32Array(64);
+  var SHA256 = class extends HashMD {
+    constructor(outputLen = 32) {
+      super(64, outputLen, 8, false);
+      this.A = SHA256_IV[0] | 0;
+      this.B = SHA256_IV[1] | 0;
+      this.C = SHA256_IV[2] | 0;
+      this.D = SHA256_IV[3] | 0;
+      this.E = SHA256_IV[4] | 0;
+      this.F = SHA256_IV[5] | 0;
+      this.G = SHA256_IV[6] | 0;
+      this.H = SHA256_IV[7] | 0;
+    }
+    get() {
+      const { A, B, C, D, E, F, G, H } = this;
+      return [A, B, C, D, E, F, G, H];
+    }
+    // prettier-ignore
+    set(A, B, C, D, E, F, G, H) {
+      this.A = A | 0;
+      this.B = B | 0;
+      this.C = C | 0;
+      this.D = D | 0;
+      this.E = E | 0;
+      this.F = F | 0;
+      this.G = G | 0;
+      this.H = H | 0;
+    }
+    process(view, offset) {
+      for (let i = 0; i < 16; i++, offset += 4)
+        SHA256_W[i] = view.getUint32(offset, false);
+      for (let i = 16; i < 64; i++) {
+        const W15 = SHA256_W[i - 15];
+        const W2 = SHA256_W[i - 2];
+        const s0 = rotr(W15, 7) ^ rotr(W15, 18) ^ W15 >>> 3;
+        const s1 = rotr(W2, 17) ^ rotr(W2, 19) ^ W2 >>> 10;
+        SHA256_W[i] = s1 + SHA256_W[i - 7] + s0 + SHA256_W[i - 16] | 0;
+      }
+      let { A, B, C, D, E, F, G, H } = this;
+      for (let i = 0; i < 64; i++) {
+        const sigma1 = rotr(E, 6) ^ rotr(E, 11) ^ rotr(E, 25);
+        const T1 = H + sigma1 + Chi(E, F, G) + SHA256_K[i] + SHA256_W[i] | 0;
+        const sigma0 = rotr(A, 2) ^ rotr(A, 13) ^ rotr(A, 22);
+        const T2 = sigma0 + Maj(A, B, C) | 0;
+        H = G;
+        G = F;
+        F = E;
+        E = D + T1 | 0;
+        D = C;
+        C = B;
+        B = A;
+        A = T1 + T2 | 0;
+      }
+      A = A + this.A | 0;
+      B = B + this.B | 0;
+      C = C + this.C | 0;
+      D = D + this.D | 0;
+      E = E + this.E | 0;
+      F = F + this.F | 0;
+      G = G + this.G | 0;
+      H = H + this.H | 0;
+      this.set(A, B, C, D, E, F, G, H);
+    }
+    roundClean() {
+      clean(SHA256_W);
+    }
+    destroy() {
+      this.set(0, 0, 0, 0, 0, 0, 0, 0);
+      clean(this.buffer);
+    }
+  };
+  var sha256 = /* @__PURE__ */ createHasher(() => new SHA256());
+
+  // node_modules/@noble/hashes/esm/sha256.js
+  var sha2562 = sha256;
+
+  // web/onnx-metadata.mjs
+  var decoder = new TextDecoder("utf-8", { fatal: true });
+  var types = { 1: "float32", 2: "uint8", 3: "int8", 6: "int32", 7: "int64", 9: "bool", 10: "float16", 11: "float64", 12: "uint32", 13: "uint64" };
+  function fields(bytes) {
+    let offset = 0;
+    const result2 = [];
+    const varint = () => {
+      let value = 0n;
+      for (let i = 0; i < 10; ++i) {
+        if (offset >= bytes.length) throw Error("Truncated ONNX protobuf");
+        const byte = bytes[offset++];
+        if (i === 9 && byte > 1) throw Error("Invalid ONNX varint");
+        value |= BigInt(byte & 127) << BigInt(i * 7);
+        if (!(byte & 128)) return value;
+      }
+      throw Error("Invalid ONNX varint");
+    };
+    while (offset < bytes.length) {
+      const tag = varint();
+      const id = Number(tag >> 3n), wire = Number(tag & 7n);
+      if (!id || id > 536870911) throw Error("Invalid ONNX field");
+      if (wire === 0) result2.push({ id, wire, value: varint() });
+      else {
+        const length = wire === 2 ? Number(varint()) : wire === 1 ? 8 : wire === 5 ? 4 : NaN;
+        if (!Number.isSafeInteger(length) || length < 0 || length > bytes.length - offset) throw Error("Invalid ONNX field length");
+        result2.push({ id, wire, bytes: bytes.subarray(offset, offset + length) });
+        offset += length;
+      }
+    }
+    return result2;
+  }
+  var all = (items, id) => items.filter((item) => item.id === id);
+  var one = (items, id) => items.find((item) => item.id === id);
+  var nested = (item) => fields(item?.bytes || new Uint8Array());
+  var text = (item) => item ? decoder.decode(item.bytes) : "";
+  var integer = (item) => {
+    if (item?.wire !== 0) throw Error("Missing ONNX integer");
+    const value = Number(BigInt.asIntN(64, item.value));
+    if (!Number.isSafeInteger(value)) throw Error("ONNX dimension exceeds safe integer range");
+    return value;
+  };
+  function tensorInfo(item) {
+    const value = nested(item);
+    const tensor = nested(one(nested(one(value, 2)), 1));
+    const type = types[integer(one(tensor, 1))];
+    if (!type) throw Error("Unsupported ONNX tensor type");
+    const dims = all(nested(one(tensor, 2)), 1).map((dim) => {
+      const info = nested(dim);
+      return one(info, 1) ? integer(one(info, 1)) : text(one(info, 2));
+    });
+    return { name: text(one(value, 1)), type, dims };
+  }
+  function describeOnnx(bytes) {
+    const graphField = one(fields(bytes), 7);
+    if (!graphField) throw Error("ONNX model has no graph");
+    const graph = nested(graphField), external = /* @__PURE__ */ new Set(), windows = /* @__PURE__ */ new Set();
+    const tensor = (item) => {
+      for (const entry of all(nested(item), 13)) {
+        const pair = nested(entry);
+        if (text(one(pair, 1)) === "location") external.add(text(one(pair, 2)));
+      }
+    };
+    const sparse = (item) => {
+      const data = nested(item);
+      for (const id of [1, 2]) if (one(data, id)) tensor(one(data, id));
+    };
+    function walk(items, depth = 0) {
+      if (depth > 32) throw Error("ONNX subgraph nesting limit exceeded");
+      for (const item of all(items, 5)) tensor(item);
+      for (const item of all(items, 15)) sparse(item);
+      for (const node of all(items, 1)) {
+        const data = nested(node);
+        for (const attribute of all(data, 5)) {
+          const attr = nested(attribute);
+          if (text(one(data, 4)) === "GroupQueryAttention" && text(one(attr, 1)) === "local_window_size") {
+            const window = integer(one(attr, 3));
+            if (window > 0) windows.add(window);
+          }
+          for (const id of [5, 10]) for (const item of all(attr, id)) tensor(item);
+          for (const id of [6, 11]) for (const item of all(attr, id)) walk(nested(item), depth + 1);
+          for (const id of [22, 23]) for (const item of all(attr, id)) sparse(item);
+        }
+      }
+    }
+    walk(graph);
+    return {
+      inputs: all(graph, 11).map(tensorInfo),
+      outputs: all(graph, 12).map(tensorInfo),
+      external: [...external].sort(),
+      features: { slidingWindowAttention: windows.size > 0, localAttentionWindows: [...windows].sort((a, b) => a - b) }
+    };
+  }
+  function stateBindings(decoderConfig, inputs, outputs, maxLength) {
+    const states = [], names = new Set(outputs.map((output) => output.name));
+    for (const kind of ["key", "value", "conv", "recurrent"]) {
+      const inputTemplate = decoderConfig.inputs[`past_${kind}_names`], outputTemplate = decoderConfig.outputs[`present_${kind}_names`];
+      if (!inputTemplate && !outputTemplate) continue;
+      if (!inputTemplate || !outputTemplate || inputTemplate.split("%d").length !== 2 || outputTemplate.split("%d").length !== 2) throw Error(`Invalid ${kind} state templates`);
+      const pattern = new RegExp("^" + inputTemplate.split("%d").map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("(\\d+)") + "$");
+      for (const input of inputs) {
+        const match = input.name.match(pattern);
+        if (!match) continue;
+        const output = outputTemplate.replace("%d", match[1]);
+        if (!names.has(output)) throw Error(`Missing state output ${output}`);
+        const shared = kind === "key" || kind === "value";
+        const dims = input.dims.map((dim, i) => {
+          if (Number.isSafeInteger(dim) && dim > 0) return dim;
+          if (i === 0) return 1;
+          if (shared && i === 2) return maxLength;
+          if (shared && i === 3 && dim === "kv_cache_dim") return decoderConfig.head_size;
+          throw Error(`Unresolved state dimension ${dim} for ${input.name}`);
+        });
+        if (shared && (dims.length !== 4 || dims[2] !== maxLength)) throw Error(`State ${input.name} cannot use the requested KV capacity`);
+        states.push({ input: input.name, output, kind, type: input.type, dims, shared });
+      }
+    }
+    if (!states.length) throw Error("No recognized autoregressive state inputs");
+    return states;
+  }
+
+  // web/local-files.mjs
+  function safePath(value) {
+    const name = String(value).replaceAll("\\", "/");
+    if (!name || name.startsWith("/") || name.includes(":") || name.split("/").some((part) => !part || part === ".." || part === ".")) throw Error(`Unsafe artifact path: ${value}`);
+    return name;
+  }
+  function directoryFiles(files) {
+    const result2 = /* @__PURE__ */ new Map();
+    for (const file of files) {
+      const relative = file.webkitRelativePath || file.name;
+      const name = safePath(file.webkitRelativePath ? relative.slice(relative.indexOf("/") + 1) : relative);
+      if (result2.has(name)) throw Error(`Duplicate selected file: ${name}`);
+      result2.set(name, file);
+    }
+    return result2;
+  }
+  async function fingerprint(file, signal, progress = () => {
+  }) {
+    const hash = sha2562.create();
+    const chunkSize = 8 * 1024 * 1024;
+    for (let offset = 0; offset < file.size; offset += chunkSize) {
+      signal?.throwIfAborted();
+      hash.update(new Uint8Array(await file.slice(offset, offset + chunkSize).arrayBuffer()));
+      progress(Math.min(file.size, offset + chunkSize), file.size);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+    signal?.throwIfAborted();
+    return { size: file.size, sha256: bytesToHex(hash.digest()) };
+  }
+  var readJson = async (file) => JSON.parse((await file.text()).replace(/^\uFEFF/, ""));
+  function requireFile(files, name) {
+    const file = files.get(safePath(name));
+    if (!file) throw Error(`Missing selected file: ${name}`);
+    return file;
+  }
+  async function verifyRuntime(files, signal, progress = () => {
+  }) {
+    const build = await readJson(requireFile(files, "build-metadata.json"));
+    const names = ["ort.all.min.js", "ort-wasm-simd-threaded.jspi.mjs", "ort-wasm-simd-threaded.jspi.wasm"];
+    if (build.runtime !== "ort-web" || !build.builtFromSource || build.wasmVariant !== "jspi" || build.webgpuImplementation !== "cpp" || build.entrypoint !== names[0] || !/^[a-f0-9]{40}$/.test(build.repositories?.onnxruntime?.commit || "") || JSON.stringify(Object.keys(build.artifacts || {}).sort()) !== JSON.stringify([...names].sort())) throw Error("Select a complete, source-built ORT C++ WebGPU/JSPI runtime folder");
+    for (const name of names) {
+      progress(`Verifying ${name}`);
+      const actual = await fingerprint(requireFile(files, name), signal);
+      if (actual.sha256 !== build.artifacts[name].sha256 || actual.size !== build.artifacts[name].size) throw Error(`Runtime hash mismatch: ${name}`);
+    }
+    return build;
+  }
+  function discoverModels(files, folderName = "Selected model") {
+    return [...files.keys()].filter((name) => name === "genai_config.json" || name.endsWith("/genai_config.json")).map((configPath) => {
+      const prefix = configPath.slice(0, -"genai_config.json".length);
+      const parts = prefix.split("/").filter(Boolean);
+      const name = parts.at(-1) === "onnx-webgpu" ? parts.at(-2) || folderName : parts.at(-1) || folderName;
+      return { name, configPath, files: new Map([...files].filter(([key]) => key.startsWith(prefix)).map(([key, file]) => [key.slice(prefix.length), file])) };
+    });
+  }
+  async function describeLocalModel(entry, maxLength, signal, progress = () => {
+  }) {
+    const configFile = requireFile(entry.files, "genai_config.json"), config = await readJson(configFile);
+    const model = config.model;
+    if (!model?.decoder || !Number.isSafeInteger(model.vocab_size) || model.vocab_size <= 1 || maxLength > model.context_length || !config.search?.past_present_share_buffer) throw Error("Model needs a supported decoder and shared static KV cache export");
+    const sessions = {}, hashes = /* @__PURE__ */ new Map();
+    for (const name of ["decoder", "embedding"]) if (model[name]) {
+      const filename = safePath(model[name].filename), file = requireFile(entry.files, filename);
+      progress(`Reading ${entry.name}: ${filename}`);
+      if (file.size > 512 * 1024 * 1024) throw Error("Use an external-data ONNX export; embedded graph exceeds 512 MB");
+      const graph = describeOnnx(new Uint8Array(await file.arrayBuffer()));
+      const externalData = [];
+      for (const location2 of graph.external) {
+        const relative = filename.includes("/") ? filename.slice(0, filename.lastIndexOf("/") + 1) + safePath(location2) : safePath(location2);
+        const external = requireFile(entry.files, relative);
+        if (!hashes.has(relative)) {
+          progress(`Hashing ${entry.name}: ${relative} (${(external.size / 1024 ** 3).toFixed(2)} GB)`);
+          hashes.set(relative, await fingerprint(external, signal));
+        }
+        externalData.push({ path: location2, file: relative, ...hashes.get(relative) });
+      }
+      sessions[name] = { file: filename, ...await fingerprint(file, signal), inputs: graph.inputs, outputs: graph.outputs, features: graph.features, externalData };
+    }
+    const states = stateBindings(model.decoder, sessions.decoder.inputs, sessions.decoder.outputs, maxLength);
+    const known = /* @__PURE__ */ new Set([...states.map((state) => state.input), ...["input_ids", "attention_mask", "position_ids", "inputs_embeds"].map((key) => model.decoder.inputs[key])]);
+    if (sessions.decoder.inputs.some((input) => !known.has(input.name))) throw Error("Unsupported decoder input in selected model");
+    if (!sessions.decoder.outputs.some((output) => output.name === model.decoder.outputs.logits)) throw Error("Missing decoder logits");
+    return { schemaVersion: 1, name: entry.name, maxLength, config, configArtifact: { file: "genai_config.json", ...await fingerprint(configFile, signal) }, sessions, states };
+  }
+
+  // web/generator.mjs
+  function randomPrompt(config, length, seed = 42) {
+    if (!Number.isSafeInteger(length) || length <= 0) throw new Error("Prompt length must be positive");
+    const model = config.model;
+    const forbidden = new Set(Object.entries(model).filter(([key]) => key.endsWith("_token_id")).flatMap(([, value]) => Array.isArray(value) ? value : [value]));
+    if (!Number.isSafeInteger(model.vocab_size) || model.vocab_size <= forbidden.size) throw new Error("Invalid vocabulary");
+    let state = seed >>> 0;
+    const tokens = [];
+    while (tokens.length < length) {
+      state ^= state << 13;
+      state ^= state >>> 17;
+      state ^= state << 5;
+      if (!state) state = 2654435769;
+      const token = (state >>> 0) % model.vocab_size;
+      if (!forbidden.has(token)) tokens.push(token);
+    }
+    return tokens;
+  }
+
+  // web/page-utils.mjs
+  function parseSettings({ lengths, tokens, repetitions, graphCapture, gpuSampling, diagnostics }) {
+    const promptLengths = lengths.split(",").map((value) => Number(value.trim()));
+    const generationLength = Number(tokens), reps = Number(repetitions);
+    if (!promptLengths.length || new Set(promptLengths).size !== promptLengths.length || promptLengths.some((n) => !Number.isSafeInteger(n) || n < 1) || !Number.isSafeInteger(generationLength) || generationLength < 2 || Math.max(...promptLengths) + generationLength > 8192 || !Number.isSafeInteger(reps) || reps < 1 || reps > 100) throw Error("Use unique positive input lengths, 2+ output tokens, 1\u2013100 repetitions, and at most 8,192 total tokens");
+    if (!["auto", "cpu", "gpu"].includes(gpuSampling)) throw Error("Invalid sampling policy");
+    if (!graphCapture && gpuSampling === "gpu") throw Error("GPU sampling requires graph capture");
+    return { promptLengths, generationLength, repetitions: reps, graphCapture, gpuSampling, diagnostics };
+  }
+  function csvResults(result2) {
+    const escape = (value) => '"' + String(value).replaceAll('"', '""').replace(/^[=+@-]/, "'$&") + '"';
+    const rows = [["Model", "Input tokens", "Output tokens", "TTFT throughput (tokens/s)", "Decode (tokens/s)", "Run complete"]];
+    for (const model of result2.models || []) for (const row of model.rows || []) rows.push([model.name, row.pl, row.tg, row.plTs, row.tgTs, result2.success]);
+    return rows.map((row) => row.map(escape).join(",")).join("\r\n");
+  }
+
+  // web/page-entry.mjs
+  var workerSource = '(() => {\n  // web/generator.mjs\n  function halfToFloat(value) {\n    const sign = value & 32768 ? -1 : 1;\n    const exponent = value >>> 10 & 31;\n    const fraction = value & 1023;\n    if (exponent === 31) return fraction ? NaN : sign * Infinity;\n    return sign * (exponent ? (1 + fraction / 1024) * 2 ** (exponent - 15) : fraction * 2 ** -24);\n  }\n  function greedyToken(data, type, vocabSize, suppressedTokens = []) {\n    if (!Number.isSafeInteger(vocabSize) || vocabSize <= 0 || data.length < vocabSize || data.length % vocabSize) {\n      throw new Error("Logits do not contain complete vocabulary rows");\n    }\n    if (type === "float16" && data instanceof Uint16Array && typeof globalThis.Float16Array === "function") {\n      data = new globalThis.Float16Array(data.buffer, data.byteOffset, data.length);\n    }\n    const offset = data.length - vocabSize;\n    const suppressed = new Set(suppressedTokens);\n    const rawHalf = type === "float16" && data instanceof Uint16Array;\n    let best = -Infinity;\n    let token = -1;\n    for (let i = 0; i < vocabSize; ++i) {\n      const score = rawHalf ? halfToFloat(data[offset + i]) : Number(data[offset + i]);\n      if (!Number.isFinite(score)) throw new Error(`Non-finite logits at token ${i}`);\n      if (score > best && !suppressed.has(i)) {\n        best = score;\n        token = i;\n      }\n    }\n    if (token < 0) throw new Error("No valid next token");\n    return token;\n  }\n  function randomPrompt(config, length, seed = 42) {\n    if (!Number.isSafeInteger(length) || length <= 0) throw new Error("Prompt length must be positive");\n    const model = config.model;\n    const forbidden = new Set(Object.entries(model).filter(([key]) => key.endsWith("_token_id")).flatMap(([, value]) => Array.isArray(value) ? value : [value]));\n    if (!Number.isSafeInteger(model.vocab_size) || model.vocab_size <= forbidden.size) throw new Error("Invalid vocabulary");\n    let state = seed >>> 0;\n    const tokens = [];\n    while (tokens.length < length) {\n      state ^= state << 13;\n      state ^= state >>> 17;\n      state ^= state << 5;\n      if (!state) state = 2654435769;\n      const token = (state >>> 0) % model.vocab_size;\n      if (!forbidden.has(token)) tokens.push(token);\n    }\n    return tokens;\n  }\n  function tensorData(type, values) {\n    switch (type) {\n      case "int64":\n        return BigInt64Array.from(values, BigInt);\n      case "int32":\n        return Int32Array.from(values);\n      case "float16":\n        return Uint16Array.from(values);\n      case "float32":\n        return Float32Array.from(values);\n      default:\n        throw new Error(`Unsupported generator input type: ${type}`);\n    }\n  }\n  function cpuInputs(ort, section, session, tokens, pastLength, embeddings) {\n    const feeds = {};\n    const temporary = [];\n    for (const input of session.inputs) {\n      let dims, values;\n      if (input.name === section.inputs.input_ids) {\n        dims = [1, tokens.length];\n        values = tokens;\n      } else if (input.name === section.inputs.attention_mask) {\n        dims = [1, pastLength + tokens.length];\n        values = Array(dims[1]).fill(1);\n      } else if (input.name === section.inputs.position_ids) {\n        const sequence = tokens.map((_, index) => pastLength + index);\n        if (input.dims.length === 3 && input.dims[0] === 3) {\n          dims = [3, 1, tokens.length];\n          values = [...sequence, ...sequence, ...sequence];\n        } else if (input.dims.length === 2) {\n          dims = [1, tokens.length];\n          values = sequence;\n        } else throw new Error(`Unsupported position_ids shape for ${input.name}`);\n      } else if (input.name === section.inputs.inputs_embeds) {\n        if (!embeddings) throw new Error("Decoder requires the embedding session output");\n        feeds[input.name] = embeddings;\n        continue;\n      } else if (input.name === section.inputs.image_features || input.name === section.inputs.audio_features) {\n        if (input.dims.length !== 2 || !Number.isSafeInteger(input.dims[1])) {\n          throw new Error(`Unsupported empty modality input ${input.name}`);\n        }\n        dims = [0, input.dims[1]];\n        values = [];\n      } else continue;\n      const tensor = new ort.Tensor(input.type, tensorData(input.type, values), dims);\n      feeds[input.name] = tensor;\n      temporary.push(tensor);\n    }\n    return { feeds, temporary };\n  }\n  var TextGenerator = class {\n    constructor(ort, device, manifest, sessions, now = () => performance.now()) {\n      this.ort = ort;\n      this.device = device;\n      this.manifest = manifest;\n      this.sessions = sessions;\n      this.now = now;\n      this.pastLength = 0;\n      this.states = [];\n      try {\n        for (const state of manifest.states) {\n          const first = this.allocateState(state);\n          this.states.push({ ...state, past: first, present: first });\n          if (!state.shared) this.states.at(-1).present = this.allocateState(state);\n        }\n      } catch (error) {\n        this.disposeStates();\n        throw error;\n      }\n    }\n    allocateState(state) {\n      if (!["float16", "float32"].includes(state.type)) throw new Error(`Unsupported cache type ${state.type}`);\n      const bytes = state.dims.reduce((a, b) => a * b, 1) * (state.type === "float16" ? 2 : 4);\n      if (!Number.isSafeInteger(bytes) || bytes <= 0) throw new Error(`Invalid state size for ${state.input}`);\n      if (bytes > this.device.limits.maxStorageBufferBindingSize || bytes > this.device.limits.maxBufferSize) {\n        throw new Error(`GPU buffer limit cannot accommodate ${state.input} (${bytes} bytes)`);\n      }\n      const buffer = this.device.createBuffer({\n        size: Math.ceil(bytes / 4) * 4,\n        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,\n        label: state.input\n      });\n      try {\n        return this.ort.Tensor.fromGpuBuffer(buffer, {\n          dataType: state.type,\n          dims: state.dims,\n          dispose: () => buffer.destroy()\n        });\n      } catch (error) {\n        buffer.destroy();\n        throw error;\n      }\n    }\n    async reset() {\n      this.pastLength = 0;\n      const encoder = this.device.createCommandEncoder();\n      for (const state of this.states) if (!state.shared) {\n        encoder.clearBuffer(state.past.gpuBuffer);\n        encoder.clearBuffer(state.present.gpuBuffer);\n      }\n      this.device.queue.submit([encoder.finish()]);\n      await this.device.queue.onSubmittedWorkDone();\n    }\n    async step(tokens, suppressedTokens = []) {\n      if (!tokens.length || this.pastLength + tokens.length > this.manifest.maxLength) {\n        throw new Error(`Sequence exceeds ${this.manifest.maxLength}-token KV cache capacity`);\n      }\n      const model = this.manifest.config.model;\n      for (const token of tokens) if (!Number.isInteger(token) || token < 0 || token >= model.vocab_size) {\n        throw new Error(`Token ${token} is outside the model vocabulary`);\n      }\n      const temporary = [];\n      let embeddingOutputs, decoderOutputs;\n      try {\n        let embedding;\n        if (this.sessions.embedding) {\n          const prepared2 = cpuInputs(this.ort, model.embedding, this.manifest.sessions.embedding, tokens, this.pastLength);\n          temporary.push(...prepared2.temporary);\n          embeddingOutputs = await this.sessions.embedding.run(prepared2.feeds);\n          embedding = embeddingOutputs[model.embedding.outputs.inputs_embeds];\n        }\n        const prepared = cpuInputs(this.ort, model.decoder, this.manifest.sessions.decoder, tokens, this.pastLength, embedding);\n        temporary.push(...prepared.temporary);\n        const fetches = { [model.decoder.outputs.logits]: null };\n        for (const state of this.states) {\n          prepared.feeds[state.input] = state.past;\n          fetches[state.output] = state.present;\n        }\n        decoderOutputs = await this.sessions.decoder.run(prepared.feeds, fetches);\n        const logits = decoderOutputs[model.decoder.outputs.logits];\n        const values = await logits.getData();\n        const token = greedyToken(values, logits.type, model.vocab_size, suppressedTokens);\n        this.pastLength += tokens.length;\n        for (const state of this.states) if (!state.shared) [state.past, state.present] = [state.present, state.past];\n        return token;\n      } finally {\n        for (const tensor of temporary) tensor.dispose();\n        if (embeddingOutputs) for (const tensor of Object.values(embeddingOutputs)) tensor.dispose();\n        decoderOutputs?.[model.decoder.outputs.logits]?.dispose();\n      }\n    }\n    async generate(prompt, generationLength, { prefillChunkSize = 0 } = {}) {\n      if (!Number.isSafeInteger(generationLength) || generationLength < 2 || prompt.length + generationLength > this.manifest.maxLength) {\n        throw new Error("Generation length must be >=2 and fit within the KV cache");\n      }\n      if (!Number.isSafeInteger(prefillChunkSize) || prefillChunkSize < 0 || prefillChunkSize > this.manifest.maxLength || !prompt.length) {\n        throw new Error("Invalid prefill chunk size or empty prompt");\n      }\n      await this.reset();\n      const eos = this.manifest.config.model.eos_token_id;\n      const suppressedTokens = eos === void 0 ? [] : Array.isArray(eos) ? eos : [eos];\n      const start = this.now();\n      const chunkSize = prefillChunkSize || prompt.length;\n      let firstToken;\n      for (let offset = 0; offset < prompt.length; offset += chunkSize) {\n        firstToken = await this.step(prompt.slice(offset, offset + chunkSize), suppressedTokens, { phase: "prefill" });\n      }\n      const generated = [firstToken];\n      const firstTokenAt = this.now();\n      for (let index = 1; index < generationLength; ++index) generated.push(await this.step([generated.at(-1)], suppressedTokens, { phase: "decode" }));\n      const end = this.now();\n      const ttftMs = firstTokenAt - start;\n      const decodeMs = end - firstTokenAt;\n      const sample = {\n        ttftMs,\n        prefillTps: prompt.length * 1e3 / ttftMs,\n        decodeTps: (generationLength - 1) * 1e3 / decodeMs,\n        e2eMs: end - start,\n        generated\n      };\n      for (const key of ["ttftMs", "prefillTps", "decodeTps", "e2eMs"]) {\n        if (!(sample[key] > 0 && Number.isFinite(sample[key]))) throw new Error(`Invalid measured ${key}`);\n      }\n      return sample;\n    }\n    disposeStates() {\n      for (const state of this.states) {\n        state.past.dispose();\n        if (state.present !== state.past) state.present.dispose();\n      }\n      this.states = [];\n    }\n    async dispose() {\n      this.disposeStates();\n      for (const session of Object.values(this.sessions)) await session.release();\n    }\n  };\n  function modelProviderOptions(manifest, name) {\n    const providers = manifest.config.model[name].session_options?.provider_options || [];\n    const configured = Object.assign({}, ...providers.map((provider) => provider.webgpu || {}));\n    delete configured.enableGraphCapture;\n    delete configured.device;\n    delete configured.name;\n    return { ...configured, validationMode: "basic" };\n  }\n  async function createModelSession(ort, device, manifest, baseUrl, name, options = {}, weights = /* @__PURE__ */ new Map()) {\n    const description = manifest.sessions[name];\n    const externalData = [];\n    for (const artifact of description.externalData) {\n      let blob = weights.get(artifact.file);\n      if (!blob) {\n        if (typeof baseUrl?.read === "function") blob = await baseUrl.read(artifact.file);\n        else {\n          const response = await fetch(new URL(artifact.file, baseUrl));\n          if (!response.ok) throw new Error(`Weights download failed: HTTP ${response.status}`);\n          blob = await response.blob();\n        }\n        if (blob.size !== artifact.size) throw new Error(`Weights size mismatch: ${artifact.file}`);\n        weights.set(artifact.file, blob);\n      }\n      externalData.push({ path: artifact.path, data: blob });\n    }\n    const graph = typeof baseUrl?.read === "function" ? new Uint8Array(await (await baseUrl.read(description.file)).arrayBuffer()) : new URL(description.file, baseUrl).href;\n    return ort.InferenceSession.create(graph, {\n      executionProviders: [{ ...modelProviderOptions(manifest, name), name: "webgpu", device }],\n      externalData,\n      graphOptimizationLevel: "all",\n      enableGraphCapture: false,\n      preferredOutputLocation: name === "embedding" ? "gpu-buffer" : { [manifest.config.model.decoder.outputs.logits]: "cpu" },\n      ...options\n    });\n  }\n  async function loadGenerator(ort, device, manifest, baseUrl, onProgress = () => {\n  }) {\n    const sessions = {};\n    try {\n      const weights = /* @__PURE__ */ new Map();\n      for (const name of Object.keys(manifest.sessions)) {\n        onProgress(`Loading ${manifest.name} ${name}`);\n        sessions[name] = await createModelSession(ort, device, manifest, baseUrl, name, {}, weights);\n      }\n      const generator = new TextGenerator(ort, device, manifest, sessions);\n      generator.providerOptions = Object.fromEntries(Object.keys(manifest.sessions).map((name) => [name, modelProviderOptions(manifest, name)]));\n      return generator;\n    } catch (error) {\n      for (const session of Object.values(sessions)) await session.release();\n      throw error;\n    }\n  }\n\n  // web/capture-generator.mjs\n  var TYPES = { float16: [2, Uint16Array], float32: [4, Float32Array], int64: [8, BigInt64Array], int32: [4, Int32Array] };\n  function allocateGpuTensor(ort, device, type, dims, label) {\n    const bytes = TYPES[type]?.[0];\n    if (!bytes || dims.some((d) => !Number.isSafeInteger(d) || d < 0)) throw new Error(`Unsupported static tensor ${label}`);\n    const size = dims.reduce((a, b) => a * b, 1) * bytes;\n    const allocated = Math.max(16, Math.ceil(size / 16) * 16);\n    if (!Number.isSafeInteger(size) || allocated > device.limits.maxBufferSize || allocated > device.limits.maxStorageBufferBindingSize) {\n      throw new Error(`GPU buffer limit cannot accommodate ${label} (${size} bytes)`);\n    }\n    const buffer = device.createBuffer({ size: allocated, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST, label });\n    try {\n      return ort.Tensor.fromGpuBuffer(buffer, { dataType: type, dims, dispose: () => buffer.destroy() });\n    } catch (error) {\n      buffer.destroy();\n      throw error;\n    }\n  }\n  function staticInputPlan(manifest, name) {\n    const section = manifest.config.model[name];\n    const states = new Map(manifest.states.map((state) => [state.input, state]));\n    const inputs = {}, overrides = {};\n    for (const input of manifest.sessions[name].inputs) {\n      let dims;\n      if (states.has(input.name)) dims = states.get(input.name).dims;\n      else if (input.name === section.inputs.input_ids) dims = [1, 1];\n      else if (input.name === section.inputs.attention_mask) dims = [1, manifest.maxLength];\n      else if (input.name === section.inputs.position_ids) dims = input.dims.length === 3 ? [3, 1, 1] : [1, 1];\n      else if (input.name === section.inputs.inputs_embeds) dims = [1, 1, input.dims[2]];\n      else if (input.name === section.inputs.image_features || input.name === section.inputs.audio_features) dims = [0, input.dims[1]];\n      else throw new Error(`Unrecognized static input ${name}/${input.name}`);\n      if (dims.length !== input.dims.length || dims.some((d) => !Number.isSafeInteger(d) || d < 0)) throw new Error(`Cannot resolve static dimensions for ${input.name}`);\n      input.dims.forEach((dim, index) => {\n        if (typeof dim === "number") {\n          if (dim !== dims[index]) throw new Error(`Static input dimension mismatch: ${input.name}`);\n        } else if (dim) {\n          if (overrides[dim] !== void 0 && overrides[dim] !== dims[index]) throw new Error(`Conflicting static dimension ${dim}`);\n          overrides[dim] = dims[index];\n        }\n      });\n      inputs[input.name] = { type: input.type, dims };\n    }\n    return { inputs, overrides };\n  }\n  function decodeLogitsShape(dims, vocabulary) {\n    if (dims.at(-1) !== vocabulary || dims.length < 1 || dims.length > 3 || dims.some((d) => !Number.isSafeInteger(d) || d <= 0)) {\n      throw new Error(`Unsupported logits shape ${dims}`);\n    }\n    return dims.map((dim, i) => i === dims.length - 1 ? dim : 1);\n  }\n  var CaptureGenerator = class extends TextGenerator {\n    constructor(ort, device, manifest, sessions, { graphCapture = true, now } = {}) {\n      super(ort, device, manifest, sessions, now);\n      this.graphCapture = graphCapture;\n      this.owned = [];\n      this.prefillBuffers = /* @__PURE__ */ new Map();\n      this.decodeFeeds = {};\n      this.decodeFetches = {};\n      this.embeddingFeeds = {};\n      this.embeddingFetches = {};\n      this.maskFilled = 0;\n      this.recurrentStates = this.states.filter((state) => !state.shared);\n      this.evidence = {\n        graphCaptureRequested: graphCapture,\n        captureScope: graphCapture ? "decoder-decode" : "none",\n        staticKvCache: true,\n        embeddingCapture: false,\n        embeddingIoBinding: sessions.decodeEmbedding ? "cpu-token-input-gpu-output" : "not-applicable",\n        embeddingPrefillIoBinding: sessions.embedding ? "cpu-inputs-gpu-output" : "not-applicable",\n        kvCapacity: manifest.maxLength,\n        ioBinding: "gpu-inputs-and-outputs",\n        recurrentStatePolicy: "fixed-buffers-copy-present-to-past",\n        providerOptions: Object.fromEntries(Object.keys(manifest.sessions).map((name) => [name, modelProviderOptions(manifest, name)])),\n        decodeRuns: 0,\n        decodeInputLocations: {},\n        decodeInputShapes: {},\n        decodeOutputShapes: {}\n      };\n      try {\n        if (sessions.decodeEmbedding) {\n          const plan2 = staticInputPlan(manifest, "embedding");\n          for (const [name, spec2] of Object.entries(plan2.inputs)) {\n            if (name === manifest.config.model.embedding.inputs.input_ids) {\n              const ArrayType = TYPES[spec2.type][1];\n              this.embeddingFeeds[name] = new ort.Tensor(spec2.type, new ArrayType(1), spec2.dims);\n              this.owned.push(this.embeddingFeeds[name]);\n            } else this.embeddingFeeds[name] = this.own(spec2.type, spec2.dims, `decode-embedding/${name}`);\n          }\n          this.evidence.embeddingInputLocations = Object.fromEntries(Object.entries(this.embeddingFeeds).map(([name, tensor]) => [name, tensor.location]));\n          const outputName = manifest.config.model.embedding.outputs.inputs_embeds;\n          const spec = manifest.sessions.embedding.outputs.find((output) => output.name === outputName);\n          const dims = spec.dims.map((dim) => typeof dim === "number" ? dim : plan2.overrides[dim]);\n          this.embeddingFetches[outputName] = this.own(spec.type, dims, `decode-embedding/${outputName}`);\n        }\n        const section = manifest.config.model.decoder;\n        const plan = staticInputPlan(manifest, "decoder");\n        const states = new Map(this.states.map((state) => [state.input, state]));\n        for (const [name, spec] of Object.entries(plan.inputs)) {\n          this.decodeFeeds[name] = states.has(name) ? states.get(name).past : name === section.inputs.inputs_embeds ? this.embeddingFetches[manifest.config.model.embedding.outputs.inputs_embeds] : this.own(spec.type, spec.dims, `decode/${name}`);\n        }\n        const stateOutputs = new Map(this.states.map((state) => [state.output, state.present]));\n        for (const output of manifest.sessions.decoder.outputs) {\n          if (output.name === section.outputs.logits) this.decodeFetches[output.name] = null;\n          else if (stateOutputs.has(output.name)) this.decodeFetches[output.name] = stateOutputs.get(output.name);\n          else throw new Error(`Unsupported captured decoder output ${output.name}`);\n        }\n        const mask = this.decodeFeeds[section.inputs.attention_mask];\n        if (mask) {\n          const ArrayType = TYPES[mask.type][1];\n          this.maskOnes = new ArrayType(manifest.maxLength).fill(mask.type === "int64" ? 1n : 1);\n        }\n        for (const [name, tensor] of Object.entries(this.decodeFeeds)) {\n          this.evidence.decodeInputLocations[name] = tensor.location;\n          this.evidence.decodeInputShapes[name] = [...tensor.dims];\n        }\n      } catch (error) {\n        this.disposeBuffers();\n        this.disposeStates();\n        throw error;\n      }\n    }\n    own(type, dims, name) {\n      const tensor = allocateGpuTensor(this.ort, this.device, type, dims, name);\n      this.owned.push(tensor);\n      return tensor;\n    }\n    async reset() {\n      await super.reset();\n      this.maskFilled = 0;\n      const mask = this.decodeFeeds[this.manifest.config.model.decoder.inputs.attention_mask];\n      if (mask) {\n        const encoder = this.device.createCommandEncoder();\n        encoder.clearBuffer(mask.gpuBuffer);\n        this.device.queue.submit([encoder.finish()]);\n        await this.device.queue.onSubmittedWorkDone();\n      }\n    }\n    upload(tensor, values) {\n      if (!values.length) return;\n      const ArrayType = TYPES[tensor.type][1];\n      const data = tensor.type === "int64" ? BigInt64Array.from(values, BigInt) : ArrayType.from(values);\n      if (tensor.location === "cpu") tensor.data.set(data);\n      else this.device.queue.writeBuffer(tensor.gpuBuffer, 0, data);\n    }\n    gpuPrefillInputs(section, description, tokens, embeddings) {\n      const prepared = cpuInputs(this.ort, section, description, tokens, this.pastLength, embeddings);\n      try {\n        for (const [name, tensor] of Object.entries(prepared.feeds)) {\n          if (tensor.location === "gpu-buffer") continue;\n          const key = [name, tensor.type, ...tensor.dims].join("|");\n          let gpu = this.prefillBuffers.get(key);\n          if (!gpu) {\n            gpu = this.own(tensor.type, tensor.dims, `prefill/${name}`);\n            this.prefillBuffers.set(key, gpu);\n          }\n          if (tensor.data.byteLength) this.device.queue.writeBuffer(gpu.gpuBuffer, 0, tensor.data);\n          prepared.feeds[name] = gpu;\n        }\n        return prepared.feeds;\n      } finally {\n        for (const tensor of prepared.temporary) tensor.dispose();\n      }\n    }\n    updateDecodeInputs(tokens) {\n      const section = this.manifest.config.model.decoder;\n      if (tokens.length !== 1) throw new Error("Captured decode requires exactly one input token");\n      if (section.inputs.input_ids) this.upload(this.decodeFeeds[section.inputs.input_ids], tokens);\n      if (section.inputs.position_ids) {\n        const tensor = this.decodeFeeds[section.inputs.position_ids];\n        this.upload(tensor, Array(tensor.dims.reduce((a, b) => a * b, 1)).fill(this.pastLength));\n      }\n      const mask = this.decodeFeeds[section.inputs.attention_mask];\n      const active = this.pastLength + 1;\n      if (mask) {\n        const bytes = TYPES[mask.type][0];\n        this.device.queue.writeBuffer(\n          mask.gpuBuffer,\n          this.maskFilled * bytes,\n          this.maskOnes.buffer,\n          this.maskFilled * bytes,\n          (active - this.maskFilled) * bytes\n        );\n        this.maskFilled = active;\n      }\n      if (this.sessions.decodeEmbedding) this.upload(this.embeddingFeeds[this.manifest.config.model.embedding.inputs.input_ids], tokens);\n    }\n    copyRecurrentState() {\n      if (!this.recurrentStates.length) return;\n      const encoder = this.device.createCommandEncoder();\n      for (const state of this.recurrentStates) encoder.copyBufferToBuffer(state.present.gpuBuffer, 0, state.past.gpuBuffer, 0, state.past.gpuBuffer.size);\n      this.device.queue.submit([encoder.finish()]);\n    }\n    async readLogits(logits) {\n      if (logits.location !== "gpu-buffer" || !["float16", "float32"].includes(logits.type)) throw new Error("Expected GPU-bound floating-point logits");\n      const vocab = this.manifest.config.model.vocab_size;\n      const elements = logits.dims.reduce((a, b) => a * b, 1);\n      if (elements < vocab || elements % vocab) throw new Error("Incomplete logits vocabulary rows");\n      const [bytes, ArrayType] = TYPES[logits.type];\n      const offset = (elements - vocab) * bytes;\n      const alignedOffset = Math.floor(offset / 4) * 4;\n      const padding = offset - alignedOffset;\n      const size = Math.ceil((vocab * bytes + padding) / 4) * 4;\n      if (!this.readback || this.readback.size < size) {\n        this.readback?.destroy();\n        this.readback = this.device.createBuffer({ size, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ, label: "logits-readback" });\n      }\n      const encoder = this.device.createCommandEncoder();\n      encoder.copyBufferToBuffer(logits.gpuBuffer, alignedOffset, this.readback, 0, size);\n      this.device.queue.submit([encoder.finish()]);\n      await this.readback.mapAsync(GPUMapMode.READ);\n      try {\n        return new ArrayType(this.readback.getMappedRange().slice(padding, padding + vocab * bytes));\n      } finally {\n        this.readback.unmap();\n      }\n    }\n    async step(tokens, suppressedTokens = [], { phase = "prefill" } = {}) {\n      if (!tokens.length || this.pastLength + tokens.length > this.manifest.maxLength) throw new Error("Sequence exceeds KV cache capacity");\n      const model = this.manifest.config.model;\n      if (tokens.some((token) => !Number.isSafeInteger(token) || token < 0 || token >= model.vocab_size)) throw new Error("Token outside model vocabulary");\n      let logits, embeddingOutputs, decoderOutputs, embeddingPrepared;\n      const captured = phase === "decode";\n      try {\n        if (captured) {\n          for (const [name, tensor] of [...Object.entries(this.decodeFeeds), ...Object.entries(this.decodeFetches)]) {\n            if (tensor?.location !== "gpu-buffer" || !tensor.gpuBuffer) throw new Error(`Captured GPU binding is missing: ${name}`);\n          }\n          this.updateDecodeInputs(tokens);\n          if (this.sessions.decodeEmbedding) await this.sessions.decodeEmbedding.run(this.embeddingFeeds, this.embeddingFetches);\n          try {\n            await this.sessions.decodeDecoder.run(this.decodeFeeds, this.decodeFetches);\n          } catch (error) {\n            throw new Error(`Captured decoder failed after ${this.evidence.decodeRuns} successful decode calls: ${error.message}`, { cause: error });\n          }\n          logits = this.decodeFetches[model.decoder.outputs.logits];\n          this.evidence.decodeRuns++;\n        } else {\n          let embedding;\n          if (this.sessions.embedding) {\n            embeddingPrepared = cpuInputs(this.ort, model.embedding, this.manifest.sessions.embedding, tokens, this.pastLength);\n            embeddingOutputs = await this.sessions.embedding.run(embeddingPrepared.feeds);\n            embedding = embeddingOutputs[model.embedding.outputs.inputs_embeds];\n          }\n          const feeds = this.gpuPrefillInputs(model.decoder, this.manifest.sessions.decoder, tokens, embedding);\n          const fetches = { [model.decoder.outputs.logits]: null };\n          for (const state of this.states) {\n            feeds[state.input] = state.past;\n            fetches[state.output] = state.present;\n          }\n          decoderOutputs = await this.sessions.decoder.run(feeds, fetches);\n          logits = decoderOutputs[model.decoder.outputs.logits];\n          if (!this.decodeFetches[model.decoder.outputs.logits]) {\n            const dims = decodeLogitsShape(logits.dims, model.vocab_size);\n            this.decodeFetches[model.decoder.outputs.logits] = this.own(logits.type, dims, "decode/logits");\n            this.evidence.decodeOutputShapes = Object.fromEntries(Object.entries(this.decodeFetches).map(([name, tensor]) => [name, [...tensor.dims]]));\n          }\n        }\n        this.copyRecurrentState();\n        const values = await this.readLogits(logits);\n        const token = greedyToken(values, logits.type, model.vocab_size, suppressedTokens);\n        this.pastLength += tokens.length;\n        return token;\n      } finally {\n        if (embeddingOutputs) for (const tensor of Object.values(embeddingOutputs)) tensor.dispose();\n        if (embeddingPrepared) for (const tensor of embeddingPrepared.temporary) tensor.dispose();\n        if (!captured) decoderOutputs?.[model.decoder.outputs.logits]?.dispose();\n      }\n    }\n    disposeBuffers() {\n      for (const tensor of this.owned) tensor.dispose();\n      this.owned = [];\n      this.readback?.destroy();\n      this.readback = null;\n    }\n    async dispose() {\n      for (const session of Object.values(this.sessions)) await session.release();\n      this.disposeBuffers();\n      this.disposeStates();\n    }\n  };\n  async function loadCapturedGenerator(ort, device, manifest, baseUrl, onProgress = () => {\n  }, options = {}) {\n    const sessions = {}, weights = /* @__PURE__ */ new Map();\n    try {\n      for (const name of Object.keys(manifest.sessions)) {\n        onProgress(`Loading ${manifest.name} ${name}: GPU-bound prefill`);\n        sessions[name] = await createModelSession(ort, device, manifest, baseUrl, name, { preferredOutputLocation: "gpu-buffer" }, weights);\n        const captureSession = name === "decoder" && options.graphCapture !== false;\n        onProgress(`Loading ${manifest.name} ${name}: static ${captureSession ? "captured" : "GPU-bound"} decode`);\n        const plan = staticInputPlan(manifest, name);\n        sessions[name === "decoder" ? "decodeDecoder" : "decodeEmbedding"] = await createModelSession(ort, device, manifest, baseUrl, name, {\n          // Capture the transformer decoder. Auxiliary embedding sessions can\n          // retain CPU shape/empty-modality nodes, so run them uncaptured into\n          // the same fixed GPU tensor consumed by the captured decoder.\n          preferredOutputLocation: "gpu-buffer",\n          enableGraphCapture: captureSession,\n          freeDimensionOverrides: plan.overrides,\n          ...options.diagnostics ? { logSeverityLevel: 0, logVerbosityLevel: 1 } : {}\n        }, weights);\n      }\n      return new CaptureGenerator(ort, device, manifest, sessions, options);\n    } catch (error) {\n      for (const session of Object.values(sessions)) await session.release();\n      throw error;\n    }\n  }\n\n  // web/gpu-greedy.mjs\n  function shader(half) {\n    return `\nstruct Params { dimensions: vec4<u32>, eos: array<vec4<u32>, 2>, };\n@group(0) @binding(0) var<storage, read> logits: array<u32>;\n@group(0) @binding(1) var<storage, read_write> partial: array<vec4<u32>>;\n@group(0) @binding(2) var<uniform> params: Params;\n@group(0) @binding(3) var<storage, read_write> next_token: array<u32>;\n@group(0) @binding(4) var<storage, read_write> result: array<u32>;\nvar<workgroup> values: array<vec4<u32>, 256>;\nfn merge(a: vec4<u32>, b: vec4<u32>) -> vec4<u32> {\n  let take_b = b.x > a.x || (b.x == a.x && b.y < a.y);\n  return vec4<u32>(select(a.x, b.x, take_b), select(a.y, b.y, take_b), a.z | b.z, 0u);\n}\nfn suppressed(token: u32) -> bool {\n  for(var i=0u; i<params.dimensions.w; i++) { if(params.eos[i/4u][i%4u] == token) { return true; } }\n  return false;\n}\nfn reduce(lane: u32) {\n  workgroupBarrier();\n  for(var stride=128u; stride>0u; stride/=2u) {\n    if(lane<stride) { values[lane]=merge(values[lane],values[lane+stride]); }\n    workgroupBarrier();\n  }\n}\n@compute @workgroup_size(256)\nfn scan(@builtin(local_invocation_index) lane: u32, @builtin(workgroup_id) group: vec3<u32>) {\n  var best=vec4<u32>(0u,0xffffffffu,0u,0u);\n  for(var i=group.x*256u+lane; i<params.dimensions.x; i+=params.dimensions.z*256u) {\n    let element=params.dimensions.y+i;\n    ${half ? "let bits=(logits[element/2u] >> ((element%2u)*16u)) & 0xffffu;" : "let bits=logits[element];"}\n    let invalid=${half ? "(bits & 0x7c00u)==0x7c00u" : "(bits & 0x7f800000u)==0x7f800000u"};\n    best.z |= select(0u,1u,invalid);\n    if(!invalid && !suppressed(i)) {\n      let magnitude=bits & ${half ? "0x7fffu" : "0x7fffffffu"};\n      let sign=bits & ${half ? "0x8000u" : "0x80000000u"};\n      let center=${half ? "0x8000u" : "0x80000000u"};\n      let rank=select(center+magnitude,center-magnitude,sign!=0u);\n      best=merge(best,vec4<u32>(rank,i,0u,0u));\n    }\n  }\n  values[lane]=best;reduce(lane);\n  if(lane==0u) { partial[group.x]=values[0]; }\n}\n@compute @workgroup_size(256)\nfn finish(@builtin(local_invocation_index) lane: u32) {\n  var best=vec4<u32>(0u,0xffffffffu,0u,0u);\n  for(var i=lane; i<params.dimensions.z; i+=256u) { best=merge(best,partial[i]); }\n  values[lane]=best;reduce(lane);\n  if(lane==0u) {\n    let value=values[0];let missing=value.y==0xffffffffu;\n    let token=select(value.y,0u,missing || value.z!=0u);\n    next_token[0]=token;next_token[1]=0u;\n    result[0]=token;result[1]=value.z | select(0u,2u,missing);result[2]=value.x;result[3]=0u;\n  }\n}`;\n  }\n  var GpuGreedy = class _GpuGreedy {\n    static async create(device, vocabulary, type, suppressedTokens, nextTokenBuffer, maxPending = 16) {\n      if (!Number.isSafeInteger(vocabulary) || vocabulary < 1 || vocabulary > 2147483647 || !["float16", "float32"].includes(type)) throw Error("Unsupported GPU logits");\n      if (!Number.isSafeInteger(maxPending) || maxPending < 1 || maxPending > 64 || nextTokenBuffer.size < 8) throw Error("Invalid GPU sampling buffers");\n      const eos = [...new Set(suppressedTokens)].filter((token) => Number.isSafeInteger(token) && token >= 0 && token < vocabulary);\n      if (eos.length > 8) throw Error("GPU greedy currently supports at most eight EOS IDs");\n      const instance = new _GpuGreedy();\n      Object.assign(instance, { device, vocabulary, type, eos, nextTokenBuffer, groups: Math.ceil(vocabulary / 1024), maxPending, slots: [], position: 0, buffers: [] });\n      try {\n        const storage = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST;\n        const own = (size, usage, label) => {\n          const buffer = device.createBuffer({ size, usage, label });\n          instance.buffers.push(buffer);\n          return buffer;\n        };\n        instance.partial = own(instance.groups * 16, storage, "greedy-partial");\n        instance.result = own(16, storage, "greedy-result");\n        instance.params = own(48, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST, "greedy-params");\n        const module = device.createShaderModule({ code: shader(type === "float16"), label: "exact-greedy-selection" });\n        const errors = (await module.getCompilationInfo()).messages.filter((message) => message.type === "error");\n        if (errors.length) throw Error(errors.map((message) => `${message.lineNum}:${message.linePos} ${message.message}`).join("\\n"));\n        instance.scan = await device.createComputePipelineAsync({ layout: "auto", compute: { module, entryPoint: "scan" } });\n        instance.finish = await device.createComputePipelineAsync({ layout: "auto", compute: { module, entryPoint: "finish" } });\n        instance.cache = /* @__PURE__ */ new WeakMap();\n        for (let i = 0; i < maxPending; i++) instance.slots.push({ buffer: own(16, GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ, "greedy-readback"), pending: Promise.resolve() });\n        return instance;\n      } catch (error) {\n        instance.dispose();\n        throw error;\n      }\n    }\n    async enqueue(logits) {\n      if (logits.type !== this.type || logits.location !== "gpu-buffer" || logits.dims.at(-1) !== this.vocabulary) throw Error("GPU greedy logits mismatch");\n      const slot = this.slots[this.position++ % this.maxPending];\n      await slot.pending;\n      const elements = logits.dims.reduce((a, b) => a * b, 1);\n      if (!Number.isSafeInteger(elements) || elements < this.vocabulary || elements % this.vocabulary) throw Error("Incomplete GPU logits row");\n      const params = new Uint32Array(12);\n      params.set([this.vocabulary, elements - this.vocabulary, this.groups, this.eos.length]);\n      params.set(this.eos, 4);\n      this.device.queue.writeBuffer(this.params, 0, params);\n      let bindings = this.cache.get(logits.gpuBuffer);\n      if (!bindings) {\n        const entry = (binding, buffer) => ({ binding, resource: { buffer } });\n        bindings = {\n          scan: this.device.createBindGroup({ layout: this.scan.getBindGroupLayout(0), entries: [entry(0, logits.gpuBuffer), entry(1, this.partial), entry(2, this.params)] }),\n          finish: this.device.createBindGroup({ layout: this.finish.getBindGroupLayout(0), entries: [entry(1, this.partial), entry(2, this.params), entry(3, this.nextTokenBuffer), entry(4, this.result)] })\n        };\n        this.cache.set(logits.gpuBuffer, bindings);\n      }\n      const encoder = this.device.createCommandEncoder();\n      for (const [pipeline, group, count] of [[this.scan, bindings.scan, this.groups], [this.finish, bindings.finish, 1]]) {\n        const pass = encoder.beginComputePass();\n        pass.setPipeline(pipeline);\n        pass.setBindGroup(0, group);\n        pass.dispatchWorkgroups(count);\n        pass.end();\n      }\n      encoder.copyBufferToBuffer(this.result, 0, slot.buffer, 0, 16);\n      this.device.queue.submit([encoder.finish()]);\n      const token = slot.buffer.mapAsync(GPUMapMode.READ).then(() => {\n        try {\n          const value = new Uint32Array(slot.buffer.getMappedRange());\n          if (value[1] & 1) throw Error("Non-finite GPU logits");\n          if (value[1] & 2) throw Error("No valid next GPU token");\n          if (value[0] >= this.vocabulary) throw Error("GPU token outside vocabulary");\n          return value[0];\n        } finally {\n          slot.buffer.unmap();\n        }\n      });\n      slot.pending = token.then(() => {\n      }, () => {\n      });\n      return { token };\n    }\n    async drain() {\n      await Promise.all(this.slots.map((slot) => slot.pending));\n    }\n    dispose() {\n      for (const buffer of this.buffers || []) buffer.destroy();\n      this.buffers = [];\n    }\n  };\n\n  // web/gpu-pipeline.mjs\n  function gpuPipelineSupport(engine) {\n    const model = engine.manifest.config.model, ids = engine.decodeFeeds?.[model.decoder.inputs.input_ids];\n    if (!engine.graphCapture) return { supported: false, reason: "uncaptured-decoder" };\n    if (engine.sessions.decodeEmbedding) return { supported: false, reason: "auxiliary-embedding-session" };\n    if (!ids || ids.location !== "gpu-buffer" || !["int32", "int64"].includes(ids.type)) return { supported: false, reason: "unsupported-token-binding" };\n    const spec = engine.manifest.sessions.decoder.outputs.find((output) => output.name === model.decoder.outputs.logits);\n    if (!spec || !["float16", "float32"].includes(spec.type)) return { supported: false, reason: "unsupported-logits-type" };\n    const eos = model.eos_token_id === void 0 ? [] : Array.isArray(model.eos_token_id) ? model.eos_token_id : [model.eos_token_id];\n    if (new Set(eos).size > 8) return { supported: false, reason: "too-many-eos-ids" };\n    return { supported: true };\n  }\n  async function configureGpuSampling(engine, policy) {\n    if (!["auto", "cpu", "gpu"].includes(policy)) throw Error("Invalid GPU sampling policy");\n    engine.evidence ||= {};\n    engine.evidence.requestedSamplingDevice = policy;\n    const support = gpuPipelineSupport(engine);\n    if (policy === "gpu" && !support.supported) throw Error("GPU sampling unavailable: " + support.reason);\n    if (policy !== "cpu" && support.supported) {\n      await enableGpuPipeline(engine);\n    } else {\n      engine.evidence.samplingDevice = "cpu";\n      engine.evidence.cpuSamplingReason = policy === "cpu" ? "explicit-cpu-policy" : support.reason;\n    }\n    return engine;\n  }\n  async function enableGpuPipeline(engine, { maxPending = 16 } = {}) {\n    const model = engine.manifest.config.model, ids = engine.decodeFeeds[model.decoder.inputs.input_ids];\n    if (!gpuPipelineSupport(engine).supported) {\n      throw Error("GPU token pipeline requires a captured, single-graph text decoder");\n    }\n    const spec = engine.manifest.sessions.decoder.outputs.find((output) => output.name === model.decoder.outputs.logits);\n    const eos = model.eos_token_id === void 0 ? [] : Array.isArray(model.eos_token_id) ? model.eos_token_id : [model.eos_token_id];\n    const sampler = await GpuGreedy.create(engine.device, model.vocab_size, spec.type, eos, ids.gpuBuffer, maxPending);\n    const upload = engine.upload.bind(engine), dispose = engine.dispose.bind(engine);\n    let tokenOnGpu = false;\n    engine.upload = (tensor, values) => {\n      if (tokenOnGpu && tensor === ids) return;\n      upload(tensor, values);\n    };\n    engine.evidence.samplingDevice = "gpu";\n    engine.evidence.gpuGreedy = { algorithm: "exact-ieee-order", maxPendingReadbacks: maxPending, delivery: "ordered-cpu-stream", firstToken: "cpu-greedy" };\n    engine.generate = async function(prompt, generationLength, { prefillChunkSize = 0, onToken } = {}) {\n      if (!Number.isSafeInteger(generationLength) || generationLength < 2 || prompt.length + generationLength > this.manifest.maxLength) throw Error("Generation length must fit the KV cache");\n      if (!Number.isSafeInteger(prefillChunkSize) || prefillChunkSize < 0 || prefillChunkSize > this.manifest.maxLength || !prompt.length) throw Error("Invalid prefill chunk size or empty prompt");\n      await this.reset();\n      const start = this.now(), chunk = prefillChunkSize || prompt.length;\n      let first;\n      for (let offset = 0; offset < prompt.length; offset += chunk) first = await this.step(prompt.slice(offset, offset + chunk), eos, { phase: "prefill" });\n      const firstAt = this.now(), generated = Array(generationLength), ready = Array(generationLength).fill(false), tokenDeliveryMs = Array(generationLength);\n      generated[0] = first;\n      ready[0] = true;\n      tokenDeliveryMs[0] = firstAt - start;\n      onToken?.(first, 0);\n      let nextToDeliver = 1;\n      let generationError;\n      const pending = [];\n      upload(ids, [first]);\n      tokenOnGpu = true;\n      try {\n        for (let index = 1; index < generationLength; index++) {\n          if (generationError) throw generationError;\n          for (const [name, tensor] of [...Object.entries(this.decodeFeeds), ...Object.entries(this.decodeFetches)]) {\n            if (tensor?.location !== "gpu-buffer" || !tensor.gpuBuffer) throw Error("Missing captured GPU binding " + name);\n          }\n          this.updateDecodeInputs([0]);\n          await this.sessions.decodeDecoder.run(this.decodeFeeds, this.decodeFetches);\n          this.evidence.decodeRuns++;\n          this.copyRecurrentState();\n          const selected = await sampler.enqueue(this.decodeFetches[model.decoder.outputs.logits]);\n          this.pastLength++;\n          const delivery = selected.token.then((token) => {\n            generated[index] = token;\n            ready[index] = true;\n            while (nextToDeliver < generationLength && ready[nextToDeliver]) {\n              tokenDeliveryMs[nextToDeliver] = this.now() - start;\n              onToken?.(generated[nextToDeliver], nextToDeliver);\n              nextToDeliver++;\n            }\n          });\n          delivery.catch((error) => {\n            generationError ||= error;\n          });\n          pending.push(delivery);\n        }\n        await Promise.all(pending);\n        const end = this.now(), ttftMs = firstAt - start, decodeMs = end - firstAt;\n        if (nextToDeliver !== generationLength || !(ttftMs > 0 && decodeMs > 0)) throw Error("Incomplete or invalid GPU generation");\n        return {\n          ttftMs,\n          prefillTps: prompt.length * 1e3 / ttftMs,\n          decodeTps: (generationLength - 1) * 1e3 / decodeMs,\n          e2eMs: end - start,\n          generated,\n          tokenDeliveryMs\n        };\n      } finally {\n        tokenOnGpu = false;\n        await Promise.allSettled(pending);\n        await sampler.drain();\n      }\n    };\n    engine.dispose = async () => {\n      try {\n        await sampler.drain();\n        await dispose();\n      } finally {\n        sampler.dispose();\n      }\n    };\n    return engine;\n  }\n\n  // web/device.mjs\n  var ORT_WEB_FEATURES = [\n    "shader-f16",\n    "subgroups",\n    "subgroup-size-control",\n    "timestamp-query",\n    "chromium-experimental-subgroup-matrix"\n  ];\n  var ORT_WEB_LIMITS = [\n    "maxBindGroups",\n    "maxComputeWorkgroupStorageSize",\n    "maxComputeWorkgroupsPerDimension",\n    "maxStorageBuffersPerShaderStage",\n    "maxStorageBufferBindingSize",\n    "maxBufferSize",\n    "maxComputeInvocationsPerWorkgroup",\n    "maxComputeWorkgroupSizeX",\n    "maxComputeWorkgroupSizeY",\n    "maxComputeWorkgroupSizeZ"\n  ];\n  function ortDeviceDescriptor(adapter) {\n    if (!adapter?.features.has("shader-f16")) throw new Error("The current models require WebGPU shader-f16");\n    const requiredLimits = {};\n    for (const key of ORT_WEB_LIMITS) {\n      const value = adapter.limits[key];\n      if (!Number.isSafeInteger(value) || value <= 0) throw new Error(`Invalid adapter limit ${key}`);\n      requiredLimits[key] = value;\n    }\n    return { requiredFeatures: ORT_WEB_FEATURES.filter((feature) => adapter.features.has(feature)), requiredLimits };\n  }\n\n  // web/gpu_failure.mjs\n  function monitorGpuDevice(device) {\n    let failure;\n    let closed = false;\n    let rejectFailure;\n    const failurePromise = new Promise((_, reject) => {\n      rejectFailure = reject;\n    });\n    failurePromise.catch(() => {\n    });\n    const fail = (message) => {\n      if (closed || failure) return;\n      failure = new Error(message);\n      rejectFailure(failure);\n    };\n    const onError = (event) => fail(`WebGPU error: ${event.error?.message || event.error}`);\n    device.addEventListener("uncapturederror", onError);\n    device.lost.then((info) => fail(`GPU device lost: ${info.reason}: ${info.message}`));\n    return {\n      get failed() {\n        return !!failure;\n      },\n      throwIfFailed() {\n        if (failure) throw failure;\n      },\n      race(operation) {\n        if (failure) return Promise.reject(failure);\n        return Promise.race([Promise.resolve().then(operation), failurePromise]);\n      },\n      close() {\n        closed = true;\n        device.removeEventListener("uncapturederror", onError);\n      }\n    };\n  }\n\n  // web/page-runner.mjs\n  var send = (kind, value) => parent.postMessage({ ortBenchmark: true, kind, value }, "*");\n  var progress = (message) => send("progress", message);\n  var average = (values) => values.reduce((a, b) => a + b, 0) / values.length;\n  var started = false;\n  addEventListener("message", async (event) => {\n    if (event.source !== parent || !event.data?.start || started) return;\n    started = true;\n    const { manifest, files: selectedFiles, runtimeFiles, build, settings } = event.data;\n    const files = new Map(selectedFiles), runtime = new Map(runtimeFiles), urls = [];\n    const result = { name: manifest.name, rows: [], errors: [], success: false, modelProvenance: manifest };\n    let device, gpu, generator, replayMessages = 0;\n    const originalLog = console.log, originalError = console.error, originalWarn = console.warn;\n    const observe = (original) => (...args) => {\n      if (args.some((value) => String(value).includes("Replaying the captured WebGpuExecutionProvider graph"))) replayMessages++;\n      original.apply(console, args);\n    };\n    console.log = observe(originalLog);\n    console.error = observe(originalError);\n    console.warn = observe(originalWarn);\n    const blobUrl = (file, type) => {\n      const url = URL.createObjectURL(new Blob([file], { type }));\n      urls.push(url);\n      return url;\n    };\n    try {\n      const script = document.createElement("script");\n      script.src = blobUrl(runtime.get("ort.all.min.js"), "text/javascript");\n      await new Promise((resolve, reject) => {\n        script.onload = resolve;\n        script.onerror = () => reject(Error("Could not load selected ORT JavaScript"));\n        document.head.append(script);\n      });\n      const ort = globalThis.ort;\n      if (!ort) throw Error("Selected JavaScript did not provide ORT");\n      ort.env.wasm.numThreads = 1;\n      ort.env.wasm.wasmPaths = {\n        mjs: blobUrl(runtime.get("ort-wasm-simd-threaded.jspi.mjs"), "text/javascript"),\n        wasm: blobUrl(runtime.get("ort-wasm-simd-threaded.jspi.wasm"), "application/wasm")\n      };\n      const adapter = await navigator.gpu.requestAdapter({ powerPreference: "high-performance" });\n      if (!adapter || adapter.info?.isFallbackAdapter || adapter.isFallbackAdapter) throw Error("A hardware WebGPU adapter is required");\n      result.adapter = { vendor: adapter.info.vendor, architecture: adapter.info.architecture, device: adapter.info.device, description: adapter.info.description };\n      result.deviceDescriptor = ortDeviceDescriptor(adapter);\n      device = await adapter.requestDevice(result.deviceDescriptor);\n      gpu = monitorGpuDevice(device);\n      const source = { read: async (name) => {\n        const file = files.get(name);\n        if (!file) throw Error(`Missing selected model file: ${name}`);\n        return file;\n      } };\n      const references = /* @__PURE__ */ new Map();\n      progress(`${manifest.name}: validating with the uncaptured reference`);\n      generator = await gpu.race(() => loadGenerator(ort, device, manifest, source, progress));\n      for (const pl of settings.promptLengths) {\n        const prompt = settings.prompts?.[pl] || randomPrompt(manifest.config, pl, 42);\n        references.set(pl, (await gpu.race(() => generator.generate(prompt, settings.generationLength))).generated);\n      }\n      await gpu.race(() => generator.dispose());\n      generator = null;\n      await device.queue.onSubmittedWorkDone();\n      generator = await gpu.race(() => loadCapturedGenerator(\n        ort,\n        device,\n        manifest,\n        source,\n        progress,\n        { graphCapture: settings.graphCapture, diagnostics: settings.diagnostics }\n      ));\n      await configureGpuSampling(generator, settings.gpuSampling);\n      for (const pl of settings.promptLengths) {\n        const prompt = settings.prompts?.[pl] || randomPrompt(manifest.config, pl, 42);\n        progress(`${manifest.name} \\xB7 ${pl} input tokens: warm-up`);\n        const warmup = await gpu.race(() => generator.generate(prompt, settings.generationLength));\n        if (JSON.stringify(warmup.generated) !== JSON.stringify(references.get(pl))) throw Error(`Full reference token mismatch at input ${pl}`);\n        const samples = [];\n        for (let rep = 0; rep < settings.repetitions; ++rep) {\n          progress(`${manifest.name} \\xB7 ${pl} input tokens: run ${rep + 1}/${settings.repetitions}`);\n          const sample = await gpu.race(() => generator.generate(prompt, settings.generationLength));\n          if (JSON.stringify(sample.generated) !== JSON.stringify(warmup.generated)) throw Error("Generated tokens changed after reset");\n          validateSample(sample, pl, settings.generationLength, generator.evidence.samplingDevice);\n          samples.push(sample);\n        }\n        validateSample(warmup, pl, settings.generationLength, generator.evidence.samplingDevice);\n        const ttftMs = average(samples.map((sample) => sample.ttftMs));\n        const decodeMs = average(samples.map((sample) => sample.e2eMs - sample.ttftMs));\n        const row = {\n          model: manifest.name,\n          pl,\n          prompt,\n          tg: settings.generationLength,\n          warmup,\n          samples,\n          ttftMs,\n          e2eMs: ttftMs + decodeMs,\n          plTs: pl * 1e3 / ttftMs,\n          tgTs: (settings.generationLength - 1) * 1e3 / decodeMs,\n          validation: {\n            kind: "deterministic-repeatability",\n            passed: true,\n            reference: { kind: "same-browser-uncaptured-generator", passed: true, comparedTokens: settings.generationLength }\n          },\n          testedAt: (/* @__PURE__ */ new Date()).toISOString()\n        };\n        result.rows.push(row);\n        send("row", row);\n      }\n      gpu.throwIfFailed();\n      result.executionEvidence = {\n        ...generator.evidence,\n        runtimeReplayMessages: replayMessages,\n        runtime: {\n          wasmVariant: "jspi",\n          source: "user-selected-sha256-verified-files",\n          evidence: "successful-inference-with-explicit-local-module-and-wasm-URLs",\n          // No CDP in the standalone page: do not pretend network responses were observed.\n          suppliedArtifacts: Object.entries(build.artifacts).map(([file, artifact]) => ({ file, sha256: artifact.sha256 }))\n        }\n      };\n      if (settings.diagnostics && settings.graphCapture && !replayMessages) throw Error("No actual decoder replay messages observed");\n      result.success = true;\n    } catch (error) {\n      result.errors.push(String(error.stack || error));\n    } finally {\n      try {\n        if (generator && !gpu?.failed) await gpu.race(() => generator.dispose());\n      } catch (error) {\n        result.success = false;\n        result.errors.push(`Cleanup failed: ${error.message}`);\n      }\n      gpu?.close();\n      device?.destroy();\n      for (const url of urls) URL.revokeObjectURL(url);\n      console.log = originalLog;\n      console.error = originalError;\n      console.warn = originalWarn;\n    }\n    send("result", result);\n  });\n  function validateSample(sample, pl, tg, samplingDevice) {\n    const positive = (value) => Number.isFinite(value) && value > 0;\n    if (![sample.ttftMs, sample.e2eMs, sample.prefillTps, sample.decodeTps].every(positive) || sample.generated.length !== tg || sample.e2eMs <= sample.ttftMs) throw Error("Invalid or incomplete measurement");\n    const close = (a, b) => Math.abs(a - b) <= Math.max(1, b) * 1e-6;\n    if (!close(sample.prefillTps, pl * 1e3 / sample.ttftMs) || !close(sample.decodeTps, (tg - 1) * 1e3 / (sample.e2eMs - sample.ttftMs))) throw Error("Token counts do not match elapsed time");\n    if (samplingDevice === "gpu") {\n      const times = sample.tokenDeliveryMs;\n      if (!Array.isArray(times) || times.length !== tg || !times.every(positive) || times[0] !== sample.ttftMs || times.at(-1) > sample.e2eMs || times.some((time, i) => i && time < times[i - 1])) throw Error("Incomplete or prematurely timed CPU token delivery");\n    }\n  }\n  send("ready");\n})();\n';
+  var $ = (id) => document.getElementById(id);
+  var runtimeFiles = /* @__PURE__ */ new Map();
+  var models = [];
+  var result;
+  var controller;
+  var frame;
+  var cancelFrame;
+  var importedRequest;
+  var importedRequestHash;
+  var log = (message) => {
+    const line = document.createElement("div");
+    line.textContent = message;
+    $("log").append(line);
+    $("log").scrollTop = $("log").scrollHeight;
+    $("status").textContent = message;
+  };
+  function checkBrowser() {
+    const available = isSecureContext && !!navigator.gpu && !!WebAssembly.Suspending && !!WebAssembly.promising;
+    $("environment").textContent = available ? `WebGPU + JSPI available \xB7 ${crossOriginIsolated ? "isolated" : "single-thread local"} mode` : "Use a current Edge or Chrome with WebGPU and WebAssembly JSPI enabled.";
+    $("run").disabled = !available || !runtimeFiles.size || !models.length;
+  }
+  function clearRequest() {
+    importedRequest = importedRequestHash = void 0;
+    $("request-info").textContent = "Optional: reuse exact prompts from a native benchmark request.";
+  }
+  function renderModels() {
+    $("models").replaceChildren();
+    models.forEach((entry, i) => {
+      const label = document.createElement("label");
+      label.className = "model-choice";
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      box.value = i;
+      box.checked = true;
+      const name = document.createElement("span");
+      name.textContent = entry.name;
+      label.append(box, name);
+      $("models").append(label);
+    });
+    checkBrowser();
+  }
+  $("runtime-files").addEventListener("change", (event) => {
+    try {
+      runtimeFiles = directoryFiles(event.target.files);
+      $("runtime-info").textContent = `${runtimeFiles.size} files selected. SHA-256 verification runs before inference.`;
+      checkBrowser();
+    } catch (error) {
+      runtimeFiles.clear();
+      log(error.message);
+      checkBrowser();
+    }
+  });
+  $("model-files").addEventListener("change", async (event) => {
+    try {
+      clearRequest();
+      const files = directoryFiles(event.target.files);
+      const folder = event.target.files[0]?.webkitRelativePath.split("/")[0];
+      const entries = discoverModels(files, folder);
+      if (!entries.length) throw Error("Select an onnx-webgpu model folder, or a parent folder containing genai_config.json files");
+      for (const entry of entries) if (entry.name === "onnx-webgpu") {
+        const config = await readJson(entry.files.get("genai_config.json"));
+        entry.name = config.model?.type || "Selected model";
+      }
+      models = entries;
+      renderModels();
+      $("model-info").textContent = `${entries.length} model(s). Files stay on this machine.`;
+    } catch (error) {
+      models = [];
+      renderModels();
+      log(error.message);
+    }
+  });
+  $("request-file").addEventListener("change", async (event) => {
+    try {
+      const file = event.target.files[0];
+      if (!file) return;
+      const request = await readJson(file);
+      if (!Array.isArray(request.models) || request.models.length !== models.length || request.maxLength !== 8192 || request.batchSize !== 1 || request.sampling !== "greedy" || request.suppressEos !== true || request.prefillChunkSize !== 0) throw Error("Request must match the selected models and batch-one greedy, full-prompt, 8K benchmark");
+      for (const [i, entry] of request.models.entries()) {
+        if (!models.some((model) => model.name === entry.name)) {
+          if (models.length === 1) models[i].name = entry.name;
+          else throw Error(`Select the models parent folder to match request model ${entry.name}`);
+        }
+      }
+      importedRequest = request;
+      importedRequestHash = (await fingerprint(file)).sha256;
+      $("lengths").value = request.promptLengths.join(",");
+      $("tokens").value = request.generationLength;
+      $("repetitions").value = request.repetitions;
+      renderModels();
+      $("request-info").textContent = `Loaded ${file.name}; model hashes and prompts will be checked before running.`;
+    } catch (error) {
+      clearRequest();
+      log(error.message);
+    }
+  });
+  var busy = (value) => {
+    $("configuration").disabled = value;
+    $("run").disabled = value;
+    $("stop").disabled = !value;
+    if (!value) checkBrowser();
+  };
+  function appendRow(row) {
+    const tr = document.createElement("tr");
+    for (const value of [row.model, row.pl, row.tg, row.plTs.toFixed(2), row.tgTs.toFixed(2), "Validated"]) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.append(td);
+    }
+    $("rows").append(tr);
+    $("empty").hidden = true;
+  }
+  function runModel(entry, manifest, build, settings, partial) {
+    return new Promise((resolve, reject) => {
+      frame = document.createElement("iframe");
+      frame.title = "Isolated benchmark runtime";
+      frame.hidden = true;
+      const current = frame;
+      const cleanup = () => {
+        clearTimeout(timer);
+        removeEventListener("message", receive);
+        current.remove();
+        if (frame === current) frame = null;
+        cancelFrame = null;
+      };
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(Error("Model timed out after 30 minutes"));
+      }, 30 * 60 * 1e3);
+      cancelFrame = () => {
+        cleanup();
+        reject(new DOMException("Run cancelled", "AbortError"));
+      };
+      function receive(event) {
+        if (event.source !== current.contentWindow || !event.data?.ortBenchmark) return;
+        const { kind, value } = event.data;
+        if (kind === "ready") current.contentWindow.postMessage({ start: true, manifest, files: [...entry.files], runtimeFiles: [...runtimeFiles], build, settings }, "*");
+        if (kind === "progress") log(value);
+        if (kind === "row") {
+          partial.rows.push(value);
+          appendRow(value);
+        }
+        if (kind === "result") {
+          cleanup();
+          resolve(value);
+        }
+      }
+      addEventListener("message", receive);
+      current.srcdoc = '<!doctype html><meta charset="utf-8"><script>' + workerSource.replace(/<\/script/gi, "<\\/script") + "<\/script>";
+      document.body.append(current);
+    });
+  }
+  $("run").addEventListener("click", async () => {
+    controller = new AbortController();
+    result = null;
+    $("rows").replaceChildren();
+    $("log").replaceChildren();
+    $("empty").hidden = false;
+    $("json").disabled = $("csv").disabled = true;
+    busy(true);
+    try {
+      const settings = parseSettings({
+        lengths: $("lengths").value,
+        tokens: $("tokens").value,
+        repetitions: $("repetitions").value,
+        graphCapture: $("capture").checked,
+        gpuSampling: $("sampling").value,
+        diagnostics: $("diagnostics").checked
+      });
+      const selected = [...$("models").querySelectorAll("input:checked")].map((box) => models[Number(box.value)]);
+      if (!selected.length) throw Error("Select at least one model");
+      if (importedRequest && (selected.length !== importedRequest.models.length || JSON.stringify(settings.promptLengths) !== JSON.stringify(importedRequest.promptLengths) || settings.generationLength !== importedRequest.generationLength || settings.repetitions !== importedRequest.repetitions)) throw Error("Workload differs from the imported request. Restore its values or choose the model folder again to start a new workload.");
+      const build = await verifyRuntime(runtimeFiles, controller.signal, log);
+      if (settings.graphCapture && !build.capabilities?.capturedExternalIoBinding) throw Error("Runtime lacks verified captured external I/O support");
+      $("runtime-info").textContent = `${build.version} \xB7 ORT ${build.repositories.onnxruntime.commit.slice(0, 12)} \xB7 hashes verified`;
+      result = {
+        runtime: "ort-web",
+        interface: "standalone-browser-v1",
+        success: false,
+        models: [],
+        errors: [],
+        build,
+        browser: { userAgent: navigator.userAgent, crossOriginIsolated, locationProtocol: location.protocol },
+        benchmarkOptions: { ...settings, wasmThreads: 1, ioBinding: true, maxLength: 8192, prefillChunkSize: 0, referenceTokens: settings.generationLength },
+        request: importedRequest || {
+          schemaVersion: 1,
+          models: [],
+          promptLengths: settings.promptLengths,
+          generationLength: settings.generationLength,
+          repetitions: settings.repetitions,
+          maxLength: 8192,
+          seed: 42,
+          prefillChunkSize: 0,
+          batchSize: 1,
+          sampling: "greedy",
+          suppressEos: true
+        },
+        requestSha256: importedRequestHash,
+        startedAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      const prepared = [];
+      for (const entry of selected) {
+        const manifest = await describeLocalModel(entry, 8192, controller.signal, log);
+        let prompts;
+        if (importedRequest) {
+          const expected = importedRequest.models.find((item) => item.name === entry.name);
+          if (expected.manifest.configArtifact.sha256 !== manifest.configArtifact.sha256 || JSON.stringify(expected.manifest.states) !== JSON.stringify(manifest.states)) throw Error(`Model/config differs from imported request: ${entry.name}`);
+          for (const [name, session] of Object.entries(manifest.sessions)) {
+            const old = expected.manifest.sessions[name];
+            if (old?.sha256 !== session.sha256 || JSON.stringify(old.externalData) !== JSON.stringify(session.externalData)) throw Error(`Model weights differ from request: ${entry.name}`);
+          }
+          prompts = Object.fromEntries(expected.cases.map((item) => [item.pl, item.prompt]));
+          for (const pl of settings.promptLengths) if (!Array.isArray(prompts[pl]) || prompts[pl].length !== pl || prompts[pl].some((id) => !Number.isSafeInteger(id) || id < 0 || id >= manifest.config.model.vocab_size)) throw Error("Invalid saved prompt IDs");
+        } else result.request.models.push({
+          name: entry.name,
+          root: "user-selected-local-folder",
+          manifest,
+          cases: settings.promptLengths.map((pl) => ({ pl, prompt: randomPrompt(manifest.config, pl, 42) }))
+        });
+        prepared.push({ entry, manifest, prompts });
+      }
+      if (!result.requestSha256) result.requestSha256 = (await fingerprint(new Blob([JSON.stringify(result.request)]))).sha256;
+      for (const { entry, manifest, prompts } of prepared) {
+        controller.signal.throwIfAborted();
+        const partial = { name: entry.name, rows: [], success: false, errors: ["Model has not completed"] };
+        result.models.push(partial);
+        const measured = await runModel(entry, manifest, build, { ...settings, prompts }, partial);
+        Object.assign(partial, measured);
+        if (!measured.success) throw Error(`${entry.name}: ${measured.errors.join("; ")}`);
+      }
+      result.success = true;
+      log("Complete. Every timed output matches the full reference sequence. Download JSON for all samples and token IDs.");
+    } catch (error) {
+      const cancelled = controller.signal.aborted;
+      log(cancelled ? "Cancelled. Partial results are not a completed performance run." : `Failed: ${error.message}`);
+      result ||= { runtime: "ort-web", interface: "standalone-browser-v1", models: [], errors: [] };
+      result.success = false;
+      result.cancelled = cancelled;
+      result.errors.push(String(error));
+    } finally {
+      frame?.remove();
+      frame = null;
+      cancelFrame = null;
+      result.finishedAt = (/* @__PURE__ */ new Date()).toISOString();
+      $("json").disabled = false;
+      $("csv").disabled = !result.models.some((model) => model.rows?.length);
+      busy(false);
+    }
+  });
+  $("stop").addEventListener("click", () => {
+    controller?.abort();
+    cancelFrame?.();
+  });
+  function download(contents, extension, type) {
+    const url = URL.createObjectURL(new Blob([contents], { type }));
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `ort-web-${(/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-")}.${extension}`;
+    anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1e3);
+  }
+  $("json").addEventListener("click", () => download(JSON.stringify(result, null, 2), "json", "application/json"));
+  $("csv").addEventListener("click", () => download(csvResults(result), "csv", "text/csv"));
+  checkBrowser();
+})();
+/*! Bundled license information:
+
+@noble/hashes/esm/utils.js:
+  (*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) *)
+*/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "ort-webgpu-benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone, correctness-checked ORT WebGPU Web and native benchmarks",
+  "scripts": {
+    "build:web-page": "node web/build-page.mjs",
+    "test:web-page": "node web/page.browser.cjs",
+    "test": "node --test web/*.test.mjs",
+    "test:browser": "node web/generator.browser.cjs && node web/gpu-greedy.browser.cjs"
+  },
+  "dependencies": {
+    "@noble/hashes": "1.8.0",
+    "puppeteer-core": "25.10.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

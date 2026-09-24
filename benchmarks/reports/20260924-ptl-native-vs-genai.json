@@ -1,0 +1,396 @@
+{
+  "success": true,
+  "device": {
+    "gpu": [
+      {
+        "Name": "Intel(R) Arc(TM) B390 GPU",
+        "DriverVersion": "32.0.101.8991",
+        "PNPDeviceID": "PCI\\VEN_8086&DEV_B080&SUBSYS_380417AA&REV_04\\3&11583659&0&10"
+      }
+    ],
+    "power": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "cpu": [
+      {
+        "Name": "Intel(R) Core(TM) Ultra X7 358H"
+      }
+    ],
+    "device": "WEBGFX-32",
+    "at": "2026-09-24T15:29:49.9738500+08:00"
+  },
+  "correctness": {
+    "modelsTested": 5,
+    "modelsAccepted": 4,
+    "generatedTokens": 128,
+    "cpuGpuExact": true,
+    "genaiNativeExact": false,
+    "excluded": [
+      {
+        "model": "Qwen3.5-2B",
+        "input": 1024,
+        "outputsMatch": false,
+        "firstDifferentToken": 1,
+        "left": {
+          "ttftThroughput": 2370.7830622367596,
+          "decodeTps": 40.97422511529647,
+          "decodeMsMin": 3099.5095,
+          "decodeMsMax": 3099.5095
+        },
+        "right": {
+          "ttftThroughput": 2264.4481855998347,
+          "decodeTps": 52.9296564865294,
+          "decodeMsMin": 2399.411,
+          "decodeMsMax": 2399.411
+        },
+        "decodeChangePercent": 29.177931584042916
+      }
+    ]
+  },
+  "ortBuild": {
+    "runtime": "ort",
+    "repositories": {
+      "onnxruntime": {
+        "commit": "09dfa6ad06ed8072b2fbe57687d4f71c7914b025"
+      }
+    },
+    "version": "source-09dfa6ad06ed",
+    "sourceStatus": [],
+    "note": "Local source-build runtime, not an archived daily package"
+  },
+  "genaiBuild": {
+    "genaiDllSha256": "ddcdf1b8c8663e132809c5f06c5cb58cbe13fe29e613190886f12d2b7f5874a4",
+    "genaiCommit": "a7b5804bde01a7c9f4ef2c9edc038a024b22355f",
+    "ortDllSha256": "e9f8a85dba5463eb1cf76177a0c2643d67dafd8fe3006e23d087718755f9c193",
+    "harnessSha256": "4141f965a47a62b60cf7039328c4bc5a384c99273edfa0d4297a665e76240f30"
+  },
+  "nativeArtifacts": {
+    "ort_webgpu_benchmark.exe": {
+      "size": 7007744,
+      "sha256": "74851ef1a4c660904c44cfc1e5c3ab63bed908be5601b27c60e03f2f85c0c0df"
+    },
+    "d3dcompiler_47.dll": {
+      "size": 4753864,
+      "sha256": "beaeb82207c961ea7c3f3e463111ca27858ef179b4d817e028ae7761fb5cb18e"
+    },
+    "dxcompiler.dll": {
+      "size": 17042432,
+      "sha256": "f61fe3870725e3cf231206458c44ea9b50345f03ff36503b1fc7bdecaf385141"
+    },
+    "dxil.dll": {
+      "size": 1503688,
+      "sha256": "c893080a29710045fb96ecc4b72da209c632b33c0d1330f0ee9ec497e84b1a65"
+    },
+    "onnxruntime-genai.dll": {
+      "size": 5314560,
+      "sha256": "333b53f568c6e0b3f87f2f811cb77b2ce1be69ea2a48450d9eb44726bcb2a845"
+    },
+    "onnxruntime.dll": {
+      "size": 27233792,
+      "sha256": "e9f8a85dba5463eb1cf76177a0c2643d67dafd8fe3006e23d087718755f9c193"
+    },
+    "onnxruntime_providers_shared.dll": {
+      "size": 10752,
+      "sha256": "20a1b54e89b1ab6e9fefadf8d0913519410fe680c838745e022f64fa3383872d"
+    }
+  },
+  "genaiArtifacts": {
+    "d3dcompiler_47.dll": {
+      "size": 4753864,
+      "sha256": "beaeb82207c961ea7c3f3e463111ca27858ef179b4d817e028ae7761fb5cb18e"
+    },
+    "dxcompiler.dll": {
+      "size": 17042432,
+      "sha256": "f61fe3870725e3cf231206458c44ea9b50345f03ff36503b1fc7bdecaf385141"
+    },
+    "dxil.dll": {
+      "size": 1503688,
+      "sha256": "c893080a29710045fb96ecc4b72da209c632b33c0d1330f0ee9ec497e84b1a65"
+    },
+    "genai_reference.exe": {
+      "size": 457216,
+      "sha256": "30e86370fbda31ecb07ce27a3af62780a649e340260f790e2ecb9b59f4d7ebcb"
+    },
+    "model_benchmark.exe": {
+      "size": 78848,
+      "sha256": "5dd3d1a8fc98ac1e58578dda96193df962875fdb7cba586d8e0ec72891a9c2bb"
+    },
+    "onnxruntime-genai.dll": {
+      "size": 3432960,
+      "sha256": "ddcdf1b8c8663e132809c5f06c5cb58cbe13fe29e613190886f12d2b7f5874a4"
+    },
+    "onnxruntime.dll": {
+      "size": 27233792,
+      "sha256": "e9f8a85dba5463eb1cf76177a0c2643d67dafd8fe3006e23d087718755f9c193"
+    },
+    "onnxruntime_providers_shared.dll": {
+      "size": 10752,
+      "sha256": "20a1b54e89b1ab6e9fefadf8d0913519410fe680c838745e022f64fa3383872d"
+    }
+  },
+  "comparison": [
+    {
+      "model": "aion",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 1647.9358798448752,
+        "decodeTps": 50.43496583904741,
+        "decodeTpsMin": 48.967740746427225,
+        "decodeTpsMax": 51.10194092816817,
+        "samples": 6
+      },
+      "right": {
+        "ttftThroughput": 1478.8282769874245,
+        "decodeTps": 49.69815253118267,
+        "decodeTpsMin": 40.88108721802914,
+        "decodeTpsMax": 52.81789719890472,
+        "samples": 6
+      },
+      "decodeChangePercent": -1.4609176304711369,
+      "initialPass": {
+        "left": {
+          "ttftThroughput": 1641.0324786609688,
+          "decodeTps": 50.99932713013749,
+          "decodeMsMin": 2485.2285,
+          "decodeMsMax": 2496.6081000000004
+        },
+        "right": {
+          "ttftThroughput": 1362.397215955481,
+          "decodeTps": 46.94879185601858,
+          "decodeMsMin": 2465.1914,
+          "decodeMsMax": 3106.571
+        },
+        "decodeChangePercent": -7.9423308150379235
+      },
+      "reversePass": {
+        "left": {
+          "ttftThroughput": 1654.897608058834,
+          "decodeTps": 49.8829583448494,
+          "decodeMsMin": 2514.0715,
+          "decodeMsMax": 2593.5442000000003
+        },
+        "right": {
+          "ttftThroughput": 1617.0194667667758,
+          "decodeTps": 52.7895530887701,
+          "decodeMsMin": 2404.488,
+          "decodeMsMax": 2407.6396
+        },
+        "decodeChangePercent": 5.826829122336563
+      },
+      "stockGenai": {
+        "prefillTps": 1669.43,
+        "decodeTps": 50.4571
+      },
+      "decodeChangeAgainstStockPercent": -1.5041440527048255
+    },
+    {
+      "model": "Phi-4-mini-instruct",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 1050.055697046079,
+        "decodeTps": 29.34908908496554,
+        "decodeTpsMin": 24.206733894040074,
+        "decodeTpsMax": 31.98500261005177,
+        "samples": 6
+      },
+      "right": {
+        "ttftThroughput": 926.5543696041668,
+        "decodeTps": 33.311440023257155,
+        "decodeTpsMin": 28.235202258424888,
+        "decodeTpsMax": 37.730069870444744,
+        "samples": 6
+      },
+      "decodeChangePercent": 13.500762925965493,
+      "initialPass": {
+        "left": {
+          "ttftThroughput": 1113.1911777569908,
+          "decodeTps": 29.882067948277452,
+          "decodeMsMin": 4020.2266000000004,
+          "decodeMsMax": 4704.5021
+        },
+        "right": {
+          "ttftThroughput": 794.0904573979128,
+          "decodeTps": 29.848609731668365,
+          "decodeMsMin": 3785.2574999999997,
+          "decodeMsMax": 4497.9313
+        },
+        "decodeChangePercent": -0.11196754075721849
+      },
+      "reversePass": {
+        "left": {
+          "ttftThroughput": 993.6973966292697,
+          "decodeTps": 28.834789559581132,
+          "decodeMsMin": 3970.6109,
+          "decodeMsMax": 5246.474
+        },
+        "right": {
+          "ttftThroughput": 1112.0593460316368,
+          "decodeTps": 37.68318366762949,
+          "decodeMsMin": 3366.0155,
+          "decodeMsMax": 3372.6656999999996
+        },
+        "decodeChangePercent": 30.68652222956225
+      },
+      "stockGenai": {
+        "prefillTps": 1116.37,
+        "decodeTps": 30.0425
+      },
+      "decodeChangeAgainstStockPercent": 10.881051920636287
+    },
+    {
+      "model": "Qwen3.5-4B",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 657.5110042931594,
+        "decodeTps": 22.31414419718001,
+        "decodeTpsMin": 20.094956104308896,
+        "decodeTpsMax": 24.258267652163568,
+        "samples": 6
+      },
+      "right": {
+        "ttftThroughput": 787.3454517382996,
+        "decodeTps": 28.984426876644356,
+        "decodeTpsMin": 27.65375203059106,
+        "decodeTpsMax": 29.706581544601427,
+        "samples": 6
+      },
+      "decodeChangePercent": 29.892621561114208,
+      "initialPass": {
+        "left": {
+          "ttftThroughput": 717.9035925115645,
+          "decodeTps": 23.55677938142494,
+          "decodeMsMin": 5235.3285,
+          "decodeMsMax": 5495.1597
+        },
+        "right": {
+          "ttftThroughput": 709.8284904637592,
+          "decodeTps": 28.338075833047945,
+          "decodeMsMin": 4371.0936,
+          "decodeMsMax": 4592.5052
+        },
+        "decodeChangePercent": 20.29690211130122
+      },
+      "reversePass": {
+        "left": {
+          "ttftThroughput": 606.4908498654407,
+          "decodeTps": 21.19603954949548,
+          "decodeMsMin": 5710.338,
+          "decodeMsMax": 6319.9938999999995
+        },
+        "right": {
+          "ttftThroughput": 883.8684852030575,
+          "decodeTps": 29.660950809415038,
+          "decodeMsMin": 4275.1469,
+          "decodeMsMax": 4289.852
+        },
+        "decodeChangePercent": 39.9362873434582
+      },
+      "stockGenai": {
+        "prefillTps": 746.136,
+        "decodeTps": 24.245
+      },
+      "decodeChangeAgainstStockPercent": 19.548058884901454
+    },
+    {
+      "model": "gemma-4-e2b-it",
+      "input": 1024,
+      "outputsMatch": true,
+      "firstDifferentToken": null,
+      "left": {
+        "ttftThroughput": 3359.0988167705636,
+        "decodeTps": 24.54894463394365,
+        "decodeTpsMin": 23.258595955846612,
+        "decodeTpsMax": 25.569687091658892,
+        "samples": 6
+      },
+      "right": {
+        "ttftThroughput": 2830.271727736704,
+        "decodeTps": 46.27474684798529,
+        "decodeTpsMin": 45.87286692523312,
+        "decodeTpsMax": 46.68296061277745,
+        "samples": 6
+      },
+      "decodeChangePercent": 88.4999438387324,
+      "initialPass": {
+        "left": {
+          "ttftThroughput": 3560.7301536816694,
+          "decodeTps": 25.002640862926317,
+          "decodeMsMin": 4966.8187,
+          "decodeMsMax": 5137.0952
+        },
+        "right": {
+          "ttftThroughput": 2812.5882367159224,
+          "decodeTps": 46.28804672424778,
+          "decodeMsMin": 2736.7232,
+          "decodeMsMax": 2755.2522
+        },
+        "decodeChangePercent": 85.13263050097746
+      },
+      "reversePass": {
+        "left": {
+          "ttftThroughput": 3179.0790108759275,
+          "decodeTps": 24.111420430610224,
+          "decodeMsMin": 5138.6086000000005,
+          "decodeMsMax": 5460.3468
+        },
+        "right": {
+          "ttftThroughput": 2848.178987281379,
+          "decodeTps": 46.26145461239513,
+          "decodeMsMin": 2720.4786999999997,
+          "decodeMsMax": 2768.5211000000004
+        },
+        "decodeChangePercent": 91.86532268196328
+      },
+      "stockGenai": {
+        "prefillTps": 3730.61,
+        "decodeTps": 26.3528
+      },
+      "decodeChangeAgainstStockPercent": 75.59707829143505
+    }
+  ],
+  "requestSha256": "0cad21707a5377b1b9b87a08e8cbe3c2cfdb40a4f9fa83577891bee859794752",
+  "inputs": {
+    "correctness-cpu.json": {
+      "size": 578344,
+      "sha256": "fa7fbb75df4d7c5ec8493c9203706a654d357a4137a246aa3107a72a8ee1493c"
+    },
+    "correctness-gpu.json": {
+      "size": 578371,
+      "sha256": "5e4f8fb47db6e0c53bb85907e14ebfe0d9da0c7e50c8db5f963cdc897a577f50"
+    },
+    "correctness-genai.json": {
+      "size": 577559,
+      "sha256": "0ee736f393920c7a868f1b32167c32337a1f03dc829e5aa05de5ffd500a55bf7"
+    },
+    "perf-native-validated.json": {
+      "size": 522957,
+      "sha256": "bb9a9550a33226667b62f9767a78489d652e4c6d22a22471841425944067fb49"
+    },
+    "perf-genai-validated.json": {
+      "size": 522780,
+      "sha256": "c0abe9919ae6b23852f02a48e1174d475edd21673ba842577be23e16e443ab41"
+    },
+    "perf-genai-stock-validated.json": {
+      "size": 334828,
+      "sha256": "19c1991a959df4009b2318bfa02b49a1e755021efa19083a326ee0e5fc7dacbb"
+    },
+    "perf-native-reverse.json": {
+      "size": 522939,
+      "sha256": "18514f7c33948f31a077c62fcb10ad25f1c00dde212fc9c74538c8c17ba085f8"
+    },
+    "perf-genai-reverse.json": {
+      "size": 522929,
+      "sha256": "a6b934558ddcf096a09209d82ba14b491b55709b6da29d25251d3a703b51315a"
+    }
+  },
+  "limitations": [
+    "One device, warmed runs; small changes need repeated confirmation.",
+    "Matched means identical weights/runtime/prompts/timing, not identical generation implementations.",
+    "Native capture all models; GenAI Aion only. Native robustness enabled; GenAI initialization forwarding omission remains.",
+    "Stock GenAI uses different random prompts and excludes first sampling from its TTFT metric."
+  ]
+}
