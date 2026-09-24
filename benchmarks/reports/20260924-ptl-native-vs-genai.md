@@ -29,10 +29,11 @@ across every repetition in both performance passes.
 ### Qwen3.5-2B discrepancy
 
 Follow-up: [Qwen2B correctness investigation](20260924-qwen2b-correctness.md)
-isolates Dawn floating-point strictness as the logit difference on local T1000,
-with full-token/logit agreement under matching settings. The original Panther
-Lake case still requires aligned-device verification; its exclusion below is
-unchanged.
+isolates Dawn floating-point strictness as the logit difference on both local
+T1000 and Panther Lake, with full-token/logit agreement under matching settings.
+The original Panther Lake discrepancy is reproduced exactly and explained.
+The performance exclusion below is unchanged: no new matched-policy Qwen2B
+timing experiment was performed.
 
 Both implementations emit first token `12434`. The second-token logits differ:
 
@@ -47,7 +48,9 @@ the earlier index `12434`. The score changes are a few FP16 representable steps;
 this is **not a wrong argmax or lost GPU-feedback token**. Turning native graph
 capture off leaves these logits unchanged, so capture replay alone does not
 explain it. The precise numerical execution-path difference between the direct
-ORT harness and GenAI is not yet localized. Original model files are identical.
+ORT harness and GenAI was not yet localized during this timing experiment; the
+follow-up above now isolates the device floating-point strictness policy.
+Original model files are identical.
 We do not claim correctness-qualified Qwen2B speedups while full output differs.
 
 ## Performance comparison
